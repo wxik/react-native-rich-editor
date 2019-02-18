@@ -1,0 +1,12 @@
+ext {
+ copyEditorHtmlToAppAssets = { dir ->
+    def fromF = new File(dir, '/assets/editor.html');
+    def toF = new File(projectDir, '/src/main/assets/');
+    println ('Copying ZSSRichTextEditor html asset file from ' + fromF.toString() + ' to ' + toF.toString());
+
+    copy  {
+      from fromF
+      into toF
+    }
+  }
+}
