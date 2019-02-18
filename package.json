@@ -1,0 +1,16 @@
+{
+  "name": "react-native-pell-rich-editor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": {
+    "name": "tangzehua",
+    "email": "stulip@126.com"
+  },
+  "dependencies": {
+
+  },
+
+  "peerDependencies": {
+    "react-native-webview": "*"
+  }
+}

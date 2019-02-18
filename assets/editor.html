@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <style>
+        * {
+            outline: 0px solid transparent;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            -webkit-touch-callout: none;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size:1em;
+        }
+        body {
+            /*padding:10px 5px;*/
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            height: 100%;
+            background-color: #FFF;
+        }
+        img {
+            max-width: 98%;
+            margin-left:auto;
+            margin-right:auto;
+            display: block;
+        }
+        .content {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #000033;
+            width: 100%;
+            height: 100%;
+            -webkit-overflow-scrolling: touch;
+            /*overflow:auto;*/
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .pell {
+            /*box-sizing: border-box;*/
+            /*background: aqua;*/
+            height: 100%;
+        }
+
+        .pell-content {
+            /*box-sizing: border-box;*/
+            outline: 0;
+            overflow-y: auto;
+            padding: 10px;
+            height: 100%;
+        }
+
+        table {width: 100% !important;}
+        table td {width: inherit;}
+        table span { font-size: 12px !important; }
+
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <div id="editor" class="pell"></div>
+</div>
+
+<script>
+    (function (exports) {
+        var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+        var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
+        var formatBlock = 'formatBlock';
+        var addEventListener = function addEventListener(parent, type, listener) {
+            return parent.addEventListener(type, listener);
+        };
+        var appendChild = function appendChild(parent, child) {
+            return parent.appendChild(child);
+        };
+        var createElement = function createElement(tag) {
+            return document.createElement(tag);
+        };
+        var queryCommandState = function queryCommandState(command) {
+            return document.queryCommandState(command);
+        };
+        var queryCommandValue = function queryCommandValue(command) {
+            return document.queryCommandValue(command);
+        };
+
+        var exec = function exec(command) {
+            var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+            return document.execCommand(command, false, value);
+        };
+        // 发送消息到 RN
+        var postAction = function (data){
+            window.ReactNativeWebView.postMessage(JSON.stringify(data));
+        };
+
+        console.log = function (){
+            //TODO RICH 调试(DEBUG)模式下面使用
+            postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});
+        };
+
+        var editor = null, o_height = 0;
+
+        var defaultClasses = {
+            content: 'pell-content',
+        };
+
+        var Actions = {
+            bold: {
+                state: function state() {
+                    return queryCommandState('bold');
+                },
+                result: function result() {
+                    return exec('bold');
+                }
+            },
+            italic: {
+                state: function state() {
+                    return queryCommandState('italic');
+                },
+                result: function result() {
+                    return exec('italic');
+                }
+            },
+            underline: {
+                state: function state() {
+                    return queryCommandState('underline');
+                },
+                result: function result() {
+                    return exec('underline');
+                }
+            },
+            strikethrough: {
+                state: function state() {
+                    return queryCommandState('strikeThrough');
+                },
+                result: function result() {
+                    return exec('strikeThrough');
+                }
+            },
+            heading1: {
+                result: function result() {
+                    return exec(formatBlock, '<h1>');
+                }
+            },
+            heading2: {
+                result: function result() {
+                    return exec(formatBlock, '<h2>');
+                }
+            },
+            paragraph: {
+                result: function result() {
+                    return exec(formatBlock, '<p>');
+                }
+            },
+            quote: {
+                result: function result() {
+                    return exec(formatBlock, '<blockquote>');
+                }
+            },
+            orderedList: {
+                state: function state() {
+                    return queryCommandState('insertOrderedList');
+                },
+                result: function result() {
+                    return exec('insertOrderedList');
+                }
+            },
+            unorderedList: {
+                state: function state() {
+                    return queryCommandState('insertUnorderedList');
+                },
+                result: function result() {
+                    return exec('insertUnorderedList');
+                }
+            },
+            code: {
+                result: function result() {
+                    return exec(formatBlock, '<pre>');
+                }
+            },
+            line: {
+                result: function result() {
+                    return exec('insertHorizontalRule');
+                }
+            },
+            link: {
+                result: function result() {
+                    var url = window.prompt('Enter the link URL');
+                    if (url) exec('createLink', url);
+                }
+            },
+            image: {
+                result: function result(url) {
+                    // if (url) exec('insertImage', url);
+                    if (url) {
+                        exec('insertHTML', "<br><div><img src='"+ url +"'/></div><br>");
+                    }
+                }
+            },
+
+            content: {
+                setHtml: function setHtml(html) {
+                    editor.content.innerHTML = html;
+                },
+
+                getHtml: function getHtml() {
+                    return editor.content.innerHTML;
+                },
+
+                blur: function blur() {
+                    editor.content.blur();
+                },
+
+                focus: function focus() {
+                    editor.content.focus();
+                }
+            },
+
+            UPDATE_HEIGHT: function () {
+                let height = Math.max(document.documentElement.clientHeight, document.documentElement.scrollHeight, document.body.clientHeight, document.body.scrollHeight);
+                if (o_height !== height){
+                    postAction({type: 'OFFSET_HEIGHT', data: o_height = height});
+                }
+            }
+        };
+
+        var init = function init(settings) {
+
+            var classes = _extends({}, defaultClasses, settings.classes);
+
+            var defaultParagraphSeparator = settings[defaultParagraphSeparatorString] || 'div';
+
+
+            var content = settings.element.content = createElement('div');
+            content.contentEditable = true;
+            content.spellcheck = false;
+            content.autocapitalize = 'off';
+            content.autocorrect = 'off';
+            content.autocomplete = 'off';
+            content.className = classes.content;
+            content.oninput = function (_ref) {
+                var firstChild = _ref.target.firstChild;
+
+                if (firstChild && firstChild.nodeType === 3) exec(formatBlock, '<' + defaultParagraphSeparator + '>');else if (content.innerHTML === '<br>') content.innerHTML = '';
+                // Actions.UPDATE_HEIGHT();
+                settings.onChange(content.innerHTML);
+            };
+            content.onkeydown = function (event) {
+                if (event.key === 'Enter' && queryCommandValue(formatBlock) === 'blockquote') {
+                    setTimeout(function () {
+                        return exec(formatBlock, '<' + defaultParagraphSeparator + '>');
+                    }, 0);
+                }
+            };
+            appendChild(settings.element, content);
+
+            if (settings.styleWithCSS) exec('styleWithCSS');
+            exec(defaultParagraphSeparatorString, defaultParagraphSeparator);
+
+            // 保存工具条数组
+            var actionsHandler = [];
+            for (var k in Actions){
+                if (typeof Actions[k] === 'object' && Actions[k].state){
+                    actionsHandler[k] = Actions[k]
+                }
+            }
+
+            var handler = function handler() {
+
+                var activeTools = [];
+                for(var k in actionsHandler){
+                    if ( Actions[k].state() ){
+                        activeTools.push(k);
+                    }
+                }
+                console.log('change', activeTools);
+                postAction({type: 'SELECTION_CHANGE', data: activeTools});
+                return true;
+            };
+            // addEventListener(content, 'keyup', handler);
+            // addEventListener(content, 'mouseup', handler);
+            addEventListener(content, 'touchend', function(){
+                setTimeout(handler, 100);
+            });
+            addEventListener(content, 'blur', function () {
+                postAction({type: 'SELECTION_CHANGE', data: []});
+            });
+
+            window.addEventListener("message", function (event){
+                var msgData = JSON.parse(event.data), action = Actions[msgData.type];
+                if (action ){
+                    if ( action[msgData.name]){
+                        action[msgData.name](msgData.data);
+                        if (msgData.name === 'result'){
+                            content.focus();
+                            handler();
+                        }
+                    } else {
+                        action(msgData.data);
+                    }
+                }
+            }, false);
+
+            document.addEventListener('touchend', function () {
+                content.focus();
+            });
+
+            return settings.element;
+        };
+
+        // window.pell = { exec: exec, init: init};
+
+        editor = init({
+            element: document.getElementById('editor'),
+            defaultParagraphSeparator: 'div',
+        })
+    })(window);
+
+</script>
+
+</body>
+</html>

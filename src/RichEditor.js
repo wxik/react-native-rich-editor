@@ -1,0 +1,245 @@
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {WebView} from 'react-native-webview'
+import {actions, messages} from './const';
+import {Dimensions, Keyboard, PixelRatio, Platform, StyleSheet, View} from 'react-native';
+
+const PlatformIOS = Platform.OS === 'ios';
+
+export default class RichTextEditor extends Component {
+    static propTypes = {
+        initialTitleHTML: PropTypes.string,
+        initialContentHTML: PropTypes.string,
+        titlePlaceholder: PropTypes.string,
+        contentPlaceholder: PropTypes.string,
+        editorInitializedCallback: PropTypes.func,
+        customCSS: PropTypes.string,
+        hiddenTitle: PropTypes.bool,
+        enableOnChange: PropTypes.bool,
+        footerHeight: PropTypes.number,
+        contentInset: PropTypes.object
+    };
+
+    static defaultProps = {
+        contentInset: {},
+        style: {}
+    };
+
+    constructor(props) {
+        super(props);
+        this._sendAction = this._sendAction.bind(this);
+        this.registerToolbar = this.registerToolbar.bind(this);
+        this._onKeyboardWillShow = this._onKeyboardWillShow.bind(this);
+        this._onKeyboardWillHide = this._onKeyboardWillHide.bind(this);
+        this.isInit = false;
+        this.state = {
+            selectionChangeListeners: [],
+            keyboardHeight: 0,
+            height: 0,
+        };
+    }
+
+    componentWillMount() {
+        if (PlatformIOS) {
+            this.keyboardEventListeners = [
+                Keyboard.addListener('keyboardWillShow', this._onKeyboardWillShow),
+                Keyboard.addListener('keyboardWillHide', this._onKeyboardWillHide)
+            ];
+        } else {
+            this.keyboardEventListeners = [
+                Keyboard.addListener('keyboardDidShow', this._onKeyboardWillShow),
+                Keyboard.addListener('keyboardDidHide', this._onKeyboardWillHide)
+            ];
+        }
+    }
+
+    componentWillUnmount() {
+        this.keyboardEventListeners.forEach((eventListener) => eventListener.remove());
+    }
+
+    _onKeyboardWillShow(event) {
+        // console.log('!!!!', event);
+        const newKeyboardHeight = event.endCoordinates.height;
+        if (this.state.keyboardHeight === newKeyboardHeight) {
+            return;
+        }
+        if (newKeyboardHeight) {
+            this.setEditorAvailableHeightBasedOnKeyboardHeight(newKeyboardHeight);
+        }
+        this.setState({keyboardHeight: newKeyboardHeight});
+    }
+
+    _onKeyboardWillHide(event) {
+        this.setState({keyboardHeight: 0});
+    }
+
+    setEditorAvailableHeightBasedOnKeyboardHeight(keyboardHeight) {
+        const {top = 0, bottom = 0} = this.props.contentInset;
+        const {marginTop = 0, marginBottom = 0} = this.props.style;
+        const spacing = marginTop + marginBottom + top + bottom;
+
+        const editorAvailableHeight = Dimensions.get('window').height - keyboardHeight - spacing;
+        this.setEditorHeight(editorAvailableHeight);
+    }
+
+    onMessage = (event) => {
+
+        try {
+            const message = JSON.parse(event.nativeEvent.data);
+            switch (message.type) {
+                case messages.LOG:
+                    console.log('FROM EDIT:', ...message.data);
+                    break;
+                case messages.SELECTION_CHANGE: {
+                    const items = message.data;
+                    this.state.selectionChangeListeners.map((listener) => {
+                        listener(items);
+                    });
+                    break;
+                }
+                case messages.OFFSET_HEIGHT:
+                    this.setWebHeight(message.data);
+                    break;
+            }
+        } catch (e) {
+            //alert('NON JSON MESSAGE');
+        }
+    };
+
+    setWebHeight = (height)=>{
+        console.log(height);
+        if (height !== this.state.height){
+            this.setState({height});
+        }
+    };
+
+    render() {
+        const pageSource = PlatformIOS ? require('../assets/editor.html') : {uri: 'file:///android_asset/editor.html'};
+        let {height} = this.state;
+
+        return (
+            <View style={[this.props.style, {height: height || Dimensions.get('window').height * 0.7}]}>
+                <WebView
+                    useWebKit={true}
+                    scrollEnabled={false}
+                    {...this.props}
+                    hideKeyboardAccessoryView={true}
+                    keyboardDisplayRequiresUserAction={false}
+                    ref={(r) => {
+                        this.webviewBridge = r
+                    }}
+                    onMessage = {this.onMessage}
+                    originWhitelist={["*"]}
+                    dataDetectorTypes={'none'}
+                    domStorageEnabled={false}
+                    bounces={false}
+                    javaScriptEnabled={true}
+                    source={pageSource}
+                    onLoad={() => this.init()}
+                />
+            </View>
+        );
+    }
+
+    _sendAction(type, action, data) {
+        let jsonString = JSON.stringify({type, name: action, data});
+        if (this.webviewBridge){
+            this.webviewBridge.postMessage(jsonString);
+            // console.log(jsonString)
+        }
+    }
+
+    //-------------------------------------------------------------------------------
+    //--------------- Public API
+
+    registerToolbar(listener) {
+        this.setState({
+            selectionChangeListeners: [...this.state.selectionChangeListeners, listener]
+        });
+    }
+
+    setContentHTML(html) {
+        this._sendAction(actions.content, "setHtml", html);
+    }
+
+    blurContentEditor() {
+        this._sendAction(actions.content, 'blur');
+    }
+
+    focusContentEditor() {
+        this._sendAction(actions.content, 'focus');
+    }
+
+    insertImage(attributes) {
+        this._sendAction(actions.insertImage, "result", attributes);
+    }
+
+    init() {
+        let that = this;
+        that.isInit = true;
+        that.setContentHTML(this.props.initialContentHTML);
+        that.props.editorInitializedCallback && that.props.editorInitializedCallback();
+
+        setInterval(function (){
+            that._sendAction(actions.updateHeight);
+        }, 150);
+    }
+
+    async getContentHtml() {
+        return new Promise((resolve, reject) => {
+            this.contentResolve = resolve;
+            this.contentReject = reject;
+            this._sendAction(actions.content, "getHtml");
+
+            this.pendingContentHtml = setTimeout(() => {
+                if (this.contentReject) {
+                    this.contentReject('timeout')
+                }
+            }, 5000);
+        });
+    }
+}
+
+const styles = StyleSheet.create({
+    modal: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    },
+    innerModal: {
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        paddingTop: 20,
+        paddingBottom: PlatformIOS ? 0 : 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        alignSelf: 'stretch',
+        margin: 40,
+        borderRadius: PlatformIOS ? 8 : 2
+    },
+    button: {
+        fontSize: 16,
+        color: '#4a4a4a',
+        textAlign: 'center'
+    },
+    inputWrapper: {
+        marginTop: 5,
+        marginBottom: 10,
+        borderBottomColor: '#4a4a4a',
+        borderBottomWidth: PlatformIOS ? 1 / PixelRatio.get() : 0
+    },
+    inputTitle: {
+        color: '#4a4a4a'
+    },
+    input: {
+        height: PlatformIOS ? 20 : 40,
+        paddingTop: 0
+    },
+    lineSeparator: {
+        height: 1 / PixelRatio.get(),
+        backgroundColor: '#d5d5d5',
+        marginLeft: -20,
+        marginRight: -20,
+        marginTop: 20
+    }
+});
