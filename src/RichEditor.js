@@ -37,24 +37,25 @@ export default class RichTextEditor extends Component {
             keyboardHeight: 0,
             height: 0,
         };
+        this.focusListeners = [];
     }
 
     componentWillMount() {
-        if (PlatformIOS) {
-            this.keyboardEventListeners = [
-                Keyboard.addListener('keyboardWillShow', this._onKeyboardWillShow),
-                Keyboard.addListener('keyboardWillHide', this._onKeyboardWillHide)
-            ];
-        } else {
-            this.keyboardEventListeners = [
-                Keyboard.addListener('keyboardDidShow', this._onKeyboardWillShow),
-                Keyboard.addListener('keyboardDidHide', this._onKeyboardWillHide)
-            ];
-        }
+        // if (PlatformIOS) {
+        //     this.keyboardEventListeners = [
+        //         Keyboard.addListener('keyboardWillShow', this._onKeyboardWillShow),
+        //         Keyboard.addListener('keyboardWillHide', this._onKeyboardWillHide)
+        //     ];
+        // } else {
+        //     this.keyboardEventListeners = [
+        //         Keyboard.addListener('keyboardDidShow', this._onKeyboardWillShow),
+        //         Keyboard.addListener('keyboardDidHide', this._onKeyboardWillHide)
+        //     ];
+        // }
     }
 
     componentWillUnmount() {
-        this.keyboardEventListeners.forEach((eventListener) => eventListener.remove());
+        // this.keyboardEventListeners.forEach((eventListener) => eventListener.remove());
     }
 
     _onKeyboardWillShow(event) {
@@ -79,7 +80,7 @@ export default class RichTextEditor extends Component {
         const spacing = marginTop + marginBottom + top + bottom;
 
         const editorAvailableHeight = Dimensions.get('window').height - keyboardHeight - spacing;
-        this.setEditorHeight(editorAvailableHeight);
+        // this.setEditorHeight(editorAvailableHeight);
     }
 
     onMessage = (event) => {
@@ -95,6 +96,10 @@ export default class RichTextEditor extends Component {
                     this.state.selectionChangeListeners.map((listener) => {
                         listener(items);
                     });
+                    break;
+                }
+                case messages.CONTENT_FOCUSED: {
+                    this.focusListeners.map(da => da());
                     break;
                 }
                 case messages.OFFSET_HEIGHT:
@@ -156,6 +161,10 @@ export default class RichTextEditor extends Component {
         this.setState({
             selectionChangeListeners: [...this.state.selectionChangeListeners, listener]
         });
+    }
+
+    setContentFocusHandler (listener){
+        this.focusListeners.push(listener);
     }
 
     setContentHTML(html) {
