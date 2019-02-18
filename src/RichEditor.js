@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {WebView} from 'react-native-webview'
 import {actions, messages} from './const';
-import {Dimensions, Keyboard, PixelRatio, Platform, StyleSheet, View} from 'react-native';
+import {Dimensions, PixelRatio, Platform, StyleSheet, View} from 'react-native';
 import {HTML} from './editor'
 
 const PlatformIOS = Platform.OS === 'ios';

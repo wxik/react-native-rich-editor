@@ -138,9 +138,7 @@ const HTML = `
             },
             image: {
                 result: function(url) {
-                    if (url) {
-                        exec('insertHTML', "<br><div><img src='"+ url +"'/></div><br>");
-                    }
+                    if (url) { exec('insertHTML', "<br><div><img src='"+ url +"'/></div><br>");}
                 }
             },
             content: {
@@ -158,8 +156,8 @@ const HTML = `
                 }
             },
 
-            UPDATE_HEIGHT: function () {
-                let height = Math.max(document.documentElement.clientHeight, document.documentElement.scrollHeight, document.body.clientHeight, document.body.scrollHeight);
+            UPDATE_HEIGHT: function() {
+                var height = Math.max(document.documentElement.clientHeight, document.documentElement.scrollHeight, document.body.clientHeight, document.body.scrollHeight);
                 if (o_height !== height){
                     postAction({type: 'OFFSET_HEIGHT', data: o_height = height});
                 }
