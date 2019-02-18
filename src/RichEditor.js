@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {WebView} from 'react-native-webview'
 import {actions, messages} from './const';
 import {Dimensions, Keyboard, PixelRatio, Platform, StyleSheet, View} from 'react-native';
+import {HTML} from './editor'
 
 const PlatformIOS = Platform.OS === 'ios';
 
@@ -55,6 +56,7 @@ export default class RichTextEditor extends Component {
     }
 
     componentWillUnmount() {
+        this.intervalHeight && clearInterval(this.intervalHeight);
         // this.keyboardEventListeners.forEach((eventListener) => eventListener.remove());
     }
 
@@ -119,7 +121,6 @@ export default class RichTextEditor extends Component {
     };
 
     render() {
-        const pageSource = PlatformIOS ? require('../assets/editor.html') : {uri: 'file:///android_asset/editor.html'};
         let {height} = this.state;
 
         return (
@@ -139,7 +140,7 @@ export default class RichTextEditor extends Component {
                     domStorageEnabled={false}
                     bounces={false}
                     javaScriptEnabled={true}
-                    source={pageSource}
+                    source={{html: HTML}}
                     onLoad={() => this.init()}
                 />
             </View>
@@ -189,9 +190,9 @@ export default class RichTextEditor extends Component {
         that.setContentHTML(this.props.initialContentHTML);
         that.props.editorInitializedCallback && that.props.editorInitializedCallback();
 
-        setInterval(function (){
+        this.intervalHeight = setInterval(function (){
             that._sendAction(actions.updateHeight);
-        }, 150);
+        }, 200);
     }
 
     async getContentHtml() {
