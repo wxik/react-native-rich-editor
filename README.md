@@ -10,7 +10,7 @@
 ```
 yarn add react-native-pell-rich-editor
 or
-npm i --save react-native-pell-rich-editor
+npm i react-native-pell-rich-editor
 ```
 
 Also, follow instructions [here](https://github.com/react-native-community/react-native-webview) to add the native `react-native-webview` dependency.
