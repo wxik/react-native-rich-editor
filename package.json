@@ -1,7 +1,7 @@
 {
   "name": "react-native-pell-rich-editor",
   "description": "React Native Rich Editor",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "src/index.js",
   "author": {
     "name": "stulip",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://git.astulip.com/App/react-native-pell-rich-editor.git"
+    "url": "https://github.com/stulip/react-native-pell-rich-editor.git"
   },
   "dependencies": {
 
