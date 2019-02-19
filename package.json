@@ -1,10 +1,10 @@
 {
   "name": "react-native-pell-rich-editor",
   "description": "React Native Rich Editor",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "1.0.1",
+  "main": "src/index.js",
   "author": {
-    "name": "astulip",
+    "name": "stulip",
     "email": "stulip@126.com"
   },
   "repository": {

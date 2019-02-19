@@ -81,6 +81,17 @@ export default class RichTextEditor extends Component {
         try {
             const message = JSON.parse(event.nativeEvent.data);
             switch (message.type) {
+                case messages.CONTENT_HTML_RESPONSE:
+                    if (this.contentResolve) {
+                        this.contentResolve(message.data);
+                        this.contentResolve = undefined;
+                        this.contentReject = undefined;
+                        if (this.pendingContentHtml) {
+                            clearTimeout(this.pendingContentHtml);
+                            this.pendingContentHtml = undefined;
+                        }
+                    }
+                    break;
                 case messages.LOG:
                     console.log('FROM EDIT:', ...message.data);
                     break;

@@ -153,6 +153,9 @@ const HTML = `
                 },
                 focus: function() {
                     editor.content.focus();
+                },
+                postHtml: function (){
+                    postAction({type: 'CONTENT_HTML_RESPONSE', data: editor.content.innerHTML});
                 }
             },
 
