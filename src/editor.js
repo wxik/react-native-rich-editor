@@ -222,8 +222,8 @@ const HTML = `
             addEventListener(content, 'focus', function () {
                 postAction({type: 'CONTENT_FOCUSED'});
             });
-
-            document.addEventListener("message", function (event){
+            
+            var message = function (event){
                 var msgData = JSON.parse(event.data), action = Actions[msgData.type];
                 if (action ){
                     if ( action[msgData.name]){
@@ -236,8 +236,10 @@ const HTML = `
                         action(msgData.data);
                     }
                 }
-            }, false);
+            };
 
+            document.addEventListener("message", message , false);
+            window.addEventListener("message", message , false);
             document.addEventListener('touchend', function () {
                 content.focus();
             });

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {WebView} from 'react-native-webview'
 import {actions, messages} from './const';
 import {Dimensions, PixelRatio, Platform, StyleSheet, View} from 'react-native';
@@ -8,18 +7,10 @@ import {HTML} from './editor'
 const PlatformIOS = Platform.OS === 'ios';
 
 export default class RichTextEditor extends Component {
-    static propTypes = {
-        initialTitleHTML: PropTypes.string,
-        initialContentHTML: PropTypes.string,
-        titlePlaceholder: PropTypes.string,
-        contentPlaceholder: PropTypes.string,
-        editorInitializedCallback: PropTypes.func,
-        customCSS: PropTypes.string,
-        hiddenTitle: PropTypes.bool,
-        enableOnChange: PropTypes.bool,
-        footerHeight: PropTypes.number,
-        contentInset: PropTypes.object
-    };
+    // static propTypes = {
+    //     initialContentHTML: PropTypes.string,
+    //     editorInitializedCallback: PropTypes.func,
+    // };
 
     static defaultProps = {
         contentInset: {},

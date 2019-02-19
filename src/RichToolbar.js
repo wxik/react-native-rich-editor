@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {actions} from './const';
 
@@ -26,18 +25,17 @@ function getDefaultIcon() {
 
 export default class RichToolbar extends Component {
 
-  static propTypes = {
-    getEditor: PropTypes.func.isRequired,
-    actions: PropTypes.array,
-    onPressAddLink: PropTypes.func,
-    onPressAddImage: PropTypes.func,
-    selectedButtonStyle: PropTypes.object,
-    iconTint: PropTypes.any,
-    selectedIconTint: PropTypes.any,
-    unselectedButtonStyle: PropTypes.object,
-    renderAction: PropTypes.func,
-    iconMap: PropTypes.object,
-  };
+  // static propTypes = {
+  //   getEditor: PropTypes.func.isRequired,
+  //   actions: PropTypes.array,
+  //   onPressAddImage: PropTypes.func,
+  //   selectedButtonStyle: PropTypes.object,
+  //   iconTint: PropTypes.any,
+  //   selectedIconTint: PropTypes.any,
+  //   unselectedButtonStyle: PropTypes.object,
+  //   renderAction: PropTypes.func,
+  //   iconMap: PropTypes.object,
+  // };
 
   constructor(props) {
     super(props);
