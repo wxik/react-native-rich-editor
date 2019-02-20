@@ -201,7 +201,7 @@ export default class RichTextEditor extends Component {
         return new Promise((resolve, reject) => {
             this.contentResolve = resolve;
             this.contentReject = reject;
-            this._sendAction(actions.content, "getHtml");
+            this._sendAction(actions.content, "postHtml");
 
             this.pendingContentHtml = setTimeout(() => {
                 if (this.contentReject) {
