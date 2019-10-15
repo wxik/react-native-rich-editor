@@ -128,7 +128,7 @@ export default class RichTextEditor extends Component {
     }
   };
 
-  renderWebView = () => {
+  renderWebView = () => (
     <WebView
       useWebKit={true}
       scrollEnabled={false}
@@ -146,8 +146,8 @@ export default class RichTextEditor extends Component {
       javaScriptEnabled={true}
       source={{ html: HTML }}
       onLoad={() => this.init()}
-    />;
-  };
+    />
+  );
 
   render() {
     let { height } = this.state;
