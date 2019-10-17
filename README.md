@@ -29,6 +29,10 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `editorInitializedCallback `
 
 	A function that will be called when the editor has been initialized.
+
+* `useContainer`
+
+	A boolean value that determines if a View container is wrapped around the WebView. The default value is true. If you are using your own View to wrap this library around, set this value to false. 
 	
 	
 `RichEditor` also has methods that can be used on its `ref` to  set:
@@ -42,6 +46,8 @@ The editor component. Simply place this component in your view hierarchy to rece
 This method registers a function that will get called whenver the cursor position changes or a change is made to the styling of the editor at the cursor's position., The callback will be called with an array of `actions` that are active at the cusor position, allowing a toolbar to respond to changes.
 
 *  `registerToolbar(listener: Function)` 
+
+
 
 ### Example Usage:
 
