@@ -122,7 +122,7 @@ export default class RichTextEditor extends Component {
   };
 
   setWebHeight = height => {
-    console.log(height);
+    // console.log(height);
     if (height !== this.state.height) {
       this.setState({ height });
     }
