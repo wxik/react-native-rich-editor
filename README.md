@@ -97,6 +97,10 @@ Other props supported by the `RichToolbar` component are:
     
     These provide options for styling action buttons.
 
+* `iconSize`
+    
+    Defines the size of the icon in pixels. Default is 50.
+
 * `renderAction`
 
 	Altenatively, you can provide a render function that will be used instead of the default, so you can fully control the tollbar design.
