@@ -152,6 +152,14 @@ const HTML = `
                     editor.content.blur();
                 },
                 focus: function() {
+                    var range = document.createRange();
+                    var sel = window.getSelection();
+                    range.setStart(editor.content.lastChild, 0);
+                    range.setStart(editor.content.lastChild, 1);
+                    range.collapse(false);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+
                     editor.content.focus();
                 },
                 postHtml: function (){
