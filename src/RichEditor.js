@@ -219,6 +219,8 @@ export default class RichTextEditor extends Component {
     that.props.editorInitializedCallback &&
       that.props.editorInitializedCallback();
 
+    this.focusContentEditor();
+
     this.intervalHeight = setInterval(function() {
       that._sendAction(actions.updateHeight);
     }, 200);
