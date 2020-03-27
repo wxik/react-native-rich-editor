@@ -16,6 +16,14 @@ const HTML = `
         table {width: 100% !important;}
         table td {width: inherit;}
         table span { font-size: 12px !important; }
+        [placeholder]:empty:before {
+            content: attr(placeholder);
+            color: #a9a9a9;
+        }
+        [placeholder]:empty:focus:before {
+            content: attr(placeholder);
+            color: #a9a9a9;
+        }
     </style>
 </head>
 <body>
@@ -156,6 +164,9 @@ const HTML = `
                 },
                 postHtml: function (){
                     postAction({type: 'CONTENT_HTML_RESPONSE', data: editor.content.innerHTML});
+                },
+                setPlaceholder: function(placeholder){
+                    editor.content.setAttribute("placeholder", placeholder)
                 }
             },
 

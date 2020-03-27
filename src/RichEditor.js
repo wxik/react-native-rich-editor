@@ -200,6 +200,10 @@ export default class RichTextEditor extends Component {
     this._sendAction(actions.content, "setHtml", html);
   }
 
+  setPlaceholder(placeholder) {
+    this._sendAction(actions.content, 'setPlaceholder', placeholder);
+  }
+
   blurContentEditor() {
     this._sendAction(actions.content, "blur");
   }
@@ -216,6 +220,7 @@ export default class RichTextEditor extends Component {
     let that = this;
     that.isInit = true;
     that.setContentHTML(this.props.initialContentHTML);
+    that.setPlaceholder(this.props.placeholder);
     that.props.editorInitializedCallback &&
       that.props.editorInitializedCallback();
 
