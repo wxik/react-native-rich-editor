@@ -1,0 +1,39 @@
+# EditorConfig文件使用INI格式。斜杠(/)作为路径分隔符，#或者;作为注释。路径支持通配符:
+# 表明是最顶层的配置文件，发现设为true时，才会停止查找.editorconfig文件
+root = true
+
+# * 匹配除/之外的任意字符
+# **    匹配任意字符串
+# ? 匹配任意单个字符
+# [name]    匹配name字符
+# [!name]   不匹配name字符
+# [s1,s2,s3]    匹配给定的字符串
+# [num1..num2]  匹配num1到mun2直接的整数
+[*]
+# 文件的charset。有以下几种类型：latin1, utf-8, utf-8-bom, utf-16be, utf-16le
+charset = utf-8
+# 缩进使用 tab 或者 space
+indent_style = space
+# 缩进为 space 时，缩进的字符数
+indent_size = 4
+# 缩进为 tab 时，缩进的宽度
+# tab_width = 4
+# 换行符的类型。lf, cr, crlf三种
+end_of_line = lf
+# 是否将行尾空格自动删除
+trim_trailing_whitespace = true
+# 是否使文件以一个空白行结尾
+insert_final_newline = true
+# 每行最大字符数
+max_line_length = 120
+
+
+# Matches the exact files either package.json or .travis.yml
+[{*.json, *.json5, .travis.yml, .babelrc, *.css, *.yaml, *.dart, Podfile}]
+indent_style = space
+indent_size = 2
+
+
+[{*.py}]
+indent_style = space
+indent_size = 4

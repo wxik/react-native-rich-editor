@@ -22,6 +22,10 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 `RichEditor` takes the following optional props:
 
+* `placeholder`
+
+    Wrap the editor content placeholder
+
 * `initialContentHTML`
 
 	HTML that will be rendered in the content section on load.
