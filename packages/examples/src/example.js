@@ -4,14 +4,7 @@
  * @since 2019-06-24 14:52
  */
 import React from 'react';
-import {
-    Button,
-    KeyboardAvoidingView,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    View
-} from 'react-native';
+import {Button, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import {RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 
 const initHTML = `<br/>

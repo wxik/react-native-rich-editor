@@ -2,4 +2,4 @@
 
 > A fully functional Rich Text Editor for both Android and iOS
 
-![](../readme/example.jpg)
+![](../react-native-pell-rich-editor/readme/example.jpg)

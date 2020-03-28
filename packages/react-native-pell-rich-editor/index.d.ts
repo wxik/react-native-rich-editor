@@ -91,7 +91,7 @@ declare module "react-native-pell-rich-editor" {
     /**
      * Custom renderer for toolbar actions
      */
-    renderAction?: (action: string, selected: boolean) => JSX.Element;
+    renderAction?: (action: string, selected: boolean) => React.Element;
 
     /**
      * Custom style prop for the toolbar

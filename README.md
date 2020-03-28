@@ -15,7 +15,7 @@ npm i react-native-pell-rich-editor
 
 Also, follow instructions [here](https://github.com/react-native-community/react-native-webview) to add the native `react-native-webview` dependency.
 
-* [Example](./examples)
+* [Example](packages/examples)
 
 ## `RichEditor`
 The editor component. Simply place this component in your view hierarchy to receive a fully functional Rich text Editor.
@@ -63,7 +63,7 @@ This method registers a function that will get called whenver the cursor positio
 />
 ```
 
-![](readme/editor.jpg)
+![](packages/react-native-pell-rich-editor/readme/editor.jpg)
 
 
 ## `RichToolbar`
