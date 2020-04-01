@@ -51,15 +51,15 @@ export default class RichToolbar extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         let that = this;
-        return nextProps.actions!==that.props.actions
-                || nextState.editor!==that.state.editor
-                || nextState.selectedItems!==that.state.selectedItems
-                || nextState.actions!==that.state.actions
+        return nextProps.actions !== that.props.actions
+            || nextState.editor !== that.state.editor
+            || nextState.selectedItems !== that.state.selectedItems
+            || nextState.actions !== that.state.actions
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
         const {actions} = nextProps;
-        if (actions!==prevState.actions) {
+        if (actions !== prevState.actions) {
             let {selectedItems = []} = prevState;
             return {
                 actions,
@@ -80,20 +80,20 @@ export default class RichToolbar extends Component {
     }
 
     setSelectedItems(selectedItems) {
-        if (selectedItems!==this.state.selectedItems) {
+        if (selectedItems !== this.state.selectedItems) {
             this.setState({
                 selectedItems,
-                data: this.getRows(this.state.actions, selectedItems)
+                data: this.state.actions.map(action => ({action, selected: selectedItems.includes(action)}))
             });
         }
     }
 
     _getButtonSelectedStyle() {
-        return this.props.selectedButtonStyle ? this.props.selectedButtonStyle:styles.defaultSelectedButton;
+        return this.props.selectedButtonStyle ? this.props.selectedButtonStyle : styles.defaultSelectedButton;
     }
 
     _getButtonUnselectedStyle() {
-        return this.props.unselectedButtonStyle ? this.props.unselectedButtonStyle:styles.defaultUnselectedButton;
+        return this.props.unselectedButtonStyle ? this.props.unselectedButtonStyle : styles.defaultUnselectedButton;
     }
 
     _getButtonIcon(action) {
@@ -110,43 +110,43 @@ export default class RichToolbar extends Component {
         const icon = this._getButtonIcon(action);
         const {iconSize = 50} = this.props;
         return (
-                <TouchableOpacity
-                        key={action}
-                        style={[
-                            {height: iconSize, width: iconSize, justifyContent: 'center'},
-                            selected ? this._getButtonSelectedStyle():this._getButtonUnselectedStyle()
-                        ]}
-                        onPress={() => this._onPress(action)}
-                >
-                    {icon ? <Image source={icon} style={{
-                        tintColor: selected ? this.props.selectedIconTint:this.props.iconTint,
-                        height: iconSize,
-                        width: iconSize
-                    }}/>:null}
-                </TouchableOpacity>
+            <TouchableOpacity
+                key={action}
+                style={[
+                    {height: iconSize, width: iconSize, justifyContent: 'center'},
+                    selected ? this._getButtonSelectedStyle() : this._getButtonUnselectedStyle()
+                ]}
+                onPress={() => this._onPress(action)}
+            >
+                {icon ? <Image source={icon} style={{
+                    tintColor: selected ? this.props.selectedIconTint : this.props.iconTint,
+                    height: iconSize,
+                    width: iconSize
+                }}/> : null}
+            </TouchableOpacity>
         );
     }
 
     _renderAction(action, selected) {
         return this.props.renderAction ?
-                this.props.renderAction(action, selected):
-                this._defaultRenderAction(action, selected);
+            this.props.renderAction(action, selected) :
+            this._defaultRenderAction(action, selected);
     }
 
     render() {
         return (
-                <View
-                        style={[{height: 50, backgroundColor: '#D3D3D3', alignItems: 'center'}, this.props.style]}
-                >
-                    <FlatList
-                            horizontal
-                            keyExtractor={(item, index) => item.action + '-' + index}
-                            data={this.state.data}
-                            alwaysBounceHorizontal={false}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({item}) => this._renderAction(item.action, item.selected)}
-                    />
-                </View>
+            <View
+                style={[{height: 50, backgroundColor: '#D3D3D3', alignItems: 'center'}, this.props.style]}
+            >
+                <FlatList
+                    horizontal
+                    keyExtractor={(item, index) => item.action + '-' + index}
+                    data={this.state.data}
+                    alwaysBounceHorizontal={false}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({item}) => this._renderAction(item.action, item.selected)}
+                />
+            </View>
         );
     }
 

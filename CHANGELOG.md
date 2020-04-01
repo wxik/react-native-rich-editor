@@ -1,4 +1,10 @@
 
+## 1.0.6
+
+### Fix Bug
+- Fix `selected toolbar` error
+
+
 ## 1.0.5
 
 ### Added

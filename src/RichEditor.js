@@ -4,7 +4,7 @@ import {actions, messages} from "./const";
 import {Dimensions, PixelRatio, Platform, StyleSheet, View} from "react-native";
 import {HTML} from "./editor";
 
-const PlatformIOS = Platform.OS==="ios";
+const PlatformIOS = Platform.OS === "ios";
 
 export default class RichTextEditor extends Component {
     // static propTypes = {
@@ -19,13 +19,14 @@ export default class RichTextEditor extends Component {
 
     constructor(props) {
         super(props);
+        this.onMessage = this.onMessage.bind(this);
         this._sendAction = this._sendAction.bind(this);
         this.registerToolbar = this.registerToolbar.bind(this);
         this._onKeyboardWillShow = this._onKeyboardWillShow.bind(this);
         this._onKeyboardWillHide = this._onKeyboardWillHide.bind(this);
         this.isInit = false;
+        this.selectionChangeListeners = [];
         this.state = {
-            selectionChangeListeners: [],
             keyboardHeight: 0,
             height: 0
         };
@@ -54,7 +55,7 @@ export default class RichTextEditor extends Component {
     _onKeyboardWillShow(event) {
         // console.log('!!!!', event);
         const newKeyboardHeight = event.endCoordinates.height;
-        if (this.state.keyboardHeight===newKeyboardHeight) {
+        if (this.state.keyboardHeight === newKeyboardHeight) {
             return;
         }
         if (newKeyboardHeight) {
@@ -73,11 +74,11 @@ export default class RichTextEditor extends Component {
         const spacing = marginTop + marginBottom + top + bottom;
 
         const editorAvailableHeight =
-                Dimensions.get("window").height - keyboardHeight - spacing;
+            Dimensions.get("window").height - keyboardHeight - spacing;
         // this.setEditorHeight(editorAvailableHeight);
     }
 
-    onMessage = event => {
+    onMessage(event) {
         try {
             const message = JSON.parse(event.nativeEvent.data);
             switch (message.type) {
@@ -97,7 +98,7 @@ export default class RichTextEditor extends Component {
                     break;
                 case messages.SELECTION_CHANGE: {
                     const items = message.data;
-                    this.state.selectionChangeListeners.map(listener => {
+                    this.selectionChangeListeners.map(listener => {
                         listener(items);
                     });
                     break;
@@ -117,30 +118,30 @@ export default class RichTextEditor extends Component {
 
     setWebHeight = height => {
         // console.log(height);
-        if (height!==this.state.height) {
+        if (height !== this.state.height) {
             this.setState({height});
         }
     };
 
     renderWebView = () => (
-            <WebView
-                    useWebKit={true}
-                    scrollEnabled={false}
-                    hideKeyboardAccessoryView={true}
-                    keyboardDisplayRequiresUserAction={false}
-                    {...this.props}
-                    ref={r => {
-                        this.webviewBridge = r;
-                    }}
-                    onMessage={this.onMessage}
-                    originWhitelist={["*"]}
-                    dataDetectorTypes={"none"}
-                    domStorageEnabled={false}
-                    bounces={false}
-                    javaScriptEnabled={true}
-                    source={{html: HTML}}
-                    onLoad={() => this.init()}
-            />
+        <WebView
+            useWebKit={true}
+            scrollEnabled={false}
+            hideKeyboardAccessoryView={true}
+            keyboardDisplayRequiresUserAction={false}
+            {...this.props}
+            ref={r => {
+                this.webviewBridge = r;
+            }}
+            onMessage={this.onMessage}
+            originWhitelist={["*"]}
+            dataDetectorTypes={"none"}
+            domStorageEnabled={false}
+            bounces={false}
+            javaScriptEnabled={true}
+            source={{html: HTML}}
+            onLoad={() => this.init()}
+        />
     );
 
     render() {
@@ -153,14 +154,14 @@ export default class RichTextEditor extends Component {
 
         if (useContainer) {
             return (
-                    <View
-                            style={[
-                                this.props.style,
-                                {height: height || Dimensions.get("window").height * 0.7}
-                            ]}
-                    >
-                        {this.renderWebView()}
-                    </View>
+                <View
+                    style={[
+                        this.props.style,
+                        {height: height || Dimensions.get("window").height * 0.7}
+                    ]}
+                >
+                    {this.renderWebView()}
+                </View>
             );
         }
         return this.renderWebView();
@@ -178,12 +179,10 @@ export default class RichTextEditor extends Component {
     //--------------- Public API
 
     registerToolbar(listener) {
-        this.setState({
-            selectionChangeListeners: [
-                ...this.state.selectionChangeListeners,
-                listener
-            ]
-        });
+        this.selectionChangeListeners = [
+            ...this.selectionChangeListeners,
+            listener
+        ];
     }
 
     setContentFocusHandler(listener) {
@@ -248,12 +247,12 @@ const styles = StyleSheet.create({
     innerModal: {
         backgroundColor: "rgba(255, 255, 255, 0.9)",
         paddingTop: 20,
-        paddingBottom: PlatformIOS ? 0:20,
+        paddingBottom: PlatformIOS ? 0 : 20,
         paddingLeft: 20,
         paddingRight: 20,
         alignSelf: "stretch",
         margin: 40,
-        borderRadius: PlatformIOS ? 8:2
+        borderRadius: PlatformIOS ? 8 : 2
     },
     button: {
         fontSize: 16,
@@ -264,13 +263,13 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 10,
         borderBottomColor: "#4a4a4a",
-        borderBottomWidth: PlatformIOS ? 1 / PixelRatio.get():0
+        borderBottomWidth: PlatformIOS ? 1 / PixelRatio.get() : 0
     },
     inputTitle: {
         color: "#4a4a4a"
     },
     input: {
-        height: PlatformIOS ? 20:40,
+        height: PlatformIOS ? 20 : 40,
         paddingTop: 0
     },
     lineSeparator: {

@@ -28,10 +28,10 @@ class Example extends React.Component {
         // Get the data here and call the interface to save the data
         let html = await this.richText.getContentHtml();
         // console.log(html);
-        alert( html);
+        alert(html);
     };
 
-    onPressAddImage = ()=> {
+    onPressAddImage = () => {
         // insert URL
         this.richText.insertImage("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png");
         // insert base64
@@ -39,7 +39,7 @@ class Example extends React.Component {
         this.richText.blurContentEditor();
     };
 
-    onHome = ()=> {
+    onHome = () => {
         this.props.navigation.push('index');
     };
 
@@ -58,7 +58,7 @@ class Example extends React.Component {
                         style={styles.rich}
                     />
                 </ScrollView>
-                <KeyboardAvoidingView behavior={'padding'} >
+                <KeyboardAvoidingView behavior={'padding'}>
                     <RichToolbar
                         style={styles.richBar}
                         getEditor={() => that.richText}
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: '#F5FCFF'
     },
-    scroll : {
-        backgroundColor:'#ffffff'
+    scroll: {
+        backgroundColor: '#ffffff'
     }
 });
 

@@ -1,7 +1,7 @@
 {
   "name": "examples",
   "version": "0.0.2",
-  "main": "src/index.js",
+  "main": "index.js",
   "license": "MIT",
   "scripts": {
     "android": "react-native run-android",
@@ -14,7 +14,6 @@
   "dependencies": {
     "react": "16.11.0",
     "react-native": "0.62.0",
-    "react-native-pell-rich-editor": "file:..",
     "react-native-webview": "^9.0.1"
   },
   "devDependencies": {
@@ -22,6 +21,7 @@
     "@babel/runtime": "^7.9.2",
     "@react-native-community/eslint-config": "^1.0.0",
     "babel-jest": "^25.2.3",
+    "babel-plugin-module-resolver": "^4.0.0",
     "eslint": "^6.8.0",
     "jest": "^25.2.3",
     "metro-react-native-babel-preset": "^0.59.0",
