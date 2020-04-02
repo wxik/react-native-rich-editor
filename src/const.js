@@ -40,9 +40,8 @@ export const actions = {
     init: 'ZSSS_INIT',
     setEditorHeight: 'SET_EDITOR_HEIGHT',
     setFooterHeight: 'SET_FOOTER_HEIGHT',
-    setPlatform: 'SET_PLATFORM'
+    setPlatform: 'SET_PLATFORM',
 };
-
 
 export const messages = {
     CONTENT_HTML_RESPONSE: 'CONTENT_HTML_RESPONSE',

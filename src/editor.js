@@ -269,6 +269,4 @@ const HTML = `
 </html>
 `;
 
-export {
-    HTML
-}
+export {HTML};

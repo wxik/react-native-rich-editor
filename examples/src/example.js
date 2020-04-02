@@ -4,14 +4,7 @@
  * @since 2019-06-24 14:52
  */
 import React from 'react';
-import {
-    Button,
-    KeyboardAvoidingView,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    View
-} from 'react-native';
+import {Button, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import {RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 
 const initHTML = `<br/>
@@ -23,7 +16,6 @@ const initHTML = `<br/>
 `;
 
 class Example extends React.Component {
-
     save = async () => {
         // Get the data here and call the interface to save the data
         let html = await this.richText.getContentHtml();
@@ -33,7 +25,9 @@ class Example extends React.Component {
 
     onPressAddImage = () => {
         // insert URL
-        this.richText.insertImage("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png");
+        this.richText.insertImage(
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png',
+        );
         // insert base64
         // this.richText.insertImage(`data:${image.mime};base64,${image.data}`);
         this.richText.blurContentEditor();
@@ -52,25 +46,20 @@ class Example extends React.Component {
                     <Button title="Save" onPress={that.save}/>
                 </View>
                 <ScrollView style={styles.scroll}>
-                    <RichEditor
-                        ref={rf => that.richText = rf}
-                        initialContentHTML={initHTML}
-                        style={styles.rich}
-                    />
+                    <RichEditor ref={(rf) => (that.richText = rf)} initialContentHTML={initHTML} style={styles.rich}/>
                 </ScrollView>
                 <KeyboardAvoidingView behavior={'padding'}>
                     <RichToolbar
-                        style={styles.richBar}
-                        getEditor={() => that.richText}
-                        iconTint={'#000033'}
-                        selectedIconTint={'#2095F2'}
-                        selectedButtonStyle={{backgroundColor: "transparent"}}
-                        onPressAddImage={that.onPressAddImage}
+                            style={styles.richBar}
+                            getEditor={() => that.richText}
+                            iconTint={'#000033'}
+                            selectedIconTint={'#2095F2'}
+                            selectedButtonStyle={{backgroundColor: 'transparent'}}
+                            onPressAddImage={that.onPressAddImage}
                     />
                 </KeyboardAvoidingView>
-
             </SafeAreaView>
-        )
+        );
     }
 }
 
@@ -86,17 +75,15 @@ const styles = StyleSheet.create({
     },
     rich: {
         minHeight: 300,
-        flex: 1
+        flex: 1,
     },
     richBar: {
         height: 50,
-        backgroundColor: '#F5FCFF'
+        backgroundColor: '#F5FCFF',
     },
     scroll: {
-        backgroundColor: '#ffffff'
-    }
+        backgroundColor: '#ffffff',
+    },
 });
 
-export {
-    Example
-}
+export {Example};

@@ -8,7 +8,7 @@ const defaultActions = [
     actions.setItalic,
     actions.insertBulletsList,
     actions.insertOrderedList,
-    actions.insertLink
+    actions.insertLink,
 ];
 
 function getDefaultIcon() {
@@ -22,9 +22,7 @@ function getDefaultIcon() {
     return texts;
 }
 
-
 export default class RichToolbar extends Component {
-
     // static propTypes = {
     //   getEditor: PropTypes.func.isRequired,
     //   actions: PropTypes.array,
@@ -51,10 +49,12 @@ export default class RichToolbar extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         let that = this;
-        return nextProps.actions !== that.props.actions
-            || nextState.editor !== that.state.editor
-            || nextState.selectedItems !== that.state.selectedItems
-            || nextState.actions !== that.state.actions
+        return (
+                nextProps.actions!==that.props.actions ||
+                nextState.editor!==that.state.editor ||
+                nextState.selectedItems!==that.state.selectedItems ||
+                nextState.actions!==that.state.actions
+        );
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -63,8 +63,8 @@ export default class RichToolbar extends Component {
             let {selectedItems = []} = prevState;
             return {
                 actions,
-                data: actions.map(action => ({action, selected: selectedItems.includes(action)}))
-            }
+                data: actions.map((action) => ({action, selected: selectedItems.includes(action)})),
+            };
         }
         return null;
     }
@@ -83,7 +83,7 @@ export default class RichToolbar extends Component {
         if (selectedItems !== this.state.selectedItems) {
             this.setState({
                 selectedItems,
-                data: this.state.actions.map(action => ({action, selected: selectedItems.includes(action)}))
+                data: this.state.actions.map((action) => ({action, selected: selectedItems.includes(action)})),
             });
         }
     }
@@ -110,43 +110,45 @@ export default class RichToolbar extends Component {
         const icon = this._getButtonIcon(action);
         const {iconSize = 50} = this.props;
         return (
-            <TouchableOpacity
-                key={action}
-                style={[
-                    {height: iconSize, width: iconSize, justifyContent: 'center'},
-                    selected ? this._getButtonSelectedStyle() : this._getButtonUnselectedStyle()
-                ]}
-                onPress={() => this._onPress(action)}
-            >
-                {icon ? <Image source={icon} style={{
-                    tintColor: selected ? this.props.selectedIconTint : this.props.iconTint,
-                    height: iconSize,
-                    width: iconSize
-                }}/> : null}
-            </TouchableOpacity>
+                <TouchableOpacity
+                        key={action}
+                        style={[
+                            {height: iconSize, width: iconSize, justifyContent: 'center'},
+                            selected ? this._getButtonSelectedStyle():this._getButtonUnselectedStyle(),
+                        ]}
+                        onPress={() => this._onPress(action)}>
+                    {icon ? (
+                            <Image
+                                    source={icon}
+                                    style={{
+                                        tintColor: selected ? this.props.selectedIconTint:this.props.iconTint,
+                                        height: iconSize,
+                                        width: iconSize,
+                                    }}
+                            />
+                    ):null}
+                </TouchableOpacity>
         );
     }
 
     _renderAction(action, selected) {
-        return this.props.renderAction ?
-            this.props.renderAction(action, selected) :
-            this._defaultRenderAction(action, selected);
+        return this.props.renderAction
+                ? this.props.renderAction(action, selected)
+                :this._defaultRenderAction(action, selected);
     }
 
     render() {
         return (
-            <View
-                style={[{height: 50, backgroundColor: '#D3D3D3', alignItems: 'center'}, this.props.style]}
-            >
-                <FlatList
-                    horizontal
-                    keyExtractor={(item, index) => item.action + '-' + index}
-                    data={this.state.data}
-                    alwaysBounceHorizontal={false}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={({item}) => this._renderAction(item.action, item.selected)}
-                />
-            </View>
+                <View style={[{height: 50, backgroundColor: '#D3D3D3', alignItems: 'center'}, this.props.style]}>
+                    <FlatList
+                            horizontal
+                            keyExtractor={(item, index) => item.action + '-' + index}
+                            data={this.state.data}
+                            alwaysBounceHorizontal={false}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({item}) => this._renderAction(item.action, item.selected)}
+                    />
+                </View>
         );
     }
 
@@ -176,7 +178,7 @@ export default class RichToolbar extends Component {
             case actions.setIndent:
             case actions.setOutdent:
             case actions.insertLink:
-                this.state.editor._sendAction(action, "result");
+                this.state.editor._sendAction(action, 'result');
                 break;
             case actions.insertImage:
                 if (this.props.onPressAddImage) {
@@ -189,7 +191,7 @@ export default class RichToolbar extends Component {
 
 const styles = StyleSheet.create({
     defaultSelectedButton: {
-        backgroundColor: 'red'
+        backgroundColor: 'red',
     },
-    defaultUnselectedButton: {}
+    defaultUnselectedButton: {},
 });

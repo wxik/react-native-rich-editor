@@ -7,21 +7,20 @@
  */
 
 import React, {Component} from 'react';
-import {Example} from './example'
-import {Welcome} from './welcome'
+import {Example} from './example';
+import {Welcome} from './welcome';
 
 const Routes = {
-    'index': Welcome,
-    'rich': Example,
+    index: Welcome,
+    rich: Example,
 };
 
 type Props = {};
 type State = {
-    routeKey: string
+    routeKey: string,
 };
 
 class App extends Component<Props, State> {
-
     state = {
         routeKey: 'index',
     };
