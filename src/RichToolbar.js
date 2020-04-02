@@ -50,10 +50,10 @@ export default class RichToolbar extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         let that = this;
         return (
-                nextProps.actions!==that.props.actions ||
-                nextState.editor!==that.state.editor ||
-                nextState.selectedItems!==that.state.selectedItems ||
-                nextState.actions!==that.state.actions
+            nextProps.actions !== that.props.actions ||
+            nextState.editor !== that.state.editor ||
+            nextState.selectedItems !== that.state.selectedItems ||
+            nextState.actions !== that.state.actions
         );
     }
 
@@ -110,45 +110,45 @@ export default class RichToolbar extends Component {
         const icon = this._getButtonIcon(action);
         const {iconSize = 50} = this.props;
         return (
-                <TouchableOpacity
-                        key={action}
-                        style={[
-                            {height: iconSize, width: iconSize, justifyContent: 'center'},
-                            selected ? this._getButtonSelectedStyle():this._getButtonUnselectedStyle(),
-                        ]}
-                        onPress={() => this._onPress(action)}>
-                    {icon ? (
-                            <Image
-                                    source={icon}
-                                    style={{
-                                        tintColor: selected ? this.props.selectedIconTint:this.props.iconTint,
-                                        height: iconSize,
-                                        width: iconSize,
-                                    }}
-                            />
-                    ):null}
-                </TouchableOpacity>
+            <TouchableOpacity
+                key={action}
+                style={[
+                    {height: iconSize, width: iconSize, justifyContent: 'center'},
+                    selected ? this._getButtonSelectedStyle() : this._getButtonUnselectedStyle(),
+                ]}
+                onPress={() => this._onPress(action)}>
+                {icon ? (
+                    <Image
+                        source={icon}
+                        style={{
+                            tintColor: selected ? this.props.selectedIconTint : this.props.iconTint,
+                            height: iconSize,
+                            width: iconSize,
+                        }}
+                    />
+                ) : null}
+            </TouchableOpacity>
         );
     }
 
     _renderAction(action, selected) {
         return this.props.renderAction
-                ? this.props.renderAction(action, selected)
-                :this._defaultRenderAction(action, selected);
+            ? this.props.renderAction(action, selected)
+            : this._defaultRenderAction(action, selected);
     }
 
     render() {
         return (
-                <View style={[{height: 50, backgroundColor: '#D3D3D3', alignItems: 'center'}, this.props.style]}>
-                    <FlatList
-                            horizontal
-                            keyExtractor={(item, index) => item.action + '-' + index}
-                            data={this.state.data}
-                            alwaysBounceHorizontal={false}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({item}) => this._renderAction(item.action, item.selected)}
-                    />
-                </View>
+            <View style={[{height: 50, backgroundColor: '#D3D3D3', alignItems: 'center'}, this.props.style]}>
+                <FlatList
+                    horizontal
+                    keyExtractor={(item, index) => item.action + '-' + index}
+                    data={this.state.data}
+                    alwaysBounceHorizontal={false}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({item}) => this._renderAction(item.action, item.selected)}
+                />
+            </View>
         );
     }
 

@@ -26,7 +26,7 @@ class Example extends React.Component {
     onPressAddImage = () => {
         // insert URL
         this.richText.insertImage(
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png',
         );
         // insert base64
         // this.richText.insertImage(`data:${image.mime};base64,${image.data}`);
@@ -42,20 +42,20 @@ class Example extends React.Component {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.nav}>
-                    <Button title={'HOME'} onPress={that.onHome}/>
-                    <Button title="Save" onPress={that.save}/>
+                    <Button title={'HOME'} onPress={that.onHome} />
+                    <Button title="Save" onPress={that.save} />
                 </View>
                 <ScrollView style={styles.scroll}>
-                    <RichEditor ref={(rf) => (that.richText = rf)} initialContentHTML={initHTML} style={styles.rich}/>
+                    <RichEditor ref={(rf) => (that.richText = rf)} initialContentHTML={initHTML} style={styles.rich} />
                 </ScrollView>
                 <KeyboardAvoidingView behavior={'padding'}>
                     <RichToolbar
-                            style={styles.richBar}
-                            getEditor={() => that.richText}
-                            iconTint={'#000033'}
-                            selectedIconTint={'#2095F2'}
-                            selectedButtonStyle={{backgroundColor: 'transparent'}}
-                            onPressAddImage={that.onPressAddImage}
+                        style={styles.richBar}
+                        getEditor={() => that.richText}
+                        iconTint={'#000033'}
+                        selectedIconTint={'#2095F2'}
+                        selectedButtonStyle={{backgroundColor: 'transparent'}}
+                        onPressAddImage={that.onPressAddImage}
                     />
                 </KeyboardAvoidingView>
             </SafeAreaView>

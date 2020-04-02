@@ -33,7 +33,7 @@ class App extends Component<Props, State> {
         let that = this;
         let {routeKey} = that.state;
         let Comp = Routes[routeKey];
-        return <Comp navigation={that}/>;
+        return <Comp navigation={that} />;
     }
 }
 

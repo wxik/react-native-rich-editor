@@ -17,7 +17,7 @@ const Welcome = ({navigation}) => (
         <Text style={styles.welcome}>Welcome to React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
-        <Button title={'RICH EDITOR'} onPress={() => navigation.push('rich')}/>
+        <Button title={'RICH EDITOR'} onPress={() => navigation.push('rich')} />
     </View>
 );
 

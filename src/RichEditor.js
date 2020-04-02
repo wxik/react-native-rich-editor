@@ -4,7 +4,7 @@ import {actions, messages} from './const';
 import {Dimensions, PixelRatio, Platform, StyleSheet, View} from 'react-native';
 import {HTML} from './editor';
 
-const PlatformIOS = Platform.OS==='ios';
+const PlatformIOS = Platform.OS === 'ios';
 
 export default class RichTextEditor extends Component {
     // static propTypes = {
@@ -117,30 +117,30 @@ export default class RichTextEditor extends Component {
 
     setWebHeight = (height) => {
         // console.log(height);
-        if (height!==this.state.height) {
+        if (height !== this.state.height) {
             this.setState({height});
         }
     };
 
     renderWebView = () => (
-            <WebView
-                    useWebKit={true}
-                    scrollEnabled={false}
-                    hideKeyboardAccessoryView={true}
-                    keyboardDisplayRequiresUserAction={false}
-                    {...this.props}
-                    ref={(r) => {
-                        this.webviewBridge = r;
-                    }}
-                    onMessage={this.onMessage}
-                    originWhitelist={['*']}
-                    dataDetectorTypes={'none'}
-                    domStorageEnabled={false}
-                    bounces={false}
-                    javaScriptEnabled={true}
-                    source={{html: HTML}}
-                    onLoad={() => this.init()}
-            />
+        <WebView
+            useWebKit={true}
+            scrollEnabled={false}
+            hideKeyboardAccessoryView={true}
+            keyboardDisplayRequiresUserAction={false}
+            {...this.props}
+            ref={(r) => {
+                this.webviewBridge = r;
+            }}
+            onMessage={this.onMessage}
+            originWhitelist={['*']}
+            dataDetectorTypes={'none'}
+            domStorageEnabled={false}
+            bounces={false}
+            javaScriptEnabled={true}
+            source={{html: HTML}}
+            onLoad={() => this.init()}
+        />
     );
 
     render() {
@@ -153,9 +153,9 @@ export default class RichTextEditor extends Component {
 
         if (useContainer) {
             return (
-                    <View style={[this.props.style, {height: height || Dimensions.get('window').height * 0.7}]}>
-                        {this.renderWebView()}
-                    </View>
+                <View style={[this.props.style, {height: height || Dimensions.get('window').height * 0.7}]}>
+                    {this.renderWebView()}
+                </View>
             );
         }
         return this.renderWebView();
@@ -237,12 +237,12 @@ const styles = StyleSheet.create({
     innerModal: {
         backgroundColor: 'rgba(255, 255, 255, 0.9)',
         paddingTop: 20,
-        paddingBottom: PlatformIOS ? 0:20,
+        paddingBottom: PlatformIOS ? 0 : 20,
         paddingLeft: 20,
         paddingRight: 20,
         alignSelf: 'stretch',
         margin: 40,
-        borderRadius: PlatformIOS ? 8:2,
+        borderRadius: PlatformIOS ? 8 : 2,
     },
     button: {
         fontSize: 16,
@@ -253,13 +253,13 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 10,
         borderBottomColor: '#4a4a4a',
-        borderBottomWidth: PlatformIOS ? 1 / PixelRatio.get():0,
+        borderBottomWidth: PlatformIOS ? 1 / PixelRatio.get() : 0,
     },
     inputTitle: {
         color: '#4a4a4a',
     },
     input: {
-        height: PlatformIOS ? 20:40,
+        height: PlatformIOS ? 20 : 40,
         paddingTop: 0,
     },
     lineSeparator: {
