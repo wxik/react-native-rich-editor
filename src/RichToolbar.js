@@ -24,7 +24,8 @@ function getDefaultIcon() {
 
 export default class RichToolbar extends Component {
     // static propTypes = {
-    //   getEditor: PropTypes.func.isRequired,
+    //   getEditor?: PropTypes.func.isRequired,
+    //   editor?: PropTypes.object,
     //   actions: PropTypes.array,
     //   onPressAddImage: PropTypes.func,
     //   selectedButtonStyle: PropTypes.object,
@@ -42,7 +43,7 @@ export default class RichToolbar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editor: undefined,
+            editor: void 0,
             selectedItems: [],
         };
     }
@@ -70,7 +71,7 @@ export default class RichToolbar extends Component {
     }
 
     componentDidMount() {
-        const editor = this.props.getEditor();
+        const {editor: {current: editor} = {current: this.props?.getEditor()}} = this.props;
         if (!editor) {
             throw new Error('Toolbar has no editor!');
         } else {
@@ -104,52 +105,6 @@ export default class RichToolbar extends Component {
         } else {
             return undefined;
         }
-    }
-
-    _defaultRenderAction(action, selected) {
-        const icon = this._getButtonIcon(action);
-        const {iconSize = 50} = this.props;
-        return (
-            <TouchableOpacity
-                key={action}
-                style={[
-                    {height: iconSize, width: iconSize, justifyContent: 'center'},
-                    selected ? this._getButtonSelectedStyle() : this._getButtonUnselectedStyle(),
-                ]}
-                onPress={() => this._onPress(action)}>
-                {icon ? (
-                    <Image
-                        source={icon}
-                        style={{
-                            tintColor: selected ? this.props.selectedIconTint : this.props.iconTint,
-                            height: iconSize,
-                            width: iconSize,
-                        }}
-                    />
-                ) : null}
-            </TouchableOpacity>
-        );
-    }
-
-    _renderAction(action, selected) {
-        return this.props.renderAction
-            ? this.props.renderAction(action, selected)
-            : this._defaultRenderAction(action, selected);
-    }
-
-    render() {
-        return (
-            <View style={[{height: 50, backgroundColor: '#D3D3D3', alignItems: 'center'}, this.props.style]}>
-                <FlatList
-                    horizontal
-                    keyExtractor={(item, index) => item.action + '-' + index}
-                    data={this.state.data}
-                    alwaysBounceHorizontal={false}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={({item}) => this._renderAction(item.action, item.selected)}
-                />
-            </View>
-        );
     }
 
     _onPress(action) {
@@ -187,6 +142,53 @@ export default class RichToolbar extends Component {
                 break;
         }
     }
+
+    _defaultRenderAction(action, selected) {
+        const icon = this._getButtonIcon(action);
+        const {iconSize = 50} = this.props;
+        return (
+            <TouchableOpacity
+                key={action}
+                style={[
+                    {height: iconSize, width: iconSize, justifyContent: 'center'},
+                    selected ? this._getButtonSelectedStyle() : this._getButtonUnselectedStyle(),
+                ]}
+                onPress={() => this._onPress(action)}>
+                {icon ? (
+                    <Image
+                        source={icon}
+                        style={{
+                            tintColor: selected ? this.props.selectedIconTint : this.props.iconTint,
+                            height: iconSize,
+                            width: iconSize,
+                        }}
+                    />
+                ) : null}
+            </TouchableOpacity>
+        );
+    }
+
+    _renderAction(action, selected) {
+        return this.props.renderAction
+            ? this.props.renderAction(action, selected)
+            : this._defaultRenderAction(action, selected);
+    }
+
+    render() {
+        const {style} = this.props;
+        return (
+            <View style={[styles.barContainer, style]}>
+                <FlatList
+                    horizontal
+                    keyExtractor={(item, index) => item.action + '-' + index}
+                    data={this.state.data}
+                    alwaysBounceHorizontal={false}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({item}) => this._renderAction(item.action, item.selected)}
+                />
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -194,4 +196,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
     },
     defaultUnselectedButton: {},
+    barContainer: {
+        height: 50,
+        backgroundColor: '#D3D3D3',
+        alignItems: 'center',
+    },
 });

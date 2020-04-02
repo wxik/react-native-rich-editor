@@ -74,8 +74,15 @@ declare module "react-native-pell-rich-editor" {
     export interface RichToolbarProps {
         /**
          * Function that returns a reference to the RichEditor instance
+         * Optional editor props
          */
-        getEditor: () => RichEditor;
+        getEditor?: () => RichEditor;
+
+        /**
+         * React.createRef reference to the RichEditor instance
+         * Optional getEditor props
+         */
+        editor?: React.createRef,
 
         unselectedButtonStyle?: StyleProp<ViewStyle>;
         selectedButtonStyle?: StyleProp<ViewStyle>;

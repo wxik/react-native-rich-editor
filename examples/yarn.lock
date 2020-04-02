@@ -270,6 +270,14 @@
     "@babel/helper-plugin-utils" "^7.8.3"
     "@babel/plugin-syntax-export-default-from" "^7.8.3"
 
+"@babel/plugin-proposal-function-bind@^7.8.3":
+  version "7.8.3"
+  resolved "https://r.cnpmjs.org/@babel/plugin-proposal-function-bind/download/@babel/plugin-proposal-function-bind-7.8.3.tgz#e34a1e984771b84b6e5322745edeadca7e500ced"
+  integrity sha1-40oemEdxuEtuUyJ0Xt6tyn5QDO0=
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.8.3"
+    "@babel/plugin-syntax-function-bind" "^7.8.3"
+
 "@babel/plugin-proposal-nullish-coalescing-operator@^7.0.0":
   version "7.8.3"
   resolved "https://r.cnpmjs.org/@babel/plugin-proposal-nullish-coalescing-operator/download/@babel/plugin-proposal-nullish-coalescing-operator-7.8.3.tgz#e4572253fdeed65cddeecfdab3f928afeb2fd5d2"
@@ -334,6 +342,13 @@
   version "7.8.3"
   resolved "https://r.cnpmjs.org/@babel/plugin-syntax-flow/download/@babel/plugin-syntax-flow-7.8.3.tgz#f2c883bd61a6316f2c89380ae5122f923ba4527f"
   integrity sha1-8siDvWGmMW8siTgK5RIvkjukUn8=
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.8.3"
+
+"@babel/plugin-syntax-function-bind@^7.8.3":
+  version "7.8.3"
+  resolved "https://r.cnpmjs.org/@babel/plugin-syntax-function-bind/download/@babel/plugin-syntax-function-bind-7.8.3.tgz#17d722cd8efc9bb9cf8bc59327f2b26295b352f7"
+  integrity sha1-F9cizY78m7nPi8WTJ/KyYpWzUvc=
   dependencies:
     "@babel/helper-plugin-utils" "^7.8.3"
 

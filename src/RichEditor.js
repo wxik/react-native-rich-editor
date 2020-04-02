@@ -122,6 +122,14 @@ export default class RichTextEditor extends Component {
         }
     };
 
+    _sendAction(type, action, data) {
+        let jsonString = JSON.stringify({type, name: action, data});
+        if (this.webviewBridge) {
+            this.webviewBridge.postMessage(jsonString);
+            // console.log(jsonString)
+        }
+    }
+
     renderWebView = () => (
         <WebView
             useWebKit={true}
@@ -159,14 +167,6 @@ export default class RichTextEditor extends Component {
             );
         }
         return this.renderWebView();
-    }
-
-    _sendAction(type, action, data) {
-        let jsonString = JSON.stringify({type, name: action, data});
-        if (this.webviewBridge) {
-            this.webviewBridge.postMessage(jsonString);
-            // console.log(jsonString)
-        }
     }
 
     //-------------------------------------------------------------------------------

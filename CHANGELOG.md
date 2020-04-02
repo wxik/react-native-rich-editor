@@ -1,4 +1,10 @@
 
+## 1.0.?
+
+### Added
+- Add Optional `editor` props substitute `getEditor` function props
+
+
 ## 1.0.6
 
 ### Fix Bug
