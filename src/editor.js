@@ -141,6 +141,12 @@ const HTML = `
                     if (url) { exec('insertHTML', "<br><div><img src='"+ url +"'/></div><br>");}
                 }
             },
+            video: {
+                result: function(url) {
+                    var thumbnail = url.replace('.mp4', '').replace('.m3u8', '') + '-thumbnail';
+                    if (url) { exec('insertHTML', "<br><div><video poster='"+ thumbnail + "' controls><source src='"+ url +"' type='video/mp4'>No video tag support</video></div><br>");}
+                }
+            },
             content: {
                 setHtml: function(html) {
                     editor.content.innerHTML = html;
