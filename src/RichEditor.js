@@ -212,10 +212,12 @@ export default class RichTextEditor extends Component {
 
   insertImage(attributes) {
     this._sendAction(actions.insertImage, "result", attributes);
+    this._sendAction(actions.updateHeight);
   }
 
   insertVideo(attributes) {
     this._sendAction(actions.insertVideo, "result", attributes);
+    this._sendAction(actions.updateHeight);
   }
 
   init() {
