@@ -15,6 +15,7 @@ const PlatformIOS = Platform.OS === "ios";
 export default class RichTextEditor extends Component {
   // static propTypes = {
   //     initialContentHTML: PropTypes.string,
+  //     initialEditorHeight: PropTypes.number,
   //     editorInitializedCallback: PropTypes.func,
   // };
 
@@ -202,6 +203,10 @@ export default class RichTextEditor extends Component {
     this._sendAction(actions.content, "setHtml", html);
   }
 
+  setEditorHeight(height) {
+    this._sendAction(actions.content, "setMinHeight", height);
+  }
+
   blurContentEditor() {
     this._sendAction(actions.content, "blur");
   }
@@ -224,6 +229,7 @@ export default class RichTextEditor extends Component {
     let that = this;
     that.isInit = true;
     that.setContentHTML(this.props.initialContentHTML);
+    that.setEditorHeight(this.props.initialEditorHeight);
     that.props.editorInitializedCallback &&
       that.props.editorInitializedCallback();
 

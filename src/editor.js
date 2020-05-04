@@ -152,6 +152,9 @@ const HTML = `
                 setHtml: function(html) {
                     editor.content.innerHTML = html;
                 },
+                setMinHeight: function(height) {
+                    editor.content.style.minHeight = height + 'px';
+                },
                 getHtml: function() {
                     return editor.content.innerHTML;
                 },
