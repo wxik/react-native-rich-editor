@@ -1,5 +1,8 @@
 //console.log = function (){ postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});};
-const HTML = `
+
+function createHTML(options = {}) {
+    const {backgroundColor = '#FFF', color = '#000033', placeholderColor = '#a9a9a9'} = options;
+    return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,21 +10,23 @@ const HTML = `
     <style>
         * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;}
         html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em;}
-        body { overflow-y: hidden; -webkit-overflow-scrolling: touch;height: 100%;background-color: #FFF;}
+        body { overflow-y: hidden; -webkit-overflow-scrolling: touch;height: 100%;background-color: ${backgroundColor};}
         img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
-        .content {  font-family: Arial, Helvetica, sans-serif;color: #000033; width: 100%;height: 100%;-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
+        .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;height: 100%;-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
         .pell { height: 100%;}
         .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;}
         table {width: 100% !important;}
         table td {width: inherit;}
         table span { font-size: 12px !important; }
+    </style>
+    <style>
         [placeholder]:empty:before {
             content: attr(placeholder);
-            color: #a9a9a9;
+            color: ${placeholderColor};
         }
         [placeholder]:empty:focus:before {
             content: attr(placeholder);
-            color: #a9a9a9;
+            color: ${placeholderColor};
         }
     </style>
 </head>
@@ -166,6 +171,20 @@ const HTML = `
                 },
                 setPlaceholder: function(placeholder){
                     editor.content.setAttribute("placeholder", placeholder)
+                },
+                setContentStyle: function(styles) {
+                    styles = styles || {};
+                    var backgroundColor = styles.backgroundColor, color = styles.color, pColor = styles.placeholderColor;
+                    if (backgroundColor) document.body.style.backgroundColor = backgroundColor;
+                    if (color) editor.content.style.color = color;
+                    if (pColor){
+                        var rule1="[placeholder]:empty:before {content:attr(placeholder);color:"+pColor+";}";
+                        var rule2="[placeholder]:empty:focus:before{content:attr(placeholder);color:"+pColor+";}";
+                        try {
+                            document.styleSheets[1].deleteRule(0);document.styleSheets[1].deleteRule(0);
+                            document.styleSheets[1].insertRule(rule1); document.styleSheets[1].insertRule(rule2);
+                        } catch (e){ }
+                    }
                 }
             },
 
@@ -268,5 +287,7 @@ const HTML = `
 </body>
 </html>
 `;
+}
 
-export {HTML};
+const HTML = createHTML();
+export {HTML, createHTML};

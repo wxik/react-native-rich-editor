@@ -54,7 +54,8 @@ export default class RichToolbar extends Component {
             nextProps.actions !== that.props.actions ||
             nextState.editor !== that.state.editor ||
             nextState.selectedItems !== that.state.selectedItems ||
-            nextState.actions !== that.state.actions
+            nextState.actions !== that.state.actions ||
+            nextState.style !== that.props.style
         );
     }
 

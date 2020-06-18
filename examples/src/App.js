@@ -23,17 +23,18 @@ type State = {
 class App extends Component<Props, State> {
     state = {
         routeKey: 'index',
+        args: {},
     };
 
-    push = (routeKey) => {
-        Routes[routeKey] && this.setState({routeKey});
+    push = (routeKey, args) => {
+        Routes[routeKey] && this.setState({routeKey, args});
     };
 
     render() {
         let that = this;
-        let {routeKey} = that.state;
+        let {routeKey, args = {}} = that.state;
         let Comp = Routes[routeKey];
-        return <Comp navigation={that} />;
+        return <Comp navigation={that} {...args} />;
     }
 }
 

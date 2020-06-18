@@ -33,6 +33,10 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `editorInitializedCallback `
 
 	A function that will be called when the editor has been initialized.
+	
+* `editorStyle`
+
+	Styling for container or for Rich Editor more dark or light settings
 
 * `useContainer`
 

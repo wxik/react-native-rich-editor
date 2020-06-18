@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {WebView} from 'react-native-webview';
 import {actions, messages} from './const';
 import {Dimensions, PixelRatio, Platform, StyleSheet, View} from 'react-native';
-import {HTML} from './editor';
+import {createHTML} from './editor';
 
 const PlatformIOS = Platform.OS === 'ios';
 
@@ -15,22 +15,29 @@ export default class RichTextEditor extends Component {
     static defaultProps = {
         contentInset: {},
         style: {},
+        placeholder: '',
+        initialContentHTML: '',
     };
 
     constructor(props) {
         super(props);
-        this.onMessage = this.onMessage.bind(this);
-        this._sendAction = this._sendAction.bind(this);
-        this.registerToolbar = this.registerToolbar.bind(this);
-        this._onKeyboardWillShow = this._onKeyboardWillShow.bind(this);
-        this._onKeyboardWillHide = this._onKeyboardWillHide.bind(this);
-        this.isInit = false;
-        this.selectionChangeListeners = [];
-        this.state = {
+        let that = this;
+        that.onMessage = that.onMessage.bind(that);
+        that._sendAction = that._sendAction.bind(that);
+        that.registerToolbar = that.registerToolbar.bind(that);
+        that._onKeyboardWillShow = that._onKeyboardWillShow.bind(that);
+        that._onKeyboardWillHide = that._onKeyboardWillHide.bind(that);
+        that.init = that.init.bind(that);
+        that.setRef = that.setRef.bind(that);
+        that.isInit = false;
+        that.selectionChangeListeners = [];
+        const {editorStyle: {backgroundColor, color, placeholderColor} = {}, html} = props;
+        that.state = {
+            html: {html: html || createHTML({backgroundColor, color, placeholderColor})},
             keyboardHeight: 0,
             height: 0,
         };
-        this.focusListeners = [];
+        that.focusListeners = [];
     }
 
     // componentWillMount() {
@@ -130,26 +137,40 @@ export default class RichTextEditor extends Component {
         }
     }
 
-    renderWebView = () => (
-        <WebView
-            useWebKit={true}
-            scrollEnabled={false}
-            hideKeyboardAccessoryView={true}
-            keyboardDisplayRequiresUserAction={false}
-            {...this.props}
-            ref={(r) => {
-                this.webviewBridge = r;
-            }}
-            onMessage={this.onMessage}
-            originWhitelist={['*']}
-            dataDetectorTypes={'none'}
-            domStorageEnabled={false}
-            bounces={false}
-            javaScriptEnabled={true}
-            source={{html: HTML}}
-            onLoad={() => this.init()}
-        />
-    );
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const {editorStyle} = this.props;
+        if (prevProps.editorStyle !== editorStyle) {
+            editorStyle && this.setContentStyle(editorStyle);
+        }
+    }
+
+    setRef(ref) {
+        this.webviewBridge = ref;
+    }
+
+    renderWebView = () => {
+        const {html, editorStyle, useContainer, ...rest} = this.props;
+        const {html: viewHTML} = this.state;
+        return (
+            <WebView
+                useWebKit={true}
+                scrollEnabled={false}
+                hideKeyboardAccessoryView={true}
+                keyboardDisplayRequiresUserAction={false}
+                {...rest}
+                ref={this.setRef}
+                onMessage={this.onMessage}
+                originWhitelist={['*']}
+                dataDetectorTypes={'none'}
+                domStorageEnabled={false}
+                bounces={false}
+                javaScriptEnabled={true}
+                source={viewHTML}
+                opacity={this.isInit ? 1 : 0}
+                onLoad={this.init}
+            />
+        );
+    };
 
     render() {
         let {height} = this.state;
@@ -157,11 +178,11 @@ export default class RichTextEditor extends Component {
         // useContainer is an optional prop with default value of true
         // If set to true, it will use a View wrapper with styles and height.
         // If set to false, it will not use a View wrapper
-        const {useContainer = true} = this.props;
+        const {useContainer = true, style} = this.props;
 
         if (useContainer) {
             return (
-                <View style={[this.props.style, {height: height || Dimensions.get('window').height * 0.7}]}>
+                <View style={[style, {height: height || Dimensions.get('window').height * 0.7}]}>
                     {this.renderWebView()}
                 </View>
             );
@@ -186,6 +207,10 @@ export default class RichTextEditor extends Component {
 
     setPlaceholder(placeholder) {
         this._sendAction(actions.content, 'setPlaceholder', placeholder);
+    }
+
+    setContentStyle(styles) {
+        this._sendAction(actions.content, 'setContentStyle', styles);
     }
 
     blurContentEditor() {
