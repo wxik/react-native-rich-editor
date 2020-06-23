@@ -28,22 +28,21 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 * `initialContentHTML`
 
-  HTML that will be rendered in the content section on load.
+	HTML that will be rendered in the content section on load.
 
 * `editorInitializedCallback `
 
-  A function that will be called when the editor has been initialized.
-
+	A function that will be called when the editor has been initialized.
+	
 * `editorStyle`
 
-  Styling for container or for Rich Editor more dark or light settings
+	Styling for container or for Rich Editor more dark or light settings
 
 * `useContainer`
 
-  A boolean value that determines if a View container is wrapped around the WebView. The default value is true. If you are using your own View to wrap this library around, set this value to false. 
-
-  
-
+	A boolean value that determines if a View container is wrapped around the WebView. The default value is true. If you are using your own View to wrap this library around, set this value to false. 
+	
+	
 `RichEditor` also has methods that can be used on its `ref` to  set:
 
 *  `setContentHTML(html:string)`
@@ -94,26 +93,27 @@ Other props supported by the `RichToolbar` component are:
   	* `actions.insertBulletsList`
   	* `actions.insertOrderedList`
   	* `actions.insertLink`
-  
+  	
 * `onPressAddImage`
 
     Functions called when the `addImage` actions are tapped. 
-    
+        
 * `selectedButtonStyle`
 * `iconTint`
 * `selectedIconTint`
 * `unselectedButtonStyle`
-  
+    
     These provide options for styling action buttons.
 
 * `iconSize`
-  
+    
     Defines the size of the icon in pixels. Default is 50.
 
 * `renderAction`
 
-  Altenatively, you can provide a render function that will be used instead of the default, so you can fully control the tollbar design.
-
+	Altenatively, you can provide a render function that will be used instead of the default, so you can fully control the tollbar design.
+	
+	
 * `iconMap` 
 
 	`RichTextToolbar` comes with default icons for the default actions it renders. To override those, or to add icons for non-default actions, provide them in a dictionary to this prop.
@@ -124,6 +124,7 @@ Other props supported by the `RichToolbar` component are:
 ```javascript
 <RichToolbar getEditor={() => this.richtext}/>
 ```
+
 #### With Custom Action:
 
 To define your own custom action:
