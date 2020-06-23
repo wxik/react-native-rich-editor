@@ -36,7 +36,12 @@ The editor component. Simply place this component in your view hierarchy to rece
 	
 * `editorStyle`
 
-	Styling for container or for Rich Editor more dark or light settings
+	Styling for container or for Rich Editor more dark or light settings. Object containing the following options:
+
+	- `backgroundColor`: Editor background color
+	- `color`: Editor text color
+	- `placeholderColor`: Editor placeholder text color
+	- `contentHeight`: Height for the Content editor (defaults to `100%`)
 
 * `useContainer`
 
