@@ -221,8 +221,20 @@ export default class RichTextEditor extends Component {
         this._sendAction(actions.content, 'focus');
     }
 
+    blurKeepPosition() {
+        this._sendAction(actions.content, 'blurKeepPosition');
+    }
+
+    focusOnPreviousPosition() {
+        this._sendAction(actions.content, 'focusOnPreviousPosition');
+    }
+
     insertImage(attributes) {
         this._sendAction(actions.insertImage, 'result', attributes);
+    }
+
+    insertText(text) {
+        this._sendAction(actions.text, 'result', text);
     }
 
     init() {

@@ -34,6 +34,87 @@ function createHTML(options = {}) {
 <div class="content"><div id="editor" class="pell"></div></div>
 <script>
     (function (exports) {
+        function isChildOf(node, parentId) {
+            while (node !== null) {
+                if (node.id === parentId) {
+                    return true;
+                }
+                node = node.parentNode;
+            }
+
+            return false;
+        };
+        function getCurrentCursorPosition() {
+            var selection = window.getSelection(),
+                charCount = -1,
+                node;
+            if (selection.focusNode) {
+                if (isChildOf(selection.focusNode, 'editor')) {
+                    node = selection.focusNode; 
+                    charCount = selection.focusOffset;
+
+                    while (node) {
+                        if (node.id === 'editor') {
+                            break;
+                        }
+
+                        if (node.previousSibling) {
+                            node = node.previousSibling;
+                            charCount += node.textContent.length;
+                        } else {
+                            node = node.parentNode;
+                            if (node === null) {
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+            return charCount;
+        };
+        function createRange(node, chars, range) {
+            if (!range) {
+                range = document.createRange()
+                range.selectNode(node);
+                range.setStart(node, 0);
+            }
+
+            if (chars.count === 0) {
+                range.setEnd(node, chars.count);
+            } else if (node && chars.count >0) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    if (node.textContent.length < chars.count) {
+                        chars.count -= node.textContent.length;
+                    } else {
+                        range.setEnd(node, chars.count);
+                        chars.count = 0;
+                    }
+                } else {
+                for (var lp = 0; lp < node.childNodes.length; lp++) {
+                        range = createRange(node.childNodes[lp], chars, range);
+
+                        if (chars.count === 0) {
+                            break;
+                        }
+                    }
+                }
+            } 
+
+            return range;
+        };
+        function setCurrentCursorPosition(chars) {
+            if (chars >= 0) {
+                var selection = window.getSelection();
+
+                range = createRange(document.getElementById("editor").parentNode, { count: chars });
+
+                if (range) {
+                    range.collapse(false);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+            }
+        };
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
         var formatBlock = 'formatBlock';
         var addEventListener = function addEventListener(parent, type, listener) {
@@ -61,7 +142,7 @@ function createHTML(options = {}) {
             window.ReactNativeWebView.postMessage(JSON.stringify(data));
         };
 
-        var editor = null, o_height = 0;
+        var editor = null, o_height = 0, previousPosition = 0;
 
         var Actions = {
             bold: {
@@ -153,6 +234,11 @@ function createHTML(options = {}) {
                     if (url) { exec('insertHTML', "<br><div><img src='"+ url +"'/></div><br>");}
                 }
             },
+            text: {
+                result: function(text) {
+                    if (text) {exec('insertText', text);}
+                }
+            },
             content: {
                 setHtml: function(html) {
                     editor.content.innerHTML = html;
@@ -163,7 +249,15 @@ function createHTML(options = {}) {
                 blur: function() {
                     editor.content.blur();
                 },
+                blurKeepPosition: function() {
+                    previousPosition = getCurrentCursorPosition()
+                    editor.content.blur();
+                },
                 focus: function() {
+                    editor.content.focus();
+                },
+                focusOnPreviousPosition: function() {
+                    setCurrentCursorPosition(previousPosition)
                     editor.content.focus();
                 },
                 postHtml: function (){

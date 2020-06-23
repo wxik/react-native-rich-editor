@@ -22,6 +22,7 @@ export const actions = {
     insertOrderedList: 'orderedList',
     insertLink: 'link',
     insertImage: 'image',
+    insertText: 'text',
     setSubscript: 'subscript',
     setSuperscript: 'superscript',
     setStrikethrough: 'strikeThrough',
