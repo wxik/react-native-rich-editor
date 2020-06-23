@@ -31,9 +31,9 @@ export default class RichTextEditor extends Component {
         that.setRef = that.setRef.bind(that);
         that.isInit = false;
         that.selectionChangeListeners = [];
-        const {editorStyle: {backgroundColor, color, placeholderColor} = {}, html} = props;
+        const {editorStyle: {backgroundColor, color, placeholderColor, contentHeight} = {}, html} = props;
         that.state = {
-            html: {html: html || createHTML({backgroundColor, color, placeholderColor})},
+            html: {html: html || createHTML({backgroundColor, color, placeholderColor, contentHeight})},
             keyboardHeight: 0,
             height: 0,
         };

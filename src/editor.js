@@ -1,7 +1,7 @@
 //console.log = function (){ postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});};
 
 function createHTML(options = {}) {
-    const {backgroundColor = '#FFF', color = '#000033', placeholderColor = '#a9a9a9'} = options;
+    const {backgroundColor = '#FFF', color = '#000033', placeholderColor = '#a9a9a9', contentHeight = '100%'} = options;
     return `
 <!DOCTYPE html>
 <html>
@@ -14,7 +14,7 @@ function createHTML(options = {}) {
         img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
         .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;height: 100%;-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
         .pell { height: 100%;}
-        .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;}
+        .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: ${contentHeight};}
         table {width: 100% !important;}
         table td {width: inherit;}
         table span { font-size: 12px !important; }
