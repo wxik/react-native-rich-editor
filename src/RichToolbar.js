@@ -141,6 +141,11 @@ export default class RichToolbar extends Component {
                     this.props.onPressAddImage();
                 }
                 break;
+            default:
+                if (this.props[action]) {
+                    this.props[action]();
+                }
+                break;
         }
     }
 
