@@ -34,7 +34,9 @@ export default class RichTextEditor extends Component {
     this.state = {
       selectionChangeListeners: [],
       keyboardHeight: 0,
-      height: 0
+      height: 0,
+      taggingActive: false,
+      tagText: '',
     };
     this.focusListeners = [];
   }
@@ -115,6 +117,38 @@ export default class RichTextEditor extends Component {
         }
         case messages.OFFSET_HEIGHT:
           this.setWebHeight(message.data);
+          break;
+        case messages.CONTENT_CHANGE:
+          const { onActivateTagging } = this.props;
+          const { taggingActive, tagText } = this.state;
+
+          const content = message.data.content.trim();
+          const offset = message.data.key.length > 1 ? 1 : 2;
+          const lastChar = content.length > 1 ? content.substr(content.length - offset, 1) : '';
+          //alert(JSON.stringify(message.data));
+          if (lastChar !== '@' && message.data.key === '@') {
+            onActivateTagging && onActivateTagging(true, '');
+            this.setState({
+              taggingActive: true,
+              tagText: '',
+            });
+          } else if (taggingActive && message.data.keyCode === 13) {
+            // enter key, select first connection in list
+            const text =  tagText + '\n';
+            onActivateTagging && onActivateTagging(false, text, true);
+          } else if (taggingActive && message.data.key !== 'Shift' && message.data.keyCode !== 32) {
+            // if not space, continue with tagging
+            // if backspace, but not deleting @, continue with tagging
+            if ( message.data.keyCode !== 8 &&  message.data.key.length > 1) return;
+
+            const text = message.data.keyCode === 8 ? tagText.substr(0, tagText.length - 1) : tagText + message.data.key;
+            const taggingActive = !(text.length === 0 && lastChar !== '@');
+            onActivateTagging && onActivateTagging(taggingActive, text);
+            this.setState({
+              taggingActive,
+              tagText: text,
+            });
+          }
           break;
       }
     } catch (e) {
@@ -222,6 +256,11 @@ export default class RichTextEditor extends Component {
 
   insertVideo(attributes) {
     this._sendAction(actions.insertVideo, "result", attributes);
+    this._sendAction(actions.updateHeight);
+  }
+
+  insertTag(attributes) {
+    this._sendAction(actions.insertTag, "result", attributes);
     this._sendAction(actions.updateHeight);
   }
 
