@@ -148,6 +148,17 @@ const HTML = `
                     if (url) { exec('insertHTML', "<br><div><video src='"+ url +"' poster='"+ thumbnail + "' controls><source src='"+ url +"' type='video/mp4'>No video tag support</video></div><br>");}
                 }
             },
+            tag: {
+                result: function(obj) {
+                    if (obj.link) {
+                        for (i = 0; i <= obj.text.length; i++) {
+                            exec('delete');
+                        }
+                        
+                        exec('insertHTML', obj.link);
+                    }
+                }
+            },
             content: {
                 setHtml: function(html) {
                     editor.content.innerHTML = html;
@@ -242,6 +253,9 @@ const HTML = `
             });
             addEventListener(content, 'focus', function () {
                 postAction({type: 'CONTENT_FOCUSED'});
+            });
+            addEventListener(content, 'keyup', function (e) {
+                postAction({type: 'CONTENT_CHANGE', data: { key: e.key, keyCode: e.keyCode, shiftKey: e.shiftKey, content: content.innerText }});
             });
             
             var message = function (event){
