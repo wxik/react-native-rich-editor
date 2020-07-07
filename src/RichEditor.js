@@ -226,7 +226,7 @@ export default class RichTextEditor extends Component {
     }
 
     insertLink(title, url) {
-        this._sendAction(actions.insertLink, 'result', {title, url});
+        url && this._sendAction(actions.insertLink, 'result', {title, url});
     }
 
     init() {

@@ -16,6 +16,7 @@ import {
     View,
 } from 'react-native';
 import {RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
+import {InsertLinkModal} from './insertLink';
 
 const initHTML = `<br/>
 <center><b>Pell.js Rich Editor</b></center>
@@ -27,6 +28,7 @@ const initHTML = `<br/>
 
 class Example extends React.Component {
     richText = React.createRef();
+    linkModal = React.createRef();
 
     constructor(props) {
         super(props);
@@ -39,6 +41,7 @@ class Example extends React.Component {
         that.onTheme = ::that.onTheme;
         that.onPressAddImage = ::that.onPressAddImage;
         that.onInsertLink = ::that.onInsertLink;
+        that.onLinkDone = ::that.onLinkDone;
         that.themeChange = ::that.themeChange;
     }
 
@@ -78,7 +81,12 @@ class Example extends React.Component {
     }
 
     onInsertLink() {
-        this.richText.current?.insertLink('Google', 'http://google.com');
+        // this.richText.current?.insertLink('Google', 'http://google.com');
+        this.linkModal.current?.setModalVisible(true);
+    }
+
+    onLinkDone({title, url}) {
+        this.richText.current?.insertLink(title, url);
     }
 
     onHome() {
@@ -109,6 +117,13 @@ class Example extends React.Component {
         const themeBg = {backgroundColor};
         return (
             <SafeAreaView style={[styles.container, themeBg]}>
+                <InsertLinkModal
+                    placeholderColor={placeholderColor}
+                    color={color}
+                    backgroundColor={backgroundColor}
+                    onDone={that.onLinkDone}
+                    ref={that.linkModal}
+                />
                 <View style={styles.nav}>
                     <Button title={'HOME'} onPress={that.onHome} />
                     <Button title={theme} onPress={that.onTheme} />
@@ -181,7 +196,7 @@ const styles = StyleSheet.create({
     },
     item: {
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderColor: '#eee',
+        borderColor: '#e8e8e8',
         flexDirection: 'row',
         height: 40,
         alignItems: 'center',

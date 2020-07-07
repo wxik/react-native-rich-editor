@@ -144,11 +144,13 @@ function createHTML(options = {}) {
             },
             link: {
                 result: function(data) {
+                alert(document.selection.createRange());
                     data = data || {};
                     var title = data.title;
                     // title = title || window.prompt('Enter the link title');
                     var url = data.url || window.prompt('Enter the link URL');
                     if (url) {
+                    editor.content.focus();
                         if(title){
                             exec('insertHTML', "<a href='"+ url +"'>"+title+"</a>");
                         } else {
