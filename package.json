@@ -1,7 +1,7 @@
 {
   "name": "react-native-pell-rich-editor",
   "description": "React Native Rich Editor",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "src/index.js",
   "author": {
     "name": "stulip",
@@ -14,8 +14,6 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@types/react-native": "^0.62.13",
-    "@types/react": "^16.9.38"
   },
   "peerDependencies": {
     "react-native": ">=0.50.0",

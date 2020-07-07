@@ -143,9 +143,18 @@ function createHTML(options = {}) {
                 }
             },
             link: {
-                result: function() {
-                    var url = window.prompt('Enter the link URL');
-                    if (url) exec('createLink', url);
+                result: function(data) {
+                    data = data || {};
+                    var title = data.title;
+                    // title = title || window.prompt('Enter the link title');
+                    var url = data.url || window.prompt('Enter the link URL');
+                    if (url) {
+                        if(title){
+                            exec('insertHTML', "<a href='"+ url +"'>"+title+"</a>");
+                        } else {
+                            exec('createLink', url);
+                        }
+                    }
                 }
             },
             image: {

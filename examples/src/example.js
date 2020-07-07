@@ -38,6 +38,7 @@ class Example extends React.Component {
         that.save = ::that.save;
         that.onTheme = ::that.onTheme;
         that.onPressAddImage = ::that.onPressAddImage;
+        that.onInsertLink = ::that.onInsertLink;
         that.themeChange = ::that.themeChange;
     }
 
@@ -74,6 +75,10 @@ class Example extends React.Component {
         // insert base64
         // this.richText.current?.insertImage(`data:${image.mime};base64,${image.data}`);
         this.richText.current?.blurContentEditor();
+    }
+
+    onInsertLink() {
+        this.richText.current?.insertLink('Google', 'http://google.com');
     }
 
     onHome() {
@@ -145,6 +150,7 @@ class Example extends React.Component {
                         selectedIconTint={'#2095F2'}
                         selectedButtonStyle={{backgroundColor: 'transparent'}}
                         onPressAddImage={that.onPressAddImage}
+                        onInsertLink={that.onInsertLink}
                     />
                 </KeyboardAvoidingView>
             </SafeAreaView>

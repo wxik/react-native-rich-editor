@@ -1,14 +1,14 @@
-import {WebViewProps} from "react-native-webview";
-import {ImageSourcePropType, StyleProp, ViewStyle} from "react-native";
-import * as React from "react";
+import {WebViewProps} from 'react-native-webview';
+import {ImageSourcePropType, StyleProp, ViewStyle} from 'react-native';
+import * as React from 'react';
 
-declare module "react-native-pell-rich-editor" {
+declare module 'react-native-pell-rich-editor' {
     /** The RichTextEditor accepts all props from Webview */
     export interface RichEditorProps extends WebViewProps {
         /**
          * Used for placement of editor
          */
-        contentInset?: { top: number; bottom: number };
+        contentInset?: {top: number; bottom: number};
 
         /**
          * Wrap the editor webview inside a container.
@@ -38,19 +38,12 @@ declare module "react-native-pell-rich-editor" {
         /**
          * Styling for container or for Rich Editor more dark or light settings
          */
-        editorStyle?: { backgroundColor?: string, color?: string, placeholderColor?: string}
+        editorStyle?: {backgroundColor?: string; color?: string; placeholderColor?: string};
     }
 
     export type SelectionChangeListener = (items: string[]) => void;
 
-    export type DefaultActions = [
-        "image",
-        "bold",
-        "italic",
-        "unorderedList",
-        "orderedList",
-        "link"
-    ];
+    export type DefaultActions = ['image', 'bold', 'italic', 'unorderedList', 'orderedList', 'link'];
 
     export class RichEditor extends React.Component<RichEditorProps> {
         // Public API
@@ -73,6 +66,8 @@ declare module "react-native-pell-rich-editor" {
 
         insertImage: (attributes: any) => void;
 
+        insertLink: (title: string, url: string) => void;
+
         init: () => void;
     }
 
@@ -87,7 +82,7 @@ declare module "react-native-pell-rich-editor" {
          * React.createRef reference to the RichEditor instance
          * Optional getEditor props
          */
-        editor?: React.createRef,
+        editor?: React.createRef;
 
         unselectedButtonStyle?: StyleProp<ViewStyle>;
         selectedButtonStyle?: StyleProp<ViewStyle>;
@@ -117,8 +112,13 @@ declare module "react-native-pell-rich-editor" {
 
         /**
          * Logic for what happens when you press on the add image button
-         * */
+         */
         onPressAddImage?: () => void;
+
+        /**
+         *  Logic for what happens when you press on the add insert link button
+         */
+        onInsertLink?: () => void;
 
         /**
          * Custom actions you want the toolbar to permit.
@@ -127,6 +127,5 @@ declare module "react-native-pell-rich-editor" {
         actions?: Partial<DefaultActions> | string[];
     }
 
-    export class RichToolbar extends React.Component<RichToolbarProps> {
-    }
+    export class RichToolbar extends React.Component<RichToolbarProps> {}
 }

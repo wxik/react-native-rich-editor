@@ -28,6 +28,7 @@ export default class RichToolbar extends Component {
     //   editor?: PropTypes.object,
     //   actions: PropTypes.array,
     //   onPressAddImage: PropTypes.func,
+    //   onInsertLink: PropTypes.func,
     //   selectedButtonStyle: PropTypes.object,
     //   iconTint: PropTypes.any,
     //   selectedIconTint: PropTypes.any,
@@ -110,6 +111,11 @@ export default class RichToolbar extends Component {
 
     _onPress(action) {
         switch (action) {
+            case actions.insertLink:
+                if (this.props.onInsertLink) {
+                    this.props.onInsertLink();
+                    break;
+                }
             case actions.setBold:
             case actions.setItalic:
             case actions.insertBulletsList:
@@ -133,7 +139,6 @@ export default class RichToolbar extends Component {
             case actions.setHR:
             case actions.setIndent:
             case actions.setOutdent:
-            case actions.insertLink:
                 this.state.editor._sendAction(action, 'result');
                 break;
             case actions.insertImage:

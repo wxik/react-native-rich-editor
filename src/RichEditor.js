@@ -225,6 +225,10 @@ export default class RichTextEditor extends Component {
         this._sendAction(actions.insertImage, 'result', attributes);
     }
 
+    insertLink(title, url) {
+        this._sendAction(actions.insertLink, 'result', {title, url});
+    }
+
     init() {
         let that = this;
         that.isInit = true;

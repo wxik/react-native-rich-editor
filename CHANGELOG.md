@@ -1,8 +1,16 @@
 
-## 1.0.?
+##
+
+## 1.0.8
+- Add `onInsertLink` event to toolbar, replace built-in processing
+- Add `insertLink` props to the editor to support customization
+
+
+## 1.0.7
 
 ### Added
-- Add Optional `editor` props substitute `getEditor` function props
+- Add `editor` props substitute `getEditor` function props
+- Add `editorStyle` props styling for container or for Rich Editor more dark or light settings
 
 
 ## 1.0.6

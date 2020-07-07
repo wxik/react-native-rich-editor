@@ -14,24 +14,25 @@
   "dependencies": {
     "react": "16.13.1",
     "react-native": "0.62.2",
-    "react-native-webview": "^10.3.1"
+    "react-native-modal": "^11.5.6",
+    "react-native-webview": "^10.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.2",
-    "@babel/plugin-proposal-function-bind": "^7.10.1",
-    "@babel/runtime": "^7.10.2",
+    "@babel/core": "^7.10.4",
+    "@babel/plugin-proposal-function-bind": "^7.10.4",
+    "@babel/runtime": "^7.10.4",
     "@react-native-community/eslint-config": "^1.0.0",
-    "@types/react-native": "^0.62.13",
-    "@types/react": "^16.9.38",
-    "babel-jest": "^26.0.1",
+    "@types/react-native": "^0.62.17",
+    "@types/react": "^16.9.41",
+    "babel-jest": "^26.1.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "eslint": "^6.8.0",
-    "jest": "^26.0.1",
-    "metro-react-native-babel-preset": "^0.59.0",
+    "jest": "^26.1.0",
+    "metro-react-native-babel-preset": "^0.60.0",
     "react-test-renderer": "16.13.1"
   },
   "peerDependencies": {
-    "react-native-pell-rich-editor": "^1.0.6"
+    "react-native-pell-rich-editor": "^1.0.7"
   },
   "jest": {
     "preset": "react-native"
