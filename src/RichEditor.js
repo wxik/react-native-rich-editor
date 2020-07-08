@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {WebView} from 'react-native-webview';
 import {actions, messages} from './const';
-import {Dimensions, PixelRatio, Platform, StyleSheet, View} from 'react-native';
+import {Dimensions, PixelRatio, Platform, StyleSheet, View, TextInput} from 'react-native';
 import {createHTML} from './editor';
 
 const PlatformIOS = Platform.OS === 'ios';
@@ -157,23 +157,26 @@ export default class RichTextEditor extends Component {
         const {html, editorStyle, useContainer, ...rest} = this.props;
         const {html: viewHTML} = this.state;
         return (
-            <WebView
-                useWebKit={true}
-                scrollEnabled={false}
-                hideKeyboardAccessoryView={true}
-                keyboardDisplayRequiresUserAction={false}
-                {...rest}
-                ref={this.setRef}
-                onMessage={this.onMessage}
-                originWhitelist={['*']}
-                dataDetectorTypes={'none'}
-                domStorageEnabled={false}
-                bounces={false}
-                javaScriptEnabled={true}
-                source={viewHTML}
-                opacity={this.isInit ? 1 : 0}
-                onLoad={this.init}
-            />
+            <>
+                <WebView
+                    useWebKit={true}
+                    scrollEnabled={false}
+                    hideKeyboardAccessoryView={true}
+                    keyboardDisplayRequiresUserAction={false}
+                    {...rest}
+                    ref={this.setRef}
+                    onMessage={this.onMessage}
+                    originWhitelist={['*']}
+                    dataDetectorTypes={'none'}
+                    domStorageEnabled={false}
+                    bounces={false}
+                    javaScriptEnabled={true}
+                    source={viewHTML}
+                    opacity={this.isInit ? 1 : 0}
+                    onLoad={this.init}
+                />
+                {Platform.OS === 'android' && <TextInput ref={(ref) => (this._input = ref)} style={styles._input} />}
+            </>
         );
     };
 
@@ -223,8 +226,19 @@ export default class RichTextEditor extends Component {
     }
 
     focusContentEditor() {
-        Platform.OS === 'android' && this.webviewBridge.requestFocus && this.webviewBridge.requestFocus();
+        this.showAndroidKeyboard();
         this._sendAction(actions.content, 'focus');
+    }
+
+    /**
+     * open android keyboard
+     * @platform android
+     */
+    showAndroidKeyboard() {
+        if (Platform.OS === 'android') {
+            this._input.focus();
+            this.webviewBridge.requestFocus && this.webviewBridge.requestFocus();
+        }
     }
 
     insertImage(attributes) {
@@ -232,7 +246,10 @@ export default class RichTextEditor extends Component {
     }
 
     insertLink(title, url) {
-        url && this._sendAction(actions.insertLink, 'result', {title, url});
+        if (url) {
+            this.showAndroidKeyboard();
+            this._sendAction(actions.insertLink, 'result', {title, url});
+        }
     }
 
     init() {
@@ -303,5 +320,12 @@ const styles = StyleSheet.create({
         marginLeft: -20,
         marginRight: -20,
         marginTop: 20,
+    },
+
+    _input: {
+        position: 'absolute',
+        width: 0,
+        height: 0,
+        bottom: 0,
     },
 });
