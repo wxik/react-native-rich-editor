@@ -10,6 +10,7 @@ export default class RichTextEditor extends Component {
     // static propTypes = {
     //     initialContentHTML: PropTypes.string,
     //     editorInitializedCallback: PropTypes.func,
+    //     onChange: PropTypes.func,
     // };
 
     static defaultProps = {
@@ -111,6 +112,10 @@ export default class RichTextEditor extends Component {
                 }
                 case messages.CONTENT_FOCUSED: {
                     this.focusListeners.map((da) => da());
+                    break;
+                }
+                case messages.CONTENT_CHANGE: {
+                    this.props.onChange && this.props.onChange(message.data);
                     break;
                 }
                 case messages.OFFSET_HEIGHT:
@@ -218,6 +223,7 @@ export default class RichTextEditor extends Component {
     }
 
     focusContentEditor() {
+        Platform.OS === 'android' && this.webviewBridge.requestFocus && this.webviewBridge.requestFocus();
         this._sendAction(actions.content, 'focus');
     }
 

@@ -36,6 +36,11 @@ declare module 'react-native-pell-rich-editor' {
         editorInitializedCallback?: () => void;
 
         /**
+         * Callback after editor data modification
+         */
+        onChange?: () => void;
+
+        /**
          * Styling for container or for Rich Editor more dark or light settings
          */
         editorStyle?: {backgroundColor?: string; color?: string; placeholderColor?: string};

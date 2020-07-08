@@ -37,7 +37,10 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `editorStyle`
 
 	Styling for container or for Rich Editor more dark or light settings
-
+	
+* `onChange`
+    Callback after editor data modification
+    
 * `useContainer`
 
 	A boolean value that determines if a View container is wrapped around the WebView. The default value is true. If you are using your own View to wrap this library around, set this value to false. 
@@ -47,6 +50,7 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 *  `setContentHTML(html:string)`
 *  `insertImage(url:string) `
+*  `insertLink(title: string, url: string) `
 *  `setContentFocusHandler(handler: Function)`
 *  `blurContentEditor()`
 *  `focusContentEditor()`
@@ -95,8 +99,10 @@ Other props supported by the `RichToolbar` component are:
   	* `actions.insertLink`
   	
 * `onPressAddImage`
-
     Functions called when the `addImage` actions are tapped. 
+    
+* `onInsertLink`    
+    Logic for what happens when you press on the add insert link button
         
 * `selectedButtonStyle`
 * `iconTint`

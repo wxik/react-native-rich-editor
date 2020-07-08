@@ -17,6 +17,6 @@
   },
   "peerDependencies": {
     "react-native": ">=0.50.0",
-    "react-native-webview": "*"
+    "react-native-webview": ">=7.5.2"
   }
 }

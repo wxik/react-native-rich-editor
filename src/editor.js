@@ -61,6 +61,36 @@ function createHTML(options = {}) {
             window.ReactNativeWebView.postMessage(JSON.stringify(data));
         };
 
+        var anchorNode = void 0, focusOffset = 0;
+        var saveSelection = function(){
+            var rang = window.getSelection();
+            anchorNode = rang.anchorNode;
+            focusOffset = rang.focusOffset;
+
+            rang = window.getSelection();
+            anchorNode = rang.anchorNode;
+            focusOffset = rang.focusOffset;
+        }
+
+        var focusCurrent = function (){
+            try {
+                editor.content.focus();
+                var selection = window.getSelection();
+                if (anchorNode){
+                    var range = document.createRange();
+                    range.setStart(anchorNode, focusOffset);
+                    range.collapse(true);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                } else {
+                    selection.selectAllChildren(editor.content);
+                    selection.collapseToEnd();
+                }
+            } catch(e){
+                console.log(e)
+            }
+        }
+
         var editor = null, o_height = 0;
 
         var Actions = {
@@ -144,13 +174,12 @@ function createHTML(options = {}) {
             },
             link: {
                 result: function(data) {
-                alert(document.selection.createRange());
                     data = data || {};
                     var title = data.title;
                     // title = title || window.prompt('Enter the link title');
                     var url = data.url || window.prompt('Enter the link URL');
-                    if (url) {
-                    editor.content.focus();
+                    if (url){
+                        focusCurrent();
                         if(title){
                             exec('insertHTML', "<a href='"+ url +"'>"+title+"</a>");
                         } else {
@@ -161,7 +190,10 @@ function createHTML(options = {}) {
             },
             image: {
                 result: function(url) {
-                    if (url) { exec('insertHTML', "<br><div><img src='"+ url +"'/></div><br>");}
+                    if (url){
+                        focusCurrent();
+                        exec('insertHTML', "<br><div><img src='"+ url +"'/></div><br>");
+                    }
                 }
             },
             content: {
@@ -175,7 +207,7 @@ function createHTML(options = {}) {
                     editor.content.blur();
                 },
                 focus: function() {
-                    editor.content.focus();
+                    focusCurrent();
                 },
                 postHtml: function (){
                     postAction({type: 'CONTENT_HTML_RESPONSE', data: editor.content.innerHTML});
@@ -224,6 +256,7 @@ function createHTML(options = {}) {
 
                 if (firstChild && firstChild.nodeType === 3) exec(formatBlock, '<' + defaultParagraphSeparator + '>');else if (content.innerHTML === '<br>') content.innerHTML = '';
                 settings.onChange(content.innerHTML);
+                saveSelection();
             };
             content.onkeydown = function (event) {
                 if (event.key === 'Enter' && queryCommandValue(formatBlock) === 'blockquote') {
@@ -252,12 +285,15 @@ function createHTML(options = {}) {
                         activeTools.push(k);
                     }
                 }
-                console.log('change', activeTools);
+                // console.log('change', activeTools);
                 postAction({type: 'SELECTION_CHANGE', data: activeTools});
                 return true;
             };
             addEventListener(content, 'touchend', function(){
-                setTimeout(handler, 100);
+                setTimeout(function (){
+                    handler();
+                    saveSelection();
+                }, 100);
             });
             addEventListener(content, 'blur', function () {
                 postAction({type: 'SELECTION_CHANGE', data: []});
@@ -292,6 +328,11 @@ function createHTML(options = {}) {
         editor = init({
             element: document.getElementById('editor'),
             defaultParagraphSeparator: 'div',
+            onChange: function (){
+                setTimeout(function(){
+                    postAction({type: 'CONTENT_CHANGE', data: Actions.content.getHtml()});
+                }, 10);
+            }
         })
     })(window);
 </script>

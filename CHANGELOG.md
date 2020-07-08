@@ -4,6 +4,11 @@
 ## 1.0.8
 - Add `onInsertLink` event to toolbar, replace built-in processing
 - Add `insertLink` props to the editor to support customization
+- Add `onChange` props to the editor to get data
+
+### Fix Bug
+- Fix `focusContentEditor` Unable to get focus（android requires `react-native-webview>=7.5.2`）
+- Fix `insertImage` Cannot be executed without focus
 
 
 ## 1.0.7

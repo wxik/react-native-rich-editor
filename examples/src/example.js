@@ -8,6 +8,7 @@ import {
     Appearance,
     Button,
     KeyboardAvoidingView,
+    Platform,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -22,8 +23,8 @@ const initHTML = `<br/>
 <center><b>Pell.js Rich Editor</b></center>
 <center>React Native</center>
 <br/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png" ></br></br>
-</br></br>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png" /><br/><br/>
+<br/><br/>
 `;
 
 class Example extends React.Component {
@@ -43,6 +44,7 @@ class Example extends React.Component {
         that.onInsertLink = ::that.onInsertLink;
         that.onLinkDone = ::that.onLinkDone;
         that.themeChange = ::that.themeChange;
+        that.handleChange = ::that.handleChange;
     }
 
     componentDidMount() {
@@ -68,6 +70,14 @@ class Example extends React.Component {
         let html = await this.richText.current?.getContentHtml();
         // console.log(html);
         alert(html);
+    }
+
+    /**
+     * editor change data
+     * @param {string} html
+     */
+    handleChange(html) {
+        console.log('editor data:', html);
     }
 
     onPressAddImage() {
@@ -155,9 +165,10 @@ class Example extends React.Component {
                         style={[styles.rich, themeBg]}
                         placeholder={'please input content'}
                         initialContentHTML={initHTML}
+                        onChange={that.handleChange}
                     />
                 </ScrollView>
-                <KeyboardAvoidingView behavior={'padding'}>
+                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                     <RichToolbar
                         style={[styles.richBar, themeBg]}
                         editor={that.richText}

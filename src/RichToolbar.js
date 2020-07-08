@@ -186,6 +186,7 @@ export default class RichToolbar extends Component {
             <View style={[styles.barContainer, style]}>
                 <FlatList
                     horizontal
+                    keyboardShouldPersistTaps={'always'}
                     keyExtractor={(item, index) => item.action + '-' + index}
                     data={this.state.data}
                     alwaysBounceHorizontal={false}
