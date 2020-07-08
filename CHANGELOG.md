@@ -1,5 +1,7 @@
 
 ##
+## 1.0.9-beta.0
+- experiment `showAndroidKeyboard` props on keyboard of android focus
 
 ## 1.0.8
 - Add `onInsertLink` event to toolbar, replace built-in processing
