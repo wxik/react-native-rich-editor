@@ -5,6 +5,7 @@
  */
 import React from 'react';
 import {
+    StatusBar,
     Appearance,
     Button,
     Keyboard,
@@ -180,6 +181,7 @@ class Example extends React.Component {
         const themeBg = {backgroundColor};
         return (
             <SafeAreaView style={[styles.container, themeBg]}>
+                <StatusBar barStyle={theme !== 'dark' ? 'dark-content' : 'light-content'} />
                 <InsertLinkModal
                     placeholderColor={placeholderColor}
                     color={color}
