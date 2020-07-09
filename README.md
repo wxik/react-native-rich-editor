@@ -130,3 +130,29 @@ Other props supported by the `RichToolbar` component are:
 ```javascript
 <RichToolbar getEditor={() => this.richtext}/>
 ```
+
+#### With Custom Action:
+
+To define your own custom action:
+
+-   Send your action name as string in the `actions` array.
+-   Include an icon for it with the `iconMap`
+-   Add a function prop with the same action name to be called on tap
+
+```javascript
+<RichToolbar
+	getEditor={() => this.richtext}
+		actions={[
+			actions.setBold,
+			actions.setItalic,s
+			actions.insertBulletsList,
+			actions.insertOrderedList,
+			actions.insertImage,
+			'customAction',
+		]}
+		iconMap={{
+			customAction: customIcon,
+		}}
+		customAction={this.handleCustomAction}
+/>
+```
