@@ -66,10 +66,6 @@ function createHTML(options = {}) {
             var rang = window.getSelection();
             anchorNode = rang.anchorNode;
             focusOffset = rang.focusOffset;
-
-            rang = window.getSelection();
-            anchorNode = rang.anchorNode;
-            focusOffset = rang.focusOffset;
         }
 
         var focusCurrent = function (){

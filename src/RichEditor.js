@@ -324,8 +324,9 @@ const styles = StyleSheet.create({
 
     _input: {
         position: 'absolute',
-        width: 0,
-        height: 0,
-        bottom: 0,
+        width: 1,
+        height: 1,
+        zIndex: -999,
+        bottom: -999,
     },
 });
