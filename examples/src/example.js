@@ -57,6 +57,7 @@ class Example extends React.Component {
         that.insertHTML = ::that.insertHTML;
         that.insertVideo = ::that.insertVideo;
         that.handleEmoji = ::that.handleEmoji;
+        that.editorInitializedCallback = ::that.editorInitializedCallback;
     }
 
     componentDidMount() {
@@ -72,6 +73,12 @@ class Example extends React.Component {
     onKeyBoard = () => {
         TextInput.State.currentlyFocusedField() && this.setState({emojiVisible: false});
     };
+
+    editorInitializedCallback() {
+        this.richText.current?.registerToolbar(function (items) {
+            console.log('Toolbar click, selected items (insert end callback):', items);
+        });
+    }
 
     /**
      * theme change to editor color
@@ -221,6 +228,7 @@ class Example extends React.Component {
                         style={[styles.rich, themeBg]}
                         placeholder={'please input content'}
                         initialContentHTML={initHTML}
+                        editorInitializedCallback={that.editorInitializedCallback}
                         onChange={that.handleChange}
                         onHeightChange={that.handleHeightChange}
                     />
