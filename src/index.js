@@ -1,6 +1,6 @@
 import RichEditor from './RichEditor';
-import RichToolbar from './RichToolbar';
+import RichToolbar, {defaultActions} from './RichToolbar';
 import {actions} from './const';
 import {createHTML} from './editor';
 
-export {RichEditor, RichToolbar, actions, createHTML};
+export {RichEditor, RichToolbar, actions, defaultActions, createHTML};

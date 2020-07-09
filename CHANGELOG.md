@@ -1,5 +1,22 @@
 
 ##
+
+## 1.1.0
+
+**Now you can add custom functions (insertHTML or insertText) and styles (cssText or contentCSSText) to the editor, of course, Toolbar has also been customized extension**
+
+#### Added
+- Add `contentCSSText` by editorStyle options of Custom content style （css text）
+- Add `cssText` by editorStyle options of Custom editor global css text
+- Add `initialFocus` props to the editor initial request focus
+- Add `onHeightChange` props to the editor Callback after height change
+- Add `insertVideo` props to the editor insert video
+- Add `insertText` props to the editor insert text 
+- Add `insertHTML` props to the editor insert html
+
+#### Fix Bug
+- Fix Click outside the editor to get focus
+
 ## 1.0.9-beta.1
 #### Fix Bug
 - Fix `showAndroidKeyboard` of Expo

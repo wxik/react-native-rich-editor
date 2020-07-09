@@ -31,6 +31,11 @@ declare module 'react-native-pell-rich-editor' {
         initialContentHTML?: string;
 
         /**
+         * Initial content request focus
+         */
+        initialFocus?: boolean;
+
+        /**
          * Callback called after the editor has been initialized
          */
         editorInitializedCallback?: () => void;
@@ -41,9 +46,20 @@ declare module 'react-native-pell-rich-editor' {
         onChange?: () => void;
 
         /**
+         * Callback after height change
+         */
+        onHeightChange: () => void;
+
+        /**
          * Styling for container or for Rich Editor more dark or light settings
          */
-        editorStyle?: {backgroundColor?: string; color?: string; placeholderColor?: string};
+        editorStyle?: {
+            backgroundColor?: string; // editor background color
+            color?: string; // editor text color
+            placeholderColor?: string; // editor placeholder text color
+            contentCSSText?: string; // editor content css text
+            cssText?: string; // editor global css text
+        };
     }
 
     export type SelectionChangeListener = (items: string[]) => void;
@@ -71,7 +87,13 @@ declare module 'react-native-pell-rich-editor' {
 
         insertImage: (attributes: any) => void;
 
+        insertVideo: (attributes: any) => void;
+
         insertLink: (title: string, url: string) => void;
+
+        insertText: (text: string) => void;
+
+        insertHTML: (html: string) => void;
 
         init: () => void;
     }

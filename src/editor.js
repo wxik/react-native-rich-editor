@@ -1,7 +1,14 @@
 //console.log = function (){ postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});};
 
 function createHTML(options = {}) {
-    const {backgroundColor = '#FFF', color = '#000033', placeholderColor = '#a9a9a9'} = options;
+    const {
+        backgroundColor = '#FFF',
+        color = '#000033',
+        placeholderColor = '#a9a9a9',
+        contentCSSText = '',
+        cssText = '',
+    } = options;
+    console.log(contentCSSText);
     return `
 <!DOCTYPE html>
 <html>
@@ -12,12 +19,14 @@ function createHTML(options = {}) {
         html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em;}
         body { overflow-y: hidden; -webkit-overflow-scrolling: touch;height: 100%;background-color: ${backgroundColor};}
         img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
+        video {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
         .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;height: 100%;-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
         .pell { height: 100%;}
-        .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;}
+        .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
         table {width: 100% !important;}
         table td {width: inherit;}
         table span { font-size: 12px !important; }
+        ${cssText}
     </style>
     <style>
         [placeholder]:empty:before {
@@ -175,7 +184,6 @@ function createHTML(options = {}) {
                     // title = title || window.prompt('Enter the link title');
                     var url = data.url || window.prompt('Enter the link URL');
                     if (url){
-                        focusCurrent();
                         if(title){
                             exec('insertHTML', "<a href='"+ url +"'>"+title+"</a>");
                         } else {
@@ -187,8 +195,30 @@ function createHTML(options = {}) {
             image: {
                 result: function(url) {
                     if (url){
-                        focusCurrent();
                         exec('insertHTML', "<br><div><img src='"+ url +"'/></div><br>");
+                        Actions.UPDATE_HEIGHT();
+                    }
+                }
+            },
+            html: {
+                result: function (html){
+                    if (html){
+                        exec('insertHTML', html);
+                        Actions.UPDATE_HEIGHT();
+                    }
+                }
+            },
+            text: {
+                result: function (text){
+                    text && exec('insertText', text);
+                }
+            },
+            video: {
+                result: function(url) {
+                    if (url) {
+                        var thumbnail = url.replace(/.(mp4|m3u8)/g, '') + '-thumbnail';
+                        exec('insertHTML', "<br><div><video src='"+ url +"' poster='"+ thumbnail + "' controls><source src='"+ url +"' type='video/mp4'>No video tag support</video></div><br>");
+                        Actions.UPDATE_HEIGHT();
                     }
                 }
             },
@@ -302,17 +332,21 @@ function createHTML(options = {}) {
                 var msgData = JSON.parse(event.data), action = Actions[msgData.type];
                 if (action ){
                     if ( action[msgData.name]){
+                        var flag = msgData.name === 'result';
+                        flag && focusCurrent();
                         action[msgData.name](msgData.data);
-                        if (msgData.name === 'result'){
-                            content.focus();
-                            handler();
-                        }
+                        flag && handler();
                     } else {
                         action(msgData.data);
                     }
                 }
             };
-
+            addEventListener(content, 'click', function(event){
+                event.stopPropagation();
+            });
+            document.addEventListener('click', function(){
+                Actions.content.focus();
+            }, false);
             document.addEventListener("message", message , false);
             window.addEventListener("message", message , false);
             document.addEventListener('touchend', function () {

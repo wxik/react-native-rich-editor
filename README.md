@@ -29,6 +29,9 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `initialContentHTML`
 
 	HTML that will be rendered in the content section on load.
+	
+* `initialFocus`	
+* Initial content request focus
 
 * `editorInitializedCallback `
 
@@ -36,10 +39,19 @@ The editor component. Simply place this component in your view hierarchy to rece
 	
 * `editorStyle`
 
-	Styling for container or for Rich Editor more dark or light settings
-	
+	Styling for container or for Rich Editor more dark or light settings. Object containing the following options:
+
+	- `backgroundColor`: Editor background color
+	- `color`: Editor text color
+	- `placeholderColor`: Editor placeholder text color
+	- `contentCSSText`: editor content css text（initial valid）
+	- `cssText`: editor global css text（initial valid）
+
 * `onChange`
     Callback after editor data modification
+    
+* `onHeightChange`
+    Callback after height change 
     
 * `useContainer`
 
@@ -48,9 +60,12 @@ The editor component. Simply place this component in your view hierarchy to rece
 	
 `RichEditor` also has methods that can be used on its `ref` to  set:
 
-*  `setContentHTML(html:string)`
-*  `insertImage(url:string) `
+*  `setContentHTML(html: string)`
+*  `insertImage(url: string) `
 *  `insertLink(title: string, url: string) `
+*  `insertText(text: string)`
+*  `insertHTML(html: string)`
+*  `insertVideo(url: string)`
 *  `setContentFocusHandler(handler: Function)`
 *  `blurContentEditor()`
 *  `focusContentEditor()`

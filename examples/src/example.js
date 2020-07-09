@@ -7,6 +7,7 @@ import React from 'react';
 import {
     Appearance,
     Button,
+    Keyboard,
     KeyboardAvoidingView,
     Platform,
     SafeAreaView,
@@ -16,16 +17,21 @@ import {
     TextInput,
     View,
 } from 'react-native';
-import {RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
+import {RichEditor, RichToolbar, defaultActions} from 'react-native-pell-rich-editor';
 import {InsertLinkModal} from './insertLink';
+import {EmojiView} from './emoji';
 
 const initHTML = `<br/>
 <center><b>Pell.js Rich Editor</b></center>
 <center>React Native</center>
 <br/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png" /><br/><br/>
+<img height="100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png" />
 <br/><br/>
 `;
+
+const phizIcon = require('./assets/phiz.png');
+const htmlIcon = require('./assets/h5.png');
+const videoIcon = require('./assets/video.png');
 
 class Example extends React.Component {
     richText = React.createRef();
@@ -36,7 +42,7 @@ class Example extends React.Component {
         const that = this;
         const theme = props.theme || Appearance.getColorScheme();
         const contentStyle = that.createContentStyle(theme);
-        that.state = {theme: theme, contentStyle};
+        that.state = {theme: theme, contentStyle, emojiVisible: false};
         that.onHome = ::that.onHome;
         that.save = ::that.save;
         that.onTheme = ::that.onTheme;
@@ -45,15 +51,26 @@ class Example extends React.Component {
         that.onLinkDone = ::that.onLinkDone;
         that.themeChange = ::that.themeChange;
         that.handleChange = ::that.handleChange;
+        that.handleHeightChange = ::that.handleHeightChange;
+        that.insertEmoji = ::that.insertEmoji;
+        that.insertHTML = ::that.insertHTML;
+        that.insertVideo = ::that.insertVideo;
+        that.handleEmoji = ::that.handleEmoji;
     }
 
     componentDidMount() {
         Appearance.addChangeListener(this.themeChange);
+        Keyboard.addListener('keyboardDidShow', this.onKeyBoard);
     }
 
     componentWillUnmount() {
         Appearance.removeChangeListener(this.themeChange);
+        Keyboard.removeListener('keyboardDidShow', this.onKeyBoard);
     }
+
+    onKeyBoard = () => {
+        TextInput.State.currentlyFocusedField() && this.setState({emojiVisible: false});
+    };
 
     /**
      * theme change to editor color
@@ -80,6 +97,36 @@ class Example extends React.Component {
         console.log('editor data:', html);
     }
 
+    /**
+     * editor height change
+     * @param {number} height
+     */
+    handleHeightChange(height) {
+        console.log('editor height change:', height);
+    }
+
+    insertEmoji(emoji) {
+        this.richText.current?.insertText(emoji);
+        this.richText.current?.blurContentEditor();
+    }
+
+    handleEmoji() {
+        const {emojiVisible} = this.state;
+        Keyboard.dismiss();
+        this.richText.current?.blurContentEditor();
+        this.setState({emojiVisible: !emojiVisible});
+    }
+
+    insertVideo() {
+        this.richText.current?.insertVideo(
+            'https://mdn.github.io/learning-area/html/multimedia-and-embedding/video-and-audio-content/rabbit320.mp4',
+        );
+    }
+
+    insertHTML() {
+        this.richText.current?.insertHTML(`<span style="color: blue; padding:0 10px;">HTML</span>`);
+    }
+
     onPressAddImage() {
         // insert URL
         this.richText.current?.insertImage(
@@ -104,7 +151,13 @@ class Example extends React.Component {
     }
 
     createContentStyle(theme) {
-        const contentStyle = {backgroundColor: '#000033', color: '#fff', placeholderColor: 'gray'};
+        const contentStyle = {
+            backgroundColor: '#000033',
+            color: '#fff',
+            placeholderColor: 'gray',
+            cssText: '.pell {background-color: #eee', // initial valid
+            contentCSSText: 'font-size: 20px; min-height: 200px; height: 100%;', // initial valid
+        };
         if (theme === 'light') {
             contentStyle.backgroundColor = '#fff';
             contentStyle.color = '#000033';
@@ -122,7 +175,7 @@ class Example extends React.Component {
 
     render() {
         let that = this;
-        const {contentStyle, theme} = that.state;
+        const {contentStyle, theme, emojiVisible} = that.state;
         const {backgroundColor, color, placeholderColor} = contentStyle;
         const themeBg = {backgroundColor};
         return (
@@ -159,6 +212,7 @@ class Example extends React.Component {
                         </View>
                     </View>
                     <RichEditor
+                        // initialFocus={true}
                         editorStyle={contentStyle}
                         containerStyle={themeBg}
                         ref={that.richText}
@@ -166,6 +220,7 @@ class Example extends React.Component {
                         placeholder={'please input content'}
                         initialContentHTML={initHTML}
                         onChange={that.handleChange}
+                        onHeightChange={that.handleHeightChange}
                     />
                 </ScrollView>
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -177,7 +232,19 @@ class Example extends React.Component {
                         selectedButtonStyle={{backgroundColor: 'transparent'}}
                         onPressAddImage={that.onPressAddImage}
                         onInsertLink={that.onInsertLink}
+                        iconSize={40}
+                        actions={['insertVideo', ...defaultActions, 'insertEmoji', 'insertHTML']}
+                        iconMap={{
+                            insertEmoji: phizIcon,
+                            // insertHTML: <Text style={styles.tib}>HTML</Text>,
+                            insertHTML: htmlIcon,
+                            insertVideo: videoIcon,
+                        }}
+                        insertEmoji={that.handleEmoji}
+                        insertHTML={that.insertHTML}
+                        insertVideo={that.insertVideo}
                     />
+                    {emojiVisible && <EmojiView onSelect={that.insertEmoji} />}
                 </KeyboardAvoidingView>
             </SafeAreaView>
         );
@@ -216,6 +283,11 @@ const styles = StyleSheet.create({
 
     input: {
         flex: 1,
+    },
+
+    tib: {
+        textAlign: 'center',
+        color: '#000',
     },
 });
 

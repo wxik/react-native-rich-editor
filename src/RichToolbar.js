@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {actions} from './const';
 
-const defaultActions = [
+export const defaultActions = [
     actions.insertImage,
     actions.setBold,
     actions.setItalic,
@@ -166,14 +166,18 @@ export default class RichToolbar extends Component {
                 ]}
                 onPress={() => this._onPress(action)}>
                 {icon ? (
-                    <Image
-                        source={icon}
-                        style={{
-                            tintColor: selected ? this.props.selectedIconTint : this.props.iconTint,
-                            height: iconSize,
-                            width: iconSize,
-                        }}
-                    />
+                    React.isValidElement(icon) ? (
+                        icon
+                    ) : (
+                        <Image
+                            source={icon}
+                            style={{
+                                tintColor: selected ? this.props.selectedIconTint : this.props.iconTint,
+                                height: iconSize,
+                                width: iconSize,
+                            }}
+                        />
+                    )
                 ) : null}
             </TouchableOpacity>
         );

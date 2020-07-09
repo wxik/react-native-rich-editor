@@ -11,6 +11,8 @@ export default class RichTextEditor extends Component {
     //     initialContentHTML: PropTypes.string,
     //     editorInitializedCallback: PropTypes.func,
     //     onChange: PropTypes.func,
+    //     onHeightChange: PropTypes.func,
+    //     initialFocus: PropTypes.bool,
     // };
 
     static defaultProps = {
@@ -18,6 +20,8 @@ export default class RichTextEditor extends Component {
         style: {},
         placeholder: '',
         initialContentHTML: '',
+        initialFocus: false,
+        editorInitializedCallback: () => {},
     };
 
     constructor(props) {
@@ -32,9 +36,9 @@ export default class RichTextEditor extends Component {
         that.setRef = that.setRef.bind(that);
         that.isInit = false;
         that.selectionChangeListeners = [];
-        const {editorStyle: {backgroundColor, color, placeholderColor} = {}, html} = props;
+        const {editorStyle: {backgroundColor, color, placeholderColor, cssText, contentCSSText} = {}, html} = props;
         that.state = {
-            html: {html: html || createHTML({backgroundColor, color, placeholderColor})},
+            html: {html: html || createHTML({backgroundColor, color, placeholderColor, cssText, contentCSSText})},
             keyboardHeight: 0,
             height: 0,
         };
@@ -129,8 +133,10 @@ export default class RichTextEditor extends Component {
 
     setWebHeight = (height) => {
         // console.log(height);
+        const {onHeightChange} = this.props;
         if (height !== this.state.height) {
             this.setState({height});
+            onHeightChange && onHeightChange(height);
         }
     };
 
@@ -245,6 +251,18 @@ export default class RichTextEditor extends Component {
         this._sendAction(actions.insertImage, 'result', attributes);
     }
 
+    insertVideo(attributes) {
+        this._sendAction(actions.insertVideo, 'result', attributes);
+    }
+
+    insertText(text) {
+        this._sendAction(actions.insertText, 'result', text);
+    }
+
+    insertHTML(html) {
+        this._sendAction(actions.insertHTML, 'result', html);
+    }
+
     insertLink(title, url) {
         if (url) {
             this.showAndroidKeyboard();
@@ -255,11 +273,15 @@ export default class RichTextEditor extends Component {
     init() {
         let that = this;
         that.isInit = true;
-        that.setContentHTML(this.props.initialContentHTML);
-        that.setPlaceholder(this.props.placeholder);
-        that.props.editorInitializedCallback && that.props.editorInitializedCallback();
+        const {initialFocus, initialContentHTML, placeholder, editorInitializedCallback} = that.props;
+        that.setContentHTML(initialContentHTML);
+        that.setPlaceholder(placeholder);
+        editorInitializedCallback();
 
-        this.intervalHeight = setInterval(function () {
+        // initial request focus
+        initialFocus && that.focusContentEditor();
+
+        that.intervalHeight = setInterval(function () {
             that._sendAction(actions.updateHeight);
         }, 200);
     }
@@ -280,53 +302,12 @@ export default class RichTextEditor extends Component {
 }
 
 const styles = StyleSheet.create({
-    modal: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    innerModal: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        paddingTop: 20,
-        paddingBottom: PlatformIOS ? 0 : 20,
-        paddingLeft: 20,
-        paddingRight: 20,
-        alignSelf: 'stretch',
-        margin: 40,
-        borderRadius: PlatformIOS ? 8 : 2,
-    },
-    button: {
-        fontSize: 16,
-        color: '#4a4a4a',
-        textAlign: 'center',
-    },
-    inputWrapper: {
-        marginTop: 5,
-        marginBottom: 10,
-        borderBottomColor: '#4a4a4a',
-        borderBottomWidth: PlatformIOS ? 1 / PixelRatio.get() : 0,
-    },
-    inputTitle: {
-        color: '#4a4a4a',
-    },
-    input: {
-        height: PlatformIOS ? 20 : 40,
-        paddingTop: 0,
-    },
-    lineSeparator: {
-        height: 1 / PixelRatio.get(),
-        backgroundColor: '#d5d5d5',
-        marginLeft: -20,
-        marginRight: -20,
-        marginTop: 20,
-    },
-
     _input: {
         position: 'absolute',
         width: 1,
         height: 1,
         zIndex: -999,
         bottom: -999,
+        left: -999,
     },
 });
