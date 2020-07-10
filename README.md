@@ -15,6 +15,7 @@ npm i react-native-pell-rich-editor
 
 Also, follow instructions [here](https://github.com/react-native-community/react-native-webview) to add the native `react-native-webview` dependency.
 
+* [flutter-pell-rich-editor](https://github.com/wxik/flutter-pell-rich-editor)
 * [Example](./examples)
 
 ## `RichEditor`
