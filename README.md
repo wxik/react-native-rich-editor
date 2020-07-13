@@ -5,7 +5,9 @@
 
 ------
 
-> A fully functional Rich Text Editor for both Android and iOS
+> A fully functional Rich Text Editor for both Android and iOS (macOS and windows)?
+
+> If you want to use **flutter**, you can check [here](https://github.com/wxik/flutter-rich-editor) to add flutter_rich_editor
 
 ```
 yarn add react-native-pell-rich-editor
@@ -15,7 +17,6 @@ npm i react-native-pell-rich-editor
 
 Also, follow instructions [here](https://github.com/react-native-community/react-native-webview) to add the native `react-native-webview` dependency.
 
-* [flutter-pell-rich-editor](https://github.com/wxik/flutter-pell-rich-editor)
 * [Example](./examples)
 
 ## `RichEditor`
