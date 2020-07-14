@@ -8,6 +8,7 @@ function createHTML(options = {}) {
         contentCSSText = '',
         cssText = '',
     } = options;
+    //ERROR: HTML height not 100%;
     return `
 <!DOCTYPE html>
 <html>
@@ -15,8 +16,8 @@ function createHTML(options = {}) {
     <meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
     <style>
         * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;}
-        html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em;height: 100%;}
-        body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: ${backgroundColor};}
+        html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em;}
+        body { overflow-y: hidden; -webkit-overflow-scrolling: touch;height: 100%;background-color: ${backgroundColor};}
         img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
         video {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
         .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;height: 100%;-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}

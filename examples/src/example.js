@@ -167,7 +167,7 @@ class Example extends React.Component {
             backgroundColor: '#000033',
             color: '#fff',
             placeholderColor: 'gray',
-            cssText: '.pell {background-color: #f3f3f3}', // initial valid
+            // cssText: '.pell {background-color: #f3f3f3}', // initial valid
             contentCSSText: 'font-size: 16px; min-height: 200px; height: 100%;', // initial valid
         };
         if (theme === 'light') {
