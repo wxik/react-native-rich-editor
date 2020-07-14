@@ -1,5 +1,14 @@
 
-##
+
+## 1.1.1
+
+#### Changed
+- The modified part has been subsequently supported on the web platform
+- flutter version is under development 
+
+
+#### Fix Bug
+- Fix selected Text styles
 
 ## 1.1.0
 

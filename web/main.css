@@ -1,0 +1,91 @@
+
+
+.mobile {
+  width: 320px;
+  height: 640px;
+  display: flex;
+  flex-direction: column;
+  background-color: #F5FCFF;
+
+  border: 8px solid #000;
+  border-radius: 45px;
+
+}
+
+iframe {
+  border: 0;
+  width: 100%;
+  flex: 1;
+}
+
+.toolbar {
+  background-color: #F5FCFF;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 14px;
+}
+
+.wifi, .signal {
+  margin-right: .5em;
+}
+
+.status-bar .time {
+  justify-content: center;
+  margin-right: auto;
+  margin-left: 7px;
+  width: 54px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.status-bar .battery {
+  margin-right: .8em;
+}
+
+.bottom {
+  height: 34px;
+}
+
+.nav {
+  height: 44px;
+  border-bottom: 1px solid #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav .title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.rounded-bar {
+  background: #000;
+  border-radius: 3px;
+  height: 4px;
+  margin-top: 22px;
+  width: 130px;
+}
+
+.icon {
+  height: 50px;
+  width: 50px;
+  cursor: pointer;
+
+}
+.icon:active {
+  opacity: 0.3;
+}
+
+.icon.selected {
+  background-color: #fff;
+}

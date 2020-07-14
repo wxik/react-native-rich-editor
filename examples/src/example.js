@@ -23,10 +23,14 @@ import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
 
 const initHTML = `<br/>
-<center><b>Pell.js Rich Editor</b></center>
-<center>React Native</center>
+<center><b>Rich Editor</b></center>
+<center>
+<a href="https://github.com/wxik/react-native-rich-editor">React Native</a>
+<span>And</span>
+<a href="https://github.com/wxik/flutter-rich-editor">Flutter</a>
+</center>
 <br/>
-<img height="100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png" />
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png" />
 <br/><br/>
 `;
 
@@ -102,7 +106,7 @@ class Example extends React.Component {
      * @param {string} html
      */
     handleChange(html) {
-        console.log('editor data:', html);
+        // console.log('editor data:', html);
     }
 
     /**
@@ -138,7 +142,7 @@ class Example extends React.Component {
     onPressAddImage() {
         // insert URL
         this.richText.current?.insertImage(
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/100px-React-icon.svg.png',
         );
         // insert base64
         // this.richText.current?.insertImage(`data:${image.mime};base64,${image.data}`);
@@ -163,8 +167,8 @@ class Example extends React.Component {
             backgroundColor: '#000033',
             color: '#fff',
             placeholderColor: 'gray',
-            cssText: '.pell {background-color: #eee', // initial valid
-            contentCSSText: 'font-size: 20px; min-height: 200px; height: 100%;', // initial valid
+            cssText: '.pell {background-color: #f3f3f3}', // initial valid
+            contentCSSText: 'font-size: 16px; min-height: 200px; height: 100%;', // initial valid
         };
         if (theme === 'light') {
             contentStyle.backgroundColor = '#fff';

@@ -8,7 +8,6 @@ function createHTML(options = {}) {
         contentCSSText = '',
         cssText = '',
     } = options;
-    console.log(contentCSSText);
     return `
 <!DOCTYPE html>
 <html>
@@ -16,8 +15,8 @@ function createHTML(options = {}) {
     <meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
     <style>
         * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;}
-        html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em;}
-        body { overflow-y: hidden; -webkit-overflow-scrolling: touch;height: 100%;background-color: ${backgroundColor};}
+        html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em;height: 100%;}
+        body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: ${backgroundColor};}
         img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
         video {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
         .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;height: 100%;-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
@@ -29,14 +28,8 @@ function createHTML(options = {}) {
         ${cssText}
     </style>
     <style>
-        [placeholder]:empty:before {
-            content: attr(placeholder);
-            color: ${placeholderColor};
-        }
-        [placeholder]:empty:focus:before {
-            content: attr(placeholder);
-            color: ${placeholderColor};
-        }
+        [placeholder]:empty:before { content: attr(placeholder); color: ${placeholderColor};}
+        [placeholder]:empty:focus:before { content: attr(placeholder);color: ${placeholderColor};}
     </style>
 </head>
 <body>
@@ -67,14 +60,16 @@ function createHTML(options = {}) {
         };
 
         var postAction = function(data){
-            window.ReactNativeWebView.postMessage(JSON.stringify(data));
+            exports.window.postMessage(JSON.stringify(data));
         };
 
-        var anchorNode = void 0, focusOffset = 0;
+        var anchorNode = void 0, focusNode = void 0, anchorOffset = 0, focusOffset = 0;
         var saveSelection = function(){
-            var rang = window.getSelection();
-            anchorNode = rang.anchorNode;
-            focusOffset = rang.focusOffset;
+            var sel = window.getSelection();
+            anchorNode = sel.anchorNode;
+            anchorOffset = sel.anchorOffset;
+            focusNode = sel.focusNode;
+            focusOffset = sel.focusOffset;
         }
 
         var focusCurrent = function (){
@@ -83,8 +78,9 @@ function createHTML(options = {}) {
                 var selection = window.getSelection();
                 if (anchorNode){
                     var range = document.createRange();
-                    range.setStart(anchorNode, focusOffset);
-                    range.collapse(true);
+                    range.setStart(anchorNode, anchorOffset);
+                    range.setEnd(focusNode, focusOffset);
+                    // range.collapse(false);
                     selection.removeAllRanges();
                     selection.addRange(range);
                 } else {
@@ -184,11 +180,7 @@ function createHTML(options = {}) {
                     // title = title || window.prompt('Enter the link title');
                     var url = data.url || window.prompt('Enter the link URL');
                     if (url){
-                        if(title){
-                            exec('insertHTML', "<a href='"+ url +"'>"+title+"</a>");
-                        } else {
-                            exec('createLink', url);
-                        }
+                        exec('insertHTML', "<a href='"+ url +"'>"+(title || url)+"</a>");
                     }
                 }
             },
@@ -243,8 +235,8 @@ function createHTML(options = {}) {
                 },
                 setContentStyle: function(styles) {
                     styles = styles || {};
-                    var backgroundColor = styles.backgroundColor, color = styles.color, pColor = styles.placeholderColor;
-                    if (backgroundColor) document.body.style.backgroundColor = backgroundColor;
+                    var bgColor = styles.backgroundColor, color = styles.color, pColor = styles.placeholderColor;
+                    if (bgColor) document.body.style.backgroundColor = bgColor;
                     if (color) editor.content.style.color = color;
                     if (pColor){
                         var rule1="[placeholder]:empty:before {content:attr(placeholder);color:"+pColor+";}";
@@ -315,12 +307,16 @@ function createHTML(options = {}) {
                 postAction({type: 'SELECTION_CHANGE', data: activeTools});
                 return true;
             };
-            addEventListener(content, 'touchend', function(){
+
+            var handleTouch = function (event){
+                event.stopPropagation();
                 setTimeout(function (){
                     handler();
                     saveSelection();
                 }, 100);
-            });
+            }
+            addEventListener(content, 'mouseup', handleTouch);
+            addEventListener(content, 'touchend', handleTouch);
             addEventListener(content, 'blur', function () {
                 postAction({type: 'SELECTION_CHANGE', data: []});
             });
@@ -341,16 +337,10 @@ function createHTML(options = {}) {
                     }
                 }
             };
-            addEventListener(content, 'click', function(event){
-                event.stopPropagation();
-            });
-            document.addEventListener('click', function(){
-                Actions.content.focus();
-            }, false);
             document.addEventListener("message", message , false);
             window.addEventListener("message", message , false);
             document.addEventListener('touchend', function () {
-                content.focus();
+                Actions.content.focus();
             });
             return settings.element;
         };
@@ -364,7 +354,9 @@ function createHTML(options = {}) {
                 }, 10);
             }
         })
-    })(window);
+    })({
+        window: window.ReactNativeWebView || window.parent,
+    });
 </script>
 </body>
 </html>

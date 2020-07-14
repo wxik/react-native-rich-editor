@@ -1,4 +1,4 @@
-# React Native Pell Rich Text Editor Example
+# React Native Rich Text Editor Example
 
 > A fully functional Rich Text Editor for both Android and iOS
 
