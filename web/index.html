@@ -41,12 +41,12 @@
         </div>
         <iframe id="editor"></iframe>
         <div class="toolbar">
-            <img class="icon" src="../img/icon_format_media@2x.png" onclick="editor.onToolbarClick(actions.insertImage)"/>
-            <img class="icon" src="../img/icon_format_bold@2x.png" onclick="editor.onToolbarClick(actions.setBold)"/>
-            <img class="icon" src="../img/icon_format_italic@2x.png" onclick="editor.onToolbarClick(actions.setItalic)"/>
-            <img class="icon" src="../img/icon_format_ul@2x.png" onclick="editor.onToolbarClick(actions.insertBulletsList)"/>
-            <img class="icon" src="../img/icon_format_ol@2x.png" onclick="editor.onToolbarClick(actions.insertOrderedList)"/>
-            <img class="icon" src="../img/icon_format_link@2x.png" onclick="editor.onToolbarClick(actions.insertLink)"/>
+            <img class="icon" src="../img/icon_format_media@2x.png" onclick="editor.onToolbarClick(this.id)" id='image'/>
+            <img class="icon" src="../img/icon_format_bold@2x.png" onclick="editor.onToolbarClick(this.id)" id="bold"/>
+            <img class="icon" src="../img/icon_format_italic@2x.png" onclick="editor.onToolbarClick(this.id)" id="italic"/>
+            <img class="icon" src="../img/icon_format_ul@2x.png" onclick="editor.onToolbarClick(this.id)" id="unorderedList"/>
+            <img class="icon" src="../img/icon_format_ol@2x.png" onclick="editor.onToolbarClick(this.id)" id="orderedList"/>
+            <img class="icon" src="../img/icon_format_link@2x.png" onclick="editor.onToolbarClick(this.id)" id="link"/>
         </div>
         <div class="bottom">
             <div class="rounded-bar"></div>
@@ -55,8 +55,9 @@
 </center>
 
 <script type="module">
-    import {actions} from '../src/const.js';
+    import {actions, messages} from '../src/const.js';
     import {HTML} from '../src/editor.js';
+
     window.actions = actions;
     const initHTML = `
 <br/>
@@ -70,8 +71,21 @@
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png" />
 <br/><br/>
 `;
+    const selectionChangeListeners = [];
     const webview = document.querySelector("#editor");
     webview.srcdoc = HTML;
+
+    // toolbar selected
+    selectionChangeListeners.push(function (items){
+        const icons = document.querySelectorAll(".toolbar .icon");
+        icons.forEach(da => {
+            if (items.indexOf(da.id) !== -1){
+                da.classList.add('selected');
+            } else {
+                da.classList.remove('selected');
+            }
+        })
+    });
     window.editor = (function () {
 
         const editor = {
@@ -89,11 +103,12 @@
             },
 
             init() {
-                webview.contentWindow.addEventListener('click', ()=> this.focusContentEditor(), false)
+                webview.contentWindow.addEventListener('click', () => this.focusContentEditor(), false)
+                webview.contentWindow.document.body.addEventListener('click', (event) => event.stopPropagation(), false)
                 editor.setContentHTML(initHTML);
             },
 
-            onPressAddImage(){
+            onPressAddImage() {
                 this._sendAction(actions.insertImage, 'result', 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/80px-React-icon.svg.png');
             },
 
@@ -121,19 +136,36 @@
         }
 
         window.addEventListener('message', function (event) {
-            const message = event.data;
+            if (typeof event.data === 'object') return;
+            const message = JSON.parse(event.data);
             // console.log('webview', message)
+            switch (message.type) {
+                case messages.SELECTION_CHANGE: {
+                    const items = message.data;
+                    selectionChangeListeners.map((listener) => listener(items));
+                    break;
+                }
+                case messages.CONTENT_CHANGE: {
+                    // this.props.onChange && this.props.onChange(message.data);
+                    break;
+                }
+                case messages.OFFSET_HEIGHT:
+                    // this.setWebHeight(message.data);
+                    break;
+            }
         }, false);
         return editor;
     })();
 
-    +function (){
+    +function () {
         const time = document.querySelector(".time");
-        function dtTime(){
+
+        function dtTime() {
             const date = new Date();
             const m = date.getMinutes();
-            time.innerText = `${date.getHours()}:${m < 10? "0" + m: m}`;
+            time.innerText = `${date.getHours()}:${m < 10 ? "0" + m : m}`;
         }
+
         setInterval(dtTime, 500);
         dtTime();
     }();

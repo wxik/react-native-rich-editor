@@ -87,5 +87,5 @@ iframe {
 }
 
 .icon.selected {
-  background-color: #fff;
+  filter:brightness(20%);
 }
