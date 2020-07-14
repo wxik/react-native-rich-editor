@@ -17,6 +17,7 @@ npm i react-native-pell-rich-editor
 
 Also, follow instructions [here](https://github.com/react-native-community/react-native-webview) to add the native `react-native-webview` dependency.
 
+* [Online Preview](https://wxik.github.io/react-native-rich-editor/web)
 * [Example](./examples)
 
 ## `RichEditor`
@@ -159,17 +160,17 @@ To define your own custom action:
 ```javascript
 <RichToolbar
 	getEditor={() => this.richtext}
-		actions={[
-			actions.setBold,
-			actions.setItalic,s
-			actions.insertBulletsList,
-			actions.insertOrderedList,
-			actions.insertImage,
-			'customAction',
-		]}
-		iconMap={{
-			customAction: customIcon,
-		}}
-		customAction={this.handleCustomAction}
+	actions={[
+		actions.setBold,
+		actions.setItalic,
+		actions.insertBulletsList,
+		actions.insertOrderedList,
+		actions.insertImage,
+		'customAction',
+	]}
+	iconMap={{
+		customAction: customIcon,
+	}}
+	customAction={this.handleCustomAction}
 />
 ```

@@ -80,11 +80,16 @@
                 webview.contentWindow.postMessage(jsonString);
             },
 
+            focusContentEditor() {
+                this._sendAction(actions.content, 'focus');
+            },
+
             setContentHTML(html) {
                 this._sendAction(actions.content, 'setHtml', html);
             },
 
             init() {
+                webview.contentWindow.addEventListener('click', ()=> this.focusContentEditor(), false)
                 editor.setContentHTML(initHTML);
             },
 
