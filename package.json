@@ -1,7 +1,7 @@
 {
   "name": "react-native-pell-rich-editor",
   "description": "React Native Rich Editor",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "main": "src/index.js",
   "author": {
     "name": "wxik",
