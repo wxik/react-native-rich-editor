@@ -5,7 +5,6 @@
  */
 import React from 'react';
 import {
-    StatusBar,
     Appearance,
     Button,
     Keyboard,
@@ -13,12 +12,13 @@ import {
     Platform,
     SafeAreaView,
     ScrollView,
+    StatusBar,
     StyleSheet,
     Text,
     TextInput,
     View,
 } from 'react-native';
-import {RichEditor, RichToolbar, actions, defaultActions} from 'react-native-pell-rich-editor';
+import {actions, defaultActions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
 
@@ -31,7 +31,7 @@ const initHTML = `<br/>
 </center>
 <br/>
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png" />
-<br/><br/>
+<br/><br/><br/><br/>
 `;
 
 const phizIcon = require('./assets/phiz.png');
@@ -169,7 +169,7 @@ class Example extends React.Component {
             backgroundColor: '#000033',
             color: '#fff',
             placeholderColor: 'gray',
-            // cssText: '.pell {background-color: #f3f3f3}', // initial valid
+            // cssText: '#editor {background-color: #f3f3f3}', // initial valid
             contentCSSText: 'font-size: 16px; min-height: 200px; height: 100%;', // initial valid
         };
         if (theme === 'light') {

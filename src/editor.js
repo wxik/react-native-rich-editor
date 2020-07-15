@@ -19,8 +19,7 @@ function createHTML(options = {}) {
         img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
         video {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
         .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;height: 100%;-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
-        .pell { height: 100%;}
-        .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
+        .pell { height: 100%;} .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
         table {width: 100% !important;}
         table td {width: inherit;}
         table span { font-size: 12px !important; }
@@ -36,9 +35,6 @@ function createHTML(options = {}) {
 <script>
     var placeholderColor = '${placeholderColor}';
     var __DEV__ = !!${window.__DEV__};
-    var u = navigator.userAgent;
-    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
-    var isiOS = !!u.match(/\\(i[^;]+;( U;)? CPU.+Mac OS X/);
     (function (exports) {
         var body = document.body, docEle = document.documentElement;
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
@@ -74,7 +70,6 @@ function createHTML(options = {}) {
 
         var anchorNode = void 0, focusNode = void 0, anchorOffset = 0, focusOffset = 0;
         var saveSelection = function(){
-            if ( isAndroid ) return;
             var sel = window.getSelection();
             anchorNode = sel.anchorNode;
             anchorOffset = sel.anchorOffset;
@@ -84,7 +79,6 @@ function createHTML(options = {}) {
 
         var focusCurrent = function (){
             editor.content.focus();
-            if ( isAndroid ) return;
             try {
                 var selection = window.getSelection();
                 if (anchorNode){
@@ -188,11 +182,10 @@ function createHTML(options = {}) {
             init: function (){
                 setInterval(Actions.UPDATE_HEIGHT, 150);
                 Actions.UPDATE_HEIGHT();
-                editor.content.style.minHeight = o_height + "px";
             },
 
             UPDATE_HEIGHT: function() {
-                var height = Math.max(docEle.clientHeight, docEle.scrollHeight, body.clientHeight, body.scrollHeight);
+                var height = Math.max(docEle.scrollHeight, body.scrollHeight);
                 if (o_height !== height){
                     postAction({type: 'OFFSET_HEIGHT', data: o_height = height});
                 }
@@ -200,22 +193,18 @@ function createHTML(options = {}) {
         };
 
         var init = function init(settings) {
-
             var defaultParagraphSeparator = settings[defaultParagraphSeparatorString] || 'div';
-
-
             var content = settings.element.content = createElement('div');
+            content.id = 'content';
             content.contentEditable = true;
             content.spellcheck = false;
             content.autocapitalize = 'off';
             content.autocorrect = 'off';
             content.autocomplete = 'off';
             content.className = "pell-content";
-            content.style.minHeight = docEle.clientHeight + "px";
             content.oninput = function (_ref) {
-                var firstChild = _ref.target.firstChild;
-
-                if (firstChild && firstChild.nodeType === 3) exec(formatBlock, '<' + defaultParagraphSeparator + '>');else if (content.innerHTML === '<br>') content.innerHTML = '';
+                // var firstChild = _ref.target.firstChild;
+                // if (firstChild && firstChild.nodeType === 3) exec(formatBlock, '<' + defaultParagraphSeparator + '>');else if (content.innerHTML === '<br>') content.innerHTML = '';
                 settings.onChange(content.innerHTML);
                 saveSelection();
             };
@@ -238,15 +227,13 @@ function createHTML(options = {}) {
                 }
             }
 
-            var handler = function handler() {
-
+            var handler = function () {
                 var activeTools = [];
                 for(var k in actionsHandler){
                     if ( Actions[k].state() ){
                         activeTools.push(k);
                     }
                 }
-                // console.log('change', activeTools);
                 postAction({type: 'SELECTION_CHANGE', data: activeTools});
                 return true;
             };
@@ -260,6 +247,7 @@ function createHTML(options = {}) {
                     saveSelection();
                 }, 50);
             }
+            addEventListener(content, 'touchcancel', handleTouch);
             addEventListener(content, 'mouseup', handleTouch);
             addEventListener(content, 'touchend', handleTouch);
             addEventListener(content, 'blur', function () {
@@ -284,9 +272,10 @@ function createHTML(options = {}) {
             };
             document.addEventListener("message", message , false);
             window.addEventListener("message", message , false);
-            // document.addEventListener('touchend', function () {
-                // Actions.content.focus();
-            // });
+            document.addEventListener('mouseup', function (event) {
+                event.preventDefault();
+                Actions.content.focus();
+            });
             return settings.element;
         };
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {WebView} from 'react-native-webview';
 import {actions, messages} from './const';
-import {Dimensions, PixelRatio, Platform, Keyboard, StyleSheet, View, TextInput} from 'react-native';
+import {Dimensions, Keyboard, Platform, StyleSheet, TextInput, View} from 'react-native';
 import {createHTML} from './editor';
 
 const PlatformIOS = Platform.OS === 'ios';
@@ -35,7 +35,6 @@ export default class RichTextEditor extends Component {
         that._onKeyboardWillHide = that._onKeyboardWillHide.bind(that);
         that.init = that.init.bind(that);
         that.setRef = that.setRef.bind(that);
-        that.isInit = false;
         that._keyOpen = false;
         that.selectionChangeListeners = [];
         const {editorStyle: {backgroundColor, color, placeholderColor, cssText, contentCSSText} = {}, html} = props;
@@ -43,6 +42,7 @@ export default class RichTextEditor extends Component {
             html: {html: html || createHTML({backgroundColor, color, placeholderColor, cssText, contentCSSText})},
             keyboardHeight: 0,
             height: 0,
+            isInit: false,
         };
         that.focusListeners = [];
     }
@@ -165,7 +165,7 @@ export default class RichTextEditor extends Component {
         const {html, editorStyle, useContainer, ...rest} = this.props;
         const {html: viewHTML} = this.state;
         // webview dark theme bug
-        const opacity = this.isInit ? 1 : 0;
+        const opacity = this.state.isInit ? 1 : 0;
         return (
             <>
                 <WebView
@@ -277,7 +277,6 @@ export default class RichTextEditor extends Component {
 
     init() {
         let that = this;
-        that.isInit = true;
         const {initialFocus, initialContentHTML, placeholder, editorInitializedCallback} = that.props;
         that.setContentHTML(initialContentHTML);
         that.setPlaceholder(placeholder);
@@ -287,6 +286,7 @@ export default class RichTextEditor extends Component {
         initialFocus && that.focusContentEditor();
         // no visible ?
         that._sendAction(actions.init);
+        that.setState({isInit: true});
     }
 
     /**

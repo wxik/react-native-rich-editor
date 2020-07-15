@@ -1,11 +1,9 @@
-## 1.2.0
+## 1.2.1
 #### Added
 - editor console.log in RN of __DEV__ mode
 - Add strikethrough and insertLine on editor
 
 #### Changed
-- editor content min height default by window height
-- focus selections not used android
 - Detail optimization
 - Set default Android keyboard open
 
