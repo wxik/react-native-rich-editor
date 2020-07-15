@@ -147,7 +147,7 @@ class Example extends React.Component {
         );
         // insert base64
         // this.richText.current?.insertImage(`data:${image.mime};base64,${image.data}`);
-        this.richText.current?.blurContentEditor();
+        // this.richText.current?.blurContentEditor();
     }
 
     onInsertLink() {
@@ -228,8 +228,7 @@ class Example extends React.Component {
                     </View>
                     <RichEditor
                         // initialFocus={true}
-                        // editorStyle={contentStyle} // default light style
-                        editorStyle={{color: '#000033'}}
+                        editorStyle={contentStyle} // default light style
                         containerStyle={themeBg}
                         ref={that.richText}
                         style={[styles.rich, themeBg]}
@@ -249,11 +248,11 @@ class Example extends React.Component {
                         selectedButtonStyle={{backgroundColor: 'transparent'}}
                         onPressAddImage={that.onPressAddImage}
                         onInsertLink={that.onInsertLink}
-                        iconSize={36} // default 50
+                        iconSize={40} // default 50
                         actions={[
                             'insertVideo',
                             ...defaultActions,
-                            actions.strikethrough,
+                            actions.setStrikethrough,
                             actions.heading1,
                             actions.heading4,
                             'insertEmoji',
@@ -261,7 +260,7 @@ class Example extends React.Component {
                         ]} // default defaultActions
                         iconMap={{
                             insertEmoji: phizIcon,
-                            [actions.strikethrough]: strikethrough,
+                            [actions.setStrikethrough]: strikethrough,
                             [actions.heading1]: <Text style={styles.tib}>H1</Text>,
                             [actions.heading4]: <Text style={styles.tib}>H3</Text>,
                             insertHTML: htmlIcon,

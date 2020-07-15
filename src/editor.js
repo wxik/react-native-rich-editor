@@ -36,8 +36,11 @@ function createHTML(options = {}) {
 <script>
     var placeholderColor = '${placeholderColor}';
     var __DEV__ = !!${window.__DEV__};
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+    var isiOS = !!u.match(/\\(i[^;]+;( U;)? CPU.+Mac OS X/);
     (function (exports) {
-        var body = document.body;
+        var body = document.body, docEle = document.documentElement;
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
         var formatBlock = 'formatBlock';
         var addEventListener = function addEventListener(parent, type, listener) {
@@ -65,8 +68,13 @@ function createHTML(options = {}) {
             exports.window.postMessage(JSON.stringify(data));
         };
 
+        console.log = function (){
+            __DEV__ && postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});
+        }
+
         var anchorNode = void 0, focusNode = void 0, anchorOffset = 0, focusOffset = 0;
         var saveSelection = function(){
+            if ( isAndroid ) return;
             var sel = window.getSelection();
             anchorNode = sel.anchorNode;
             anchorOffset = sel.anchorOffset;
@@ -75,14 +83,15 @@ function createHTML(options = {}) {
         }
 
         var focusCurrent = function (){
+            editor.content.focus();
+            if ( isAndroid ) return;
             try {
-                editor.content.focus();
                 var selection = window.getSelection();
                 if (anchorNode){
                     var range = document.createRange();
                     range.setStart(anchorNode, anchorOffset);
                     range.setEnd(focusNode, focusOffset);
-                    // range.collapse(false);
+                    focusOffset === anchorOffset && range.collapse(false);
                     selection.removeAllRanges();
                     selection.addRange(range);
                 } else {
@@ -95,7 +104,6 @@ function createHTML(options = {}) {
         }
 
         var editor = null, o_height = 0;
-
         var Actions = {
             bold: { state: function() { return queryCommandState('bold'); }, result: function() { return exec('bold'); }},
             italic: { state: function() { return queryCommandState('italic'); }, result: function() { return exec('italic'); }},
@@ -109,22 +117,8 @@ function createHTML(options = {}) {
             heading6: { result: function() { return exec(formatBlock, '<h6>'); }},
             paragraph: { result: function() { return exec(formatBlock, '<p>'); }},
             quote: { result: function() { return exec(formatBlock, '<blockquote>'); }},
-            orderedList: {
-                state: function() {
-                    return queryCommandState('insertOrderedList');
-                },
-                result: function() {
-                    return exec('insertOrderedList');
-                }
-            },
-            unorderedList: {
-                state: function() {
-                    return queryCommandState('insertUnorderedList');
-                },
-                result: function() {
-                    return exec('insertUnorderedList');
-                }
-            },
+            orderedList: { state: function() { return queryCommandState('insertOrderedList'); }, result: function() { return exec('insertOrderedList'); }},
+            unorderedList: { state: function() { return queryCommandState('insertUnorderedList'); },result: function() { return exec('insertUnorderedList'); }},
             code: { result: function() { return exec(formatBlock, '<pre>'); }},
             line: { result: function() { return exec('insertHorizontalRule'); }},
             link: {
@@ -191,8 +185,14 @@ function createHTML(options = {}) {
                 }
             },
 
+            init: function (){
+                setInterval(Actions.UPDATE_HEIGHT, 150);
+                Actions.UPDATE_HEIGHT();
+                editor.content.style.minHeight = o_height + "px";
+            },
+
             UPDATE_HEIGHT: function() {
-                var height = Math.max(document.documentElement.clientHeight, document.documentElement.scrollHeight, body.clientHeight, body.scrollHeight);
+                var height = Math.max(docEle.clientHeight, docEle.scrollHeight, body.clientHeight, body.scrollHeight);
                 if (o_height !== height){
                     postAction({type: 'OFFSET_HEIGHT', data: o_height = height});
                 }
@@ -211,6 +211,7 @@ function createHTML(options = {}) {
             content.autocorrect = 'off';
             content.autocomplete = 'off';
             content.className = "pell-content";
+            content.style.minHeight = docEle.clientHeight + "px";
             content.oninput = function (_ref) {
                 var firstChild = _ref.target.firstChild;
 
@@ -250,12 +251,14 @@ function createHTML(options = {}) {
                 return true;
             };
 
+            var _handleTouchDT = null;
             var handleTouch = function (event){
                 event.stopPropagation();
-                setTimeout(function (){
+                _handleTouchDT && clearTimeout(_handleTouchDT);
+                _handleTouchDT = setTimeout(function (){
                     handler();
                     saveSelection();
-                }, 100);
+                }, 50);
             }
             addEventListener(content, 'mouseup', handleTouch);
             addEventListener(content, 'touchend', handleTouch);
@@ -281,9 +284,9 @@ function createHTML(options = {}) {
             };
             document.addEventListener("message", message , false);
             window.addEventListener("message", message , false);
-            document.addEventListener('touchend', function () {
-                Actions.content.focus();
-            });
+            // document.addEventListener('touchend', function () {
+                // Actions.content.focus();
+            // });
             return settings.element;
         };
 
@@ -296,10 +299,6 @@ function createHTML(options = {}) {
                 }, 10);
             }
         })
-
-        console.log = function (){
-            __DEV__ && postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});
-        }
     })({
         window: window.ReactNativeWebView || window.parent,
     });

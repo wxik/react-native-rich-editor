@@ -139,6 +139,7 @@ export default class RichToolbar extends Component {
             case actions.setHR:
             case actions.setIndent:
             case actions.setOutdent:
+                this.state.editor.showAndroidKeyboard();
                 this.state.editor._sendAction(action, 'result');
                 break;
             case actions.insertImage:
@@ -161,7 +162,7 @@ export default class RichToolbar extends Component {
             <TouchableOpacity
                 key={action}
                 style={[
-                    {height: iconSize, width: iconSize, justifyContent: 'center'},
+                    {width: iconSize, justifyContent: 'center'},
                     selected ? this._getButtonSelectedStyle() : this._getButtonUnselectedStyle(),
                 ]}
                 onPress={() => this._onPress(action)}>

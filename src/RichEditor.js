@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {WebView} from 'react-native-webview';
 import {actions, messages} from './const';
-import {Dimensions, PixelRatio, Platform, StyleSheet, View, TextInput} from 'react-native';
+import {Dimensions, PixelRatio, Platform, Keyboard, StyleSheet, View, TextInput} from 'react-native';
 import {createHTML} from './editor';
 
 const PlatformIOS = Platform.OS === 'ios';
@@ -36,6 +36,7 @@ export default class RichTextEditor extends Component {
         that.init = that.init.bind(that);
         that.setRef = that.setRef.bind(that);
         that.isInit = false;
+        that._keyOpen = false;
         that.selectionChangeListeners = [];
         const {editorStyle: {backgroundColor, color, placeholderColor, cssText, contentCSSText} = {}, html} = props;
         that.state = {
@@ -46,49 +47,50 @@ export default class RichTextEditor extends Component {
         that.focusListeners = [];
     }
 
-    // componentWillMount() {
-    // if (PlatformIOS) {
-    //     this.keyboardEventListeners = [
-    //         Keyboard.addListener('keyboardWillShow', this._onKeyboardWillShow),
-    //         Keyboard.addListener('keyboardWillHide', this._onKeyboardWillHide)
-    //     ];
-    // } else {
-    //     this.keyboardEventListeners = [
-    //         Keyboard.addListener('keyboardDidShow', this._onKeyboardWillShow),
-    //         Keyboard.addListener('keyboardDidHide', this._onKeyboardWillHide)
-    //     ];
-    // }
-    // }
+    componentDidMount() {
+        if (PlatformIOS) {
+            this.keyboardEventListeners = [
+                Keyboard.addListener('keyboardWillShow', this._onKeyboardWillShow),
+                Keyboard.addListener('keyboardWillHide', this._onKeyboardWillHide),
+            ];
+        } else {
+            this.keyboardEventListeners = [
+                Keyboard.addListener('keyboardDidShow', this._onKeyboardWillShow),
+                Keyboard.addListener('keyboardDidHide', this._onKeyboardWillHide),
+            ];
+        }
+    }
 
     componentWillUnmount() {
-        // this.intervalHeight && clearInterval(this.intervalHeight);
         // this.keyboardEventListeners.forEach((eventListener) => eventListener.remove());
     }
 
     _onKeyboardWillShow(event) {
+        this._keyOpen = true;
         // console.log('!!!!', event);
-        const newKeyboardHeight = event.endCoordinates.height;
+        /*const newKeyboardHeight = event.endCoordinates.height;
         if (this.state.keyboardHeight === newKeyboardHeight) {
             return;
         }
         if (newKeyboardHeight) {
             this.setEditorAvailableHeightBasedOnKeyboardHeight(newKeyboardHeight);
         }
-        this.setState({keyboardHeight: newKeyboardHeight});
+        this.setState({keyboardHeight: newKeyboardHeight});*/
     }
 
     _onKeyboardWillHide(event) {
-        this.setState({keyboardHeight: 0});
+        this._keyOpen = false;
+        // this.setState({keyboardHeight: 0});
     }
 
-    setEditorAvailableHeightBasedOnKeyboardHeight(keyboardHeight) {
+    /*setEditorAvailableHeightBasedOnKeyboardHeight(keyboardHeight) {
         const {top = 0, bottom = 0} = this.props.contentInset;
         const {marginTop = 0, marginBottom = 0} = this.props.style;
         const spacing = marginTop + marginBottom + top + bottom;
 
         const editorAvailableHeight = Dimensions.get('window').height - keyboardHeight - spacing;
         // this.setEditorHeight(editorAvailableHeight);
-    }
+    }*/
 
     onMessage(event) {
         try {
@@ -243,9 +245,10 @@ export default class RichTextEditor extends Component {
      * @platform android
      */
     showAndroidKeyboard() {
+        let that = this;
         if (Platform.OS === 'android') {
-            this._input.focus();
-            this.webviewBridge.requestFocus && this.webviewBridge.requestFocus();
+            !that._keyOpen && that._input.focus();
+            that.webviewBridge.requestFocus && that.webviewBridge.requestFocus();
         }
     }
 
@@ -282,10 +285,8 @@ export default class RichTextEditor extends Component {
 
         // initial request focus
         initialFocus && that.focusContentEditor();
-
-        that.intervalHeight = setInterval(function () {
-            that._sendAction(actions.updateHeight);
-        }, 200);
+        // no visible ?
+        that._sendAction(actions.init);
     }
 
     /**

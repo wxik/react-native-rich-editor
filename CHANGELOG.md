@@ -1,19 +1,23 @@
-## 1.?
+## 1.2.0
 #### Added
 - editor console.log in RN of __DEV__ mode
 - Add strikethrough and insertLine on editor
 
 #### Changed
+- editor content min height default by window height
+- focus selections not used android
 - Detail optimization
+- Set default Android keyboard open
 
 #### Fix Bug
-- heading1、heading2 key error
+- Fix Initialization speed by default 200ms
+- Fix heading1、heading2 key error
+- Fix Android keyboard of v1.1.1
 
 ## 1.1.1
 
 #### Changed
 - The modified part has been subsequently supported on the web platform
-- flutter version is under development 
 
 
 #### Fix Bug
