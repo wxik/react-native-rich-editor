@@ -1,5 +1,3 @@
-//console.log = function (){ postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});};
-
 function createHTML(options = {}) {
     const {
         backgroundColor = '#FFF',
@@ -36,7 +34,10 @@ function createHTML(options = {}) {
 <body>
 <div class="content"><div id="editor" class="pell"></div></div>
 <script>
+    var placeholderColor = '${placeholderColor}';
+    var __DEV__ = ${__DEV__};
     (function (exports) {
+        var body = document.body;
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
         var formatBlock = 'formatBlock';
         var addEventListener = function addEventListener(parent, type, listener) {
@@ -96,58 +97,18 @@ function createHTML(options = {}) {
         var editor = null, o_height = 0;
 
         var Actions = {
-            bold: {
-                state: function() {
-                    return queryCommandState('bold');
-                },
-                result: function() {
-                    return exec('bold');
-                }
-            },
-            italic: {
-                state: function() {
-                    return queryCommandState('italic');
-                },
-                result: function() {
-                    return exec('italic');
-                }
-            },
-            underline: {
-                state: function() {
-                    return queryCommandState('underline');
-                },
-                result: function() {
-                    return exec('underline');
-                }
-            },
-            strikethrough: {
-                state: function() {
-                    return queryCommandState('strikeThrough');
-                },
-                result: function() {
-                    return exec('strikeThrough');
-                }
-            },
-            heading1: {
-                result: function() {
-                    return exec(formatBlock, '<h1>');
-                }
-            },
-            heading2: {
-                result: function() {
-                    return exec(formatBlock, '<h2>');
-                }
-            },
-            paragraph: {
-                result: function() {
-                    return exec(formatBlock, '<p>');
-                }
-            },
-            quote: {
-                result: function() {
-                    return exec(formatBlock, '<blockquote>');
-                }
-            },
+            bold: { state: function() { return queryCommandState('bold'); }, result: function() { return exec('bold'); }},
+            italic: { state: function() { return queryCommandState('italic'); }, result: function() { return exec('italic'); }},
+            underline: { state: function() { return queryCommandState('underline'); }, result: function() { return exec('underline'); }},
+            strikethrough: { state: function() { return queryCommandState('strikeThrough'); }, result: function() { return exec('strikeThrough'); }},
+            heading1: { result: function() { return exec(formatBlock, '<h1>'); }},
+            heading2: { result: function() { return exec(formatBlock, '<h2>'); }},
+            heading3: { result: function() { return exec(formatBlock, '<h3>'); }},
+            heading4: { result: function() { return exec(formatBlock, '<h4>'); }},
+            heading5: { result: function() { return exec(formatBlock, '<h5>'); }},
+            heading6: { result: function() { return exec(formatBlock, '<h6>'); }},
+            paragraph: { result: function() { return exec(formatBlock, '<p>'); }},
+            quote: { result: function() { return exec(formatBlock, '<blockquote>'); }},
             orderedList: {
                 state: function() {
                     return queryCommandState('insertOrderedList');
@@ -164,16 +125,8 @@ function createHTML(options = {}) {
                     return exec('insertUnorderedList');
                 }
             },
-            code: {
-                result: function() {
-                    return exec(formatBlock, '<pre>');
-                }
-            },
-            line: {
-                result: function() {
-                    return exec('insertHorizontalRule');
-                }
-            },
+            code: { result: function() { return exec(formatBlock, '<pre>'); }},
+            line: { result: function() { return exec('insertHorizontalRule'); }},
             link: {
                 result: function(data) {
                     data = data || {};
@@ -201,11 +154,7 @@ function createHTML(options = {}) {
                     }
                 }
             },
-            text: {
-                result: function (text){
-                    text && exec('insertText', text);
-                }
-            },
+            text: { result: function (text){ text && exec('insertText', text); }},
             video: {
                 result: function(url) {
                     if (url) {
@@ -216,42 +165,34 @@ function createHTML(options = {}) {
                 }
             },
             content: {
-                setHtml: function(html) {
-                    editor.content.innerHTML = html;
-                },
-                getHtml: function() {
-                    return editor.content.innerHTML;
-                },
-                blur: function() {
-                    editor.content.blur();
-                },
-                focus: function() {
-                    focusCurrent();
-                },
-                postHtml: function (){
-                    postAction({type: 'CONTENT_HTML_RESPONSE', data: editor.content.innerHTML});
-                },
-                setPlaceholder: function(placeholder){
-                    editor.content.setAttribute("placeholder", placeholder)
-                },
+                setHtml: function(html) { editor.content.innerHTML = html; },
+                getHtml: function() { return editor.content.innerHTML; },
+                blur: function() { editor.content.blur(); },
+                focus: function() { focusCurrent(); },
+                postHtml: function (){ postAction({type: 'CONTENT_HTML_RESPONSE', data: editor.content.innerHTML}); },
+                setPlaceholder: function(placeholder){ editor.content.setAttribute("placeholder", placeholder) },
+
                 setContentStyle: function(styles) {
                     styles = styles || {};
                     var bgColor = styles.backgroundColor, color = styles.color, pColor = styles.placeholderColor;
-                    if (bgColor) document.body.style.backgroundColor = bgColor;
-                    if (color) editor.content.style.color = color;
-                    if (pColor){
+                    if (bgColor && bgColor !== body.style.backgroundColor) body.style.backgroundColor = bgColor;
+                    if (color && color !== editor.content.style.color) editor.content.style.color = color;
+                    if (pColor && pColor !== placeholderColor){
                         var rule1="[placeholder]:empty:before {content:attr(placeholder);color:"+pColor+";}";
                         var rule2="[placeholder]:empty:focus:before{content:attr(placeholder);color:"+pColor+";}";
                         try {
                             document.styleSheets[1].deleteRule(0);document.styleSheets[1].deleteRule(0);
                             document.styleSheets[1].insertRule(rule1); document.styleSheets[1].insertRule(rule2);
-                        } catch (e){ }
+                            placeholderColor = pColor;
+                        } catch (e){
+                            console.log("set placeholderColor error!")
+                        }
                     }
                 }
             },
 
             UPDATE_HEIGHT: function() {
-                var height = Math.max(document.documentElement.clientHeight, document.documentElement.scrollHeight, document.body.clientHeight, document.body.scrollHeight);
+                var height = Math.max(document.documentElement.clientHeight, document.documentElement.scrollHeight, body.clientHeight, body.scrollHeight);
                 if (o_height !== height){
                     postAction({type: 'OFFSET_HEIGHT', data: o_height = height});
                 }
@@ -355,6 +296,10 @@ function createHTML(options = {}) {
                 }, 10);
             }
         })
+
+        console.log = function (){
+            __DEV__ && postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});
+        }
     })({
         window: window.ReactNativeWebView || window.parent,
     });

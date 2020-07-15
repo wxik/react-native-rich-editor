@@ -21,6 +21,7 @@ export default class RichTextEditor extends Component {
         placeholder: '',
         initialContentHTML: '',
         initialFocus: false,
+        useContainer: true,
         editorInitializedCallback: () => {},
     };
 
@@ -60,7 +61,7 @@ export default class RichTextEditor extends Component {
     // }
 
     componentWillUnmount() {
-        this.intervalHeight && clearInterval(this.intervalHeight);
+        // this.intervalHeight && clearInterval(this.intervalHeight);
         // this.keyboardEventListeners.forEach((eventListener) => eventListener.remove());
     }
 
@@ -133,9 +134,9 @@ export default class RichTextEditor extends Component {
 
     setWebHeight = (height) => {
         // console.log(height);
-        const {onHeightChange} = this.props;
+        const {onHeightChange, useContainer} = this.props;
         if (height !== this.state.height) {
-            this.setState({height});
+            useContainer && this.setState({height});
             onHeightChange && onHeightChange(height);
         }
     };
@@ -144,7 +145,6 @@ export default class RichTextEditor extends Component {
         let jsonString = JSON.stringify({type, name: action, data});
         if (this.webviewBridge) {
             this.webviewBridge.postMessage(jsonString);
-            // console.log(jsonString)
         }
     }
 
@@ -162,6 +162,8 @@ export default class RichTextEditor extends Component {
     renderWebView = () => {
         const {html, editorStyle, useContainer, ...rest} = this.props;
         const {html: viewHTML} = this.state;
+        // webview dark theme bug
+        const opacity = this.isInit ? 1 : 0;
         return (
             <>
                 <WebView
@@ -178,7 +180,7 @@ export default class RichTextEditor extends Component {
                     bounces={false}
                     javaScriptEnabled={true}
                     source={viewHTML}
-                    opacity={this.isInit ? 1 : 0}
+                    opacity={opacity}
                     onLoad={this.init}
                 />
                 {Platform.OS === 'android' && <TextInput ref={(ref) => (this._input = ref)} style={styles._input} />}
@@ -192,7 +194,7 @@ export default class RichTextEditor extends Component {
         // useContainer is an optional prop with default value of true
         // If set to true, it will use a View wrapper with styles and height.
         // If set to false, it will not use a View wrapper
-        const {useContainer = true, style} = this.props;
+        const {useContainer, style} = this.props;
 
         if (useContainer) {
             return (
@@ -286,6 +288,10 @@ export default class RichTextEditor extends Component {
         }, 200);
     }
 
+    /**
+     * @deprecated please use onChange
+     * @returns {Promise}
+     */
     async getContentHtml() {
         return new Promise((resolve, reject) => {
             this.contentResolve = resolve;

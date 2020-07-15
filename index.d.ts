@@ -69,6 +69,9 @@ declare module 'react-native-pell-rich-editor' {
     export class RichEditor extends React.Component<RichEditorProps> {
         // Public API
 
+        /**
+         * @deprecated please use onChange
+         */
         getContentHtml: () => Promise<string>;
 
         registerToolbar: (listener: SelectionChangeListener) => void;

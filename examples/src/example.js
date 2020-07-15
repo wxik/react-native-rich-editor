@@ -163,6 +163,7 @@ class Example extends React.Component {
     }
 
     createContentStyle(theme) {
+        // Can be selected for more situations (cssText or contentCSSText).
         const contentStyle = {
             backgroundColor: '#000033',
             color: '#fff',
@@ -226,7 +227,8 @@ class Example extends React.Component {
                     </View>
                     <RichEditor
                         // initialFocus={true}
-                        editorStyle={contentStyle}
+                        // editorStyle={contentStyle} // default light style
+                        editorStyle={{color: '#000033'}}
                         containerStyle={themeBg}
                         ref={that.richText}
                         style={[styles.rich, themeBg]}
@@ -246,8 +248,8 @@ class Example extends React.Component {
                         selectedButtonStyle={{backgroundColor: 'transparent'}}
                         onPressAddImage={that.onPressAddImage}
                         onInsertLink={that.onInsertLink}
-                        iconSize={40}
-                        actions={['insertVideo', ...defaultActions, 'insertEmoji', 'insertHTML']}
+                        iconSize={40} // default 50
+                        actions={['insertVideo', ...defaultActions, 'insertEmoji', 'insertHTML']} // default defaultActions
                         iconMap={{
                             insertEmoji: phizIcon,
                             // insertHTML: <Text style={styles.tib}>HTML</Text>,

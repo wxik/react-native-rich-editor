@@ -1,4 +1,9 @@
+## 1.?
+#### Added
+- editor console.log in RN of __DEV__ mode
 
+#### Changed
+- Detail optimization
 
 ## 1.1.1
 
