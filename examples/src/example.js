@@ -18,7 +18,7 @@ import {
     TextInput,
     View,
 } from 'react-native';
-import {RichEditor, RichToolbar, defaultActions} from 'react-native-pell-rich-editor';
+import {RichEditor, RichToolbar, actions, defaultActions} from 'react-native-pell-rich-editor';
 import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
 
@@ -37,6 +37,7 @@ const initHTML = `<br/>
 const phizIcon = require('./assets/phiz.png');
 const htmlIcon = require('./assets/h5.png');
 const videoIcon = require('./assets/video.png');
+const strikethrough = require('./assets/strikethrough.png');
 
 class Example extends React.Component {
     richText = React.createRef();
@@ -248,11 +249,21 @@ class Example extends React.Component {
                         selectedButtonStyle={{backgroundColor: 'transparent'}}
                         onPressAddImage={that.onPressAddImage}
                         onInsertLink={that.onInsertLink}
-                        iconSize={40} // default 50
-                        actions={['insertVideo', ...defaultActions, 'insertEmoji', 'insertHTML']} // default defaultActions
+                        iconSize={36} // default 50
+                        actions={[
+                            'insertVideo',
+                            ...defaultActions,
+                            actions.strikethrough,
+                            actions.heading1,
+                            actions.heading4,
+                            'insertEmoji',
+                            'insertHTML',
+                        ]} // default defaultActions
                         iconMap={{
                             insertEmoji: phizIcon,
-                            // insertHTML: <Text style={styles.tib}>HTML</Text>,
+                            [actions.strikethrough]: strikethrough,
+                            [actions.heading1]: <Text style={styles.tib}>H1</Text>,
+                            [actions.heading4]: <Text style={styles.tib}>H3</Text>,
                             insertHTML: htmlIcon,
                             insertVideo: videoIcon,
                         }}
@@ -303,7 +314,7 @@ const styles = StyleSheet.create({
 
     tib: {
         textAlign: 'center',
-        color: '#000',
+        color: '#515156',
     },
 });
 

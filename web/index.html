@@ -44,6 +44,8 @@
             <img class="icon" src="../img/icon_format_media@2x.png" onclick="editor.onToolbarClick(this.id)" id='image'/>
             <img class="icon" src="../img/icon_format_bold@2x.png" onclick="editor.onToolbarClick(this.id)" id="bold"/>
             <img class="icon" src="../img/icon_format_italic@2x.png" onclick="editor.onToolbarClick(this.id)" id="italic"/>
+            <span class="icon" onclick="editor.onToolbarClick(this.id)" id="heading1">H1</span>
+            <span class="icon" onclick="editor.onToolbarClick(this.id)" id="heading2">H2</span>
             <img class="icon" src="../img/icon_format_ul@2x.png" onclick="editor.onToolbarClick(this.id)" id="unorderedList"/>
             <img class="icon" src="../img/icon_format_ol@2x.png" onclick="editor.onToolbarClick(this.id)" id="orderedList"/>
             <img class="icon" src="../img/icon_format_link@2x.png" onclick="editor.onToolbarClick(this.id)" id="link"/>
@@ -117,6 +119,8 @@
                     case actions.insertLink:
                     case actions.setBold:
                     case actions.setItalic:
+                    case actions.heading1:
+                    case actions.heading2:
                     case actions.insertBulletsList:
                     case actions.insertOrderedList:
                     case actions.setIndent:

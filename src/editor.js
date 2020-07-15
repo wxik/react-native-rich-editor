@@ -35,7 +35,7 @@ function createHTML(options = {}) {
 <div class="content"><div id="editor" class="pell"></div></div>
 <script>
     var placeholderColor = '${placeholderColor}';
-    var __DEV__ = ${__DEV__};
+    var __DEV__ = !!${window.__DEV__};
     (function (exports) {
         var body = document.body;
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
@@ -100,7 +100,7 @@ function createHTML(options = {}) {
             bold: { state: function() { return queryCommandState('bold'); }, result: function() { return exec('bold'); }},
             italic: { state: function() { return queryCommandState('italic'); }, result: function() { return exec('italic'); }},
             underline: { state: function() { return queryCommandState('underline'); }, result: function() { return exec('underline'); }},
-            strikethrough: { state: function() { return queryCommandState('strikeThrough'); }, result: function() { return exec('strikeThrough'); }},
+            strikeThrough: { state: function() { return queryCommandState('strikeThrough'); }, result: function() { return exec('strikeThrough'); }},
             heading1: { result: function() { return exec(formatBlock, '<h1>'); }},
             heading2: { result: function() { return exec(formatBlock, '<h2>'); }},
             heading3: { result: function() { return exec(formatBlock, '<h3>'); }},

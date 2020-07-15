@@ -77,9 +77,12 @@ iframe {
 }
 
 .icon {
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
   cursor: pointer;
+  color: #878b92;
+  font-size: 16px;
 
 }
 .icon:active {

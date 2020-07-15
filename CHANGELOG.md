@@ -1,9 +1,13 @@
 ## 1.?
 #### Added
 - editor console.log in RN of __DEV__ mode
+- Add strikethrough and insertLine on editor
 
 #### Changed
 - Detail optimization
+
+#### Fix Bug
+- heading1、heading2 key error
 
 ## 1.1.1
 
