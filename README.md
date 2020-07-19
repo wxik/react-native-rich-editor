@@ -34,7 +34,10 @@ The editor component. Simply place this component in your view hierarchy to rece
 	HTML that will be rendered in the content section on load.
 	
 * `initialFocus`	
-* Initial content request focus
+* Boolean value to Initial content request focus. The default value is `false`.
+
+* `disabled`	
+* Boolean value to disable editor. The default value is `false`.
 
 * `editorInitializedCallback `
 
@@ -121,11 +124,17 @@ Other props supported by the `RichToolbar` component are:
     
 * `onInsertLink`    
     Logic for what happens when you press on the add insert link button
+
+* `disabled`	
+* Boolean value to disable editor. The default value is `false`.
         
-* `selectedButtonStyle`
+
 * `iconTint`
-* `selectedIconTint`
 * `unselectedButtonStyle`
+* `selectedIconTint`
+* `selectedButtonStyle`
+* `disabledIconTint`
+* `disabledButtonStyle`
     
     These provide options for styling action buttons.
 

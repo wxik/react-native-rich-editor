@@ -48,7 +48,7 @@ class Example extends React.Component {
         const that = this;
         const theme = props.theme || Appearance.getColorScheme();
         const contentStyle = that.createContentStyle(theme);
-        that.state = {theme: theme, contentStyle, emojiVisible: false};
+        that.state = {theme: theme, contentStyle, emojiVisible: false, disabled: false};
         that.onHome = ::that.onHome;
         that.save = ::that.save;
         that.onTheme = ::that.onTheme;
@@ -62,6 +62,7 @@ class Example extends React.Component {
         that.insertHTML = ::that.insertHTML;
         that.insertVideo = ::that.insertVideo;
         that.handleEmoji = ::that.handleEmoji;
+        that.onDisabled = ::that.onDisabled;
         that.editorInitializedCallback = ::that.editorInitializedCallback;
     }
 
@@ -187,9 +188,13 @@ class Example extends React.Component {
         this.setState({theme, contentStyle});
     }
 
+    onDisabled() {
+        this.setState({disabled: !this.state.disabled});
+    }
+
     render() {
         let that = this;
-        const {contentStyle, theme, emojiVisible} = that.state;
+        const {contentStyle, theme, emojiVisible, disabled} = that.state;
         const {backgroundColor, color, placeholderColor} = contentStyle;
         const themeBg = {backgroundColor};
         return (
@@ -204,7 +209,6 @@ class Example extends React.Component {
                 />
                 <View style={styles.nav}>
                     <Button title={'HOME'} onPress={that.onHome} />
-                    <Button title={theme} onPress={that.onTheme} />
                     <Button title="Save" onPress={that.save} />
                 </View>
                 <ScrollView style={[styles.scroll, themeBg]} keyboardDismissMode={'none'}>
@@ -225,9 +229,14 @@ class Example extends React.Component {
                                 placeholder="Rich Editor Bug 😀"
                             />
                         </View>
+                        <View style={styles.item}>
+                            <Button title={theme} onPress={that.onTheme} />
+                            <Button title={disabled ? 'enable' : 'disable'} onPress={that.onDisabled} />
+                        </View>
                     </View>
                     <RichEditor
                         // initialFocus={true}
+                        disabled={disabled}
                         editorStyle={contentStyle} // default light style
                         containerStyle={themeBg}
                         ref={that.richText}
@@ -243,9 +252,10 @@ class Example extends React.Component {
                     <RichToolbar
                         style={[styles.richBar, themeBg]}
                         editor={that.richText}
+                        disabled={disabled}
                         iconTint={color}
                         selectedIconTint={'#2095F2'}
-                        selectedButtonStyle={{backgroundColor: 'transparent'}}
+                        disabledIconTint={'#8b8b8b'}
                         onPressAddImage={that.onPressAddImage}
                         onInsertLink={that.onInsertLink}
                         iconSize={40} // default 50
@@ -261,8 +271,12 @@ class Example extends React.Component {
                         iconMap={{
                             insertEmoji: phizIcon,
                             [actions.setStrikethrough]: strikethrough,
-                            [actions.heading1]: <Text style={styles.tib}>H1</Text>,
-                            [actions.heading4]: <Text style={styles.tib}>H3</Text>,
+                            [actions.heading1]: ({tintColor}) => (
+                                <Text style={[styles.tib, {color: tintColor}]}>H1</Text>
+                            ),
+                            [actions.heading4]: ({tintColor}) => (
+                                <Text style={[styles.tib, {color: tintColor}]}>H3</Text>
+                            ),
                             insertHTML: htmlIcon,
                             insertVideo: videoIcon,
                         }}

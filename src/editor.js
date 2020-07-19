@@ -39,6 +39,7 @@ function createHTML(options = {}) {
         var body = document.body, docEle = document.documentElement;
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
         var formatBlock = 'formatBlock';
+        var editor = null, o_height = 0;
         var addEventListener = function addEventListener(parent, type, listener) {
             return parent.addEventListener(type, listener);
         };
@@ -61,7 +62,7 @@ function createHTML(options = {}) {
         };
 
         var postAction = function(data){
-            exports.window.postMessage(JSON.stringify(data));
+            editor.content.contentEditable === 'true' && exports.window.postMessage(JSON.stringify(data));
         };
 
         console.log = function (){
@@ -97,7 +98,6 @@ function createHTML(options = {}) {
             }
         }
 
-        var editor = null, o_height = 0;
         var Actions = {
             bold: { state: function() { return queryCommandState('bold'); }, result: function() { return exec('bold'); }},
             italic: { state: function() { return queryCommandState('italic'); }, result: function() { return exec('italic'); }},
@@ -153,6 +153,7 @@ function createHTML(options = {}) {
                 }
             },
             content: {
+                setDisable: function(dis){ this.blur(); editor.content.contentEditable = !dis},
                 setHtml: function(html) { editor.content.innerHTML = html; },
                 getHtml: function() { return editor.content.innerHTML; },
                 blur: function() { editor.content.blur(); },

@@ -1,3 +1,13 @@
+
+## 1.3.0
+#### Added
+- Add `disabled` props to RichEditor and Toolbar
+- Add `disabledIconTint` props to Toolbar
+- Add `disabledButtonStyle` props to Toolbar
+
+#### Changed
+- `iconMap` Support incoming methods to return React elements
+
 ## 1.2.1
 #### Added
 - editor console.log in RN of __DEV__ mode

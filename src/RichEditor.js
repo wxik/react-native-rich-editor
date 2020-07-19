@@ -13,6 +13,7 @@ export default class RichTextEditor extends Component {
     //     onChange: PropTypes.func,
     //     onHeightChange: PropTypes.func,
     //     initialFocus: PropTypes.bool,
+    //     disabled: PropTypes.bool,
     // };
 
     static defaultProps = {
@@ -21,6 +22,7 @@ export default class RichTextEditor extends Component {
         placeholder: '',
         initialContentHTML: '',
         initialFocus: false,
+        disabled: false,
         useContainer: true,
         editorInitializedCallback: () => {},
     };
@@ -28,6 +30,7 @@ export default class RichTextEditor extends Component {
     constructor(props) {
         super(props);
         let that = this;
+        that.renderWebView = that.renderWebView.bind(that);
         that.onMessage = that.onMessage.bind(that);
         that._sendAction = that._sendAction.bind(that);
         that.registerToolbar = that.registerToolbar.bind(that);
@@ -151,9 +154,12 @@ export default class RichTextEditor extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const {editorStyle} = this.props;
+        const {editorStyle, disabled} = this.props;
         if (prevProps.editorStyle !== editorStyle) {
             editorStyle && this.setContentStyle(editorStyle);
+        }
+        if (disabled !== prevProps.disabled) {
+            this.setDisable(disabled);
         }
     }
 
@@ -161,11 +167,12 @@ export default class RichTextEditor extends Component {
         this.webviewBridge = ref;
     }
 
-    renderWebView = () => {
-        const {html, editorStyle, useContainer, ...rest} = this.props;
-        const {html: viewHTML} = this.state;
+    renderWebView() {
+        let that = this;
+        const {html, editorStyle, useContainer, ...rest} = that.props;
+        const {html: viewHTML} = that.state;
         // webview dark theme bug
-        const opacity = this.state.isInit ? 1 : 0;
+        const opacity = that.state.isInit ? 1 : 0;
         return (
             <>
                 <WebView
@@ -174,8 +181,8 @@ export default class RichTextEditor extends Component {
                     hideKeyboardAccessoryView={true}
                     keyboardDisplayRequiresUserAction={false}
                     {...rest}
-                    ref={this.setRef}
-                    onMessage={this.onMessage}
+                    ref={that.setRef}
+                    onMessage={that.onMessage}
                     originWhitelist={['*']}
                     dataDetectorTypes={'none'}
                     domStorageEnabled={false}
@@ -183,12 +190,12 @@ export default class RichTextEditor extends Component {
                     javaScriptEnabled={true}
                     source={viewHTML}
                     opacity={opacity}
-                    onLoad={this.init}
+                    onLoad={that.init}
                 />
-                {Platform.OS === 'android' && <TextInput ref={(ref) => (this._input = ref)} style={styles._input} />}
+                {Platform.OS === 'android' && <TextInput ref={(ref) => (that._input = ref)} style={styles._input} />}
             </>
         );
-    };
+    }
 
     render() {
         let {height} = this.state;
@@ -229,6 +236,10 @@ export default class RichTextEditor extends Component {
 
     setContentStyle(styles) {
         this._sendAction(actions.content, 'setContentStyle', styles);
+    }
+
+    setDisable(dis) {
+        this._sendAction(actions.content, 'setDisable', !!dis);
     }
 
     blurContentEditor() {
@@ -277,13 +288,14 @@ export default class RichTextEditor extends Component {
 
     init() {
         let that = this;
-        const {initialFocus, initialContentHTML, placeholder, editorInitializedCallback} = that.props;
+        const {initialFocus, initialContentHTML, placeholder, editorInitializedCallback, disabled} = that.props;
         that.setContentHTML(initialContentHTML);
         that.setPlaceholder(placeholder);
+        that.setDisable(disabled);
         editorInitializedCallback();
 
         // initial request focus
-        initialFocus && that.focusContentEditor();
+        initialFocus && !disabled && that.focusContentEditor();
         // no visible ?
         that._sendAction(actions.init);
         that.setState({isInit: true});

@@ -31,9 +31,14 @@ declare module 'react-native-pell-rich-editor' {
         initialContentHTML?: string;
 
         /**
-         * Initial content request focus
+         * Boolean value to Initial content request focus. The default value is false.
          */
         initialFocus?: boolean;
+
+        /**
+         * Boolean value to disable editor. The default value is false.
+         */
+        disabled?: boolean;
 
         /**
          * Callback called after the editor has been initialized
@@ -116,6 +121,7 @@ declare module 'react-native-pell-rich-editor' {
 
         unselectedButtonStyle?: StyleProp<ViewStyle>;
         selectedButtonStyle?: StyleProp<ViewStyle>;
+        disabledButtonStyle?: StyleProp<ViewStyle>;
 
         /**
          * Color for selected button Icon
@@ -125,6 +131,15 @@ declare module 'react-native-pell-rich-editor' {
          * Color for unselected button Icon
          */
         iconTint?: string;
+        /**
+         * Color for disabled button Icon
+         */
+        disabledIconTint?: string;
+
+        /**
+         * Boolean value to disable editor. The default value is false.
+         */
+        disabled?: boolean,
         /**
          * Custom renderer for toolbar actions
          */
@@ -138,7 +153,7 @@ declare module 'react-native-pell-rich-editor' {
         /**
          * Your own set if images for the toolbar
          */
-        iconMap?: Record<string, ImageSourcePropType>;
+        iconMap?: Record<string, ({selected: boolean, disabled: boolean, tintColor: any, iconSize: number}) => React.Element | ImageSourcePropType>;
 
         /**
          * Logic for what happens when you press on the add image button
