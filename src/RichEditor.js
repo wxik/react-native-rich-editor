@@ -264,6 +264,11 @@ export default class RichTextEditor extends Component {
     this._sendAction(actions.updateHeight);
   }
 
+  insertLink(attributes) {
+    this._sendAction(actions.insertLink, "result", attributes);
+    this._sendAction(actions.updateHeight);
+  }
+
   init() {
     let that = this;
     that.isInit = true;

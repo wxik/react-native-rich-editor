@@ -132,8 +132,7 @@ const HTML = `
                 }
             },
             link: {
-                result: function() {
-                    var url = window.prompt('Enter the link URL');
+                result: function(url) {
                     if (url) exec('createLink', url);
                 }
             },
