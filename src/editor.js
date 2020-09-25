@@ -253,7 +253,7 @@ const HTML = `
             addEventListener(content, 'focus', function () {
                 postAction({type: 'CONTENT_FOCUSED'});
             });
-            addEventListener(content, 'keypress', function (e) {
+            addEventListener(content, 'keyup', function (e) {
                 postAction({type: 'CONTENT_CHANGE', data: { key: e.key, keyCode: e.keyCode, shiftKey: e.shiftKey, content: content.innerText }});
             });
             
