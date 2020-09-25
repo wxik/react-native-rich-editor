@@ -122,6 +122,33 @@ export default class RichTextEditor extends Component {
           const { onActivateTagging } = this.props;
           const { taggingActive, tagText } = this.state;
 
+          if (!PlatformIOS) {
+            const contentLastWord = message.data.content.split('\n').pop().split(/(\s+)/).pop();
+            if (contentLastWord === '@') {
+              onActivateTagging?.(true, '');
+              this.setState({
+                taggingActive: true,
+                tagText: '',
+              });
+            } else if (taggingActive) {
+              if (!contentLastWord.includes('@')) {
+                onActivateTagging?.(false, '');
+                this.setState({
+                  taggingActive: false,
+                  tagText: '',
+                });
+              } else {
+                const text = contentLastWord.replace('@', '');
+                onActivateTagging?.(true, text);
+                this.setState({
+                  taggingActive: true,
+                  tagText: text,
+                });
+              }
+            }
+            break;
+          }
+
           const content = message.data.content.trim();
           const offset = message.data.key.length > 1 ? 1 : 2;
           const lastChar = content.length > 1 ? content.substr(content.length - offset, 1) : '';
