@@ -12,9 +12,9 @@
     "url": "https://github.com/wxik/react-native-rich-editor.git"
   },
   "dependencies": {
+    "textversionjs": "^1.1.3"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "peerDependencies": {
     "react-native": ">=0.50.0",
     "react-native-webview": ">=7.5.2"
