@@ -1,5 +1,3 @@
-var textVersion = require("textversionjs");
-
 function createHTML(options = {}) {
     const {
         backgroundColor = '#FFF',
@@ -112,10 +110,7 @@ function createHTML(options = {}) {
             heading5: { result: function() { return exec(formatBlock, '<h5>'); }},
             heading6: { result: function() { return exec(formatBlock, '<h6>'); }},
             paragraph: { result: function() { return exec(formatBlock, '<p>'); }},
-            removeFormat: { result: function(){
-                let removedHTML = textVersion(formatBlock)
-                return exec(removedHTML, '<>');
-            }}
+            removeFormat: { result: function() { return exec(formatBlock, '<div>'); }},
             quote: { result: function() { return exec(formatBlock, '<blockquote>'); }},
             orderedList: { state: function() { return queryCommandState('insertOrderedList'); }, result: function() { return exec('insertOrderedList'); }},
             unorderedList: { state: function() { return queryCommandState('insertUnorderedList'); },result: function() { return exec('insertUnorderedList'); }},
