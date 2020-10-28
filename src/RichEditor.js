@@ -296,6 +296,11 @@ export default class RichTextEditor extends Component {
     this._sendAction(actions.updateHeight);
   }
 
+  insertAudio(attributes) {
+    this._sendAction(actions.insertAudio, "result", attributes);
+    this._sendAction(actions.updateHeight);
+  }
+
   init() {
     let that = this;
     that.isInit = true;

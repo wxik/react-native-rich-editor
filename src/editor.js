@@ -17,6 +17,15 @@ const HTML = `
         table {width: 100% !important;}
         table td {width: inherit;}
         table span { font-size: 12px !important; }
+        .audioctn {display: flex; height:64px; flex-direction:row; border: 1px solid black; border-radius: 5px;padding-left: 8px;}
+        .audioctn .imgctn {display: flex; height:64px;justify-content:center; flex-direction:column;}
+        .audioctn img { width: 48px; height: 48px; border-radius: 8px; margin-right: 8px; }
+        .audioctn .txtctn {display: flex; height:64px;justify-content:center; flex-direction:column;flex: 1;}
+        .audioctn .title {font-size: 14px; color: #000000;}
+        .audioctn .artist {color: #999999;font-size:12px;}
+        .audioctn .btnctn {display: flex; height:64px;justify-content:center; flex-direction:column; width: 64px;}
+        .audioctn .playbtn {background-color:#000000; border-radius: 25px; width: 50px; height:50px;}
+        .audioctn .triangle {width: 0; height: 0; border-width: 12px 0 12px 20.8px;border-color: transparent transparent transparent #FFFFFF; border-style: solid;position: relative; left: 17px; top: 13px;}
     </style>
 </head>
 <body>
@@ -155,6 +164,13 @@ const HTML = `
                         }
                         
                         exec('insertHTML', obj.link);
+                    }
+                }
+            },
+            audio: {
+                result: function(obj) {
+                    if (obj.url) {
+                        exec('insertHTML', "<br><span data-name='audio' data-track='" + encodeURIComponent(JSON.stringify(obj)) + "' /><div class=audioctn><div class=imgctn><img src='" + obj.artwork + "' /></div><div class=txtctn><div class=title>" + obj.title + "</div><div class=artist>" + obj.artist + "</div></div><div class=btnctn><div class=playbtn><div class=triangle>&nbsp;</div></div></div></div></span><br/><br/>");
                     }
                 }
             },
