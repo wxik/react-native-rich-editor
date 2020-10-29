@@ -75,9 +75,8 @@ class Example extends React.Component {
         Appearance.removeChangeListener(this.themeChange);
         Keyboard.removeListener('keyboardDidShow', this.onKeyBoard);
     }
-
     onKeyBoard = () => {
-        TextInput.State.currentlyFocusedField() && this.setState({emojiVisible: false});
+        TextInput.State.currentlyFocusedInput() && this.setState({emojiVisible: false});
     };
 
     editorInitializedCallback() {
@@ -265,11 +264,15 @@ class Example extends React.Component {
                             actions.setStrikethrough,
                             actions.heading1,
                             actions.heading4,
+                            actions.removeFormat,
                             'insertEmoji',
                             'insertHTML',
                         ]} // default defaultActions
                         iconMap={{
                             insertEmoji: phizIcon,
+                            [actions.removeFormat]: ({tintColor}) => (
+                                <Text style={[styles.tib, {color: tintColor}]}>C</Text>
+                            ),
                             [actions.setStrikethrough]: strikethrough,
                             [actions.heading1]: ({tintColor}) => (
                                 <Text style={[styles.tib, {color: tintColor}]}>H1</Text>

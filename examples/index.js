@@ -5,7 +5,6 @@
 import {AppRegistry, LogBox} from 'react-native';
 import App from './src/App';
 
-require('react-native').unstable_enableLogBox();
-LogBox.ignoreLogs(['currentlyFocusedField']);
+LogBox.ignoreAllLogs(true);
 
 AppRegistry.registerComponent('examples', () => App);

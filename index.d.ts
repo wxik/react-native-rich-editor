@@ -48,12 +48,12 @@ declare module 'react-native-pell-rich-editor' {
         /**
          * Callback after editor data modification
          */
-        onChange?: () => void;
+        onChange?: (text: string) => void;
 
         /**
          * Callback after height change
          */
-        onHeightChange?: () => void;
+        onHeightChange?: (height: number) => void;
 
         /**
          * Styling for container or for Rich Editor more dark or light settings
@@ -139,7 +139,7 @@ declare module 'react-native-pell-rich-editor' {
         /**
          * Boolean value to disable editor. The default value is false.
          */
-        disabled?: boolean,
+        disabled?: boolean;
         /**
          * Custom renderer for toolbar actions
          */
@@ -153,7 +153,15 @@ declare module 'react-native-pell-rich-editor' {
         /**
          * Your own set if images for the toolbar
          */
-        iconMap?: Record<string, ({selected: boolean, disabled: boolean, tintColor: any, iconSize: number}) => React.Element | ImageSourcePropType>;
+        iconMap?: Record<
+            string,
+            ({
+                selected: boolean,
+                disabled: boolean,
+                tintColor: any,
+                iconSize: number,
+            }) => React.Element | ImageSourcePropType
+        >;
 
         /**
          * Logic for what happens when you press on the add image button

@@ -112,6 +112,7 @@ function createHTML(options = {}) {
             heading6: { result: function() { return exec(formatBlock, '<h6>'); }},
             paragraph: { result: function() { return exec(formatBlock, '<p>'); }},
             quote: { result: function() { return exec(formatBlock, '<blockquote>'); }},
+            removeFormat: { result: function() { return exec('removeFormat'); }},
             orderedList: { state: function() { return queryCommandState('insertOrderedList'); }, result: function() { return exec('insertOrderedList'); }},
             unorderedList: { state: function() { return queryCommandState('insertUnorderedList'); },result: function() { return exec('insertUnorderedList'); }},
             code: { result: function() { return exec(formatBlock, '<pre>'); }},
@@ -274,6 +275,7 @@ function createHTML(options = {}) {
                 if (action ){
                     if ( action[msgData.name]){
                         var flag = msgData.name === 'result';
+                        // insert image or link need current focus
                         flag && focusCurrent();
                         action[msgData.name](msgData.data);
                         flag && handler();

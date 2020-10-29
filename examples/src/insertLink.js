@@ -117,6 +117,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     text: {
-        color: '#286ab2'
-    }
+        color: '#286ab2',
+    },
 });

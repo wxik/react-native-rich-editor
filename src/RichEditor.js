@@ -50,7 +50,14 @@ export default class RichTextEditor extends Component {
             html: {
                 html:
                     html ||
-                    createHTML({backgroundColor, color, placeholderColor, cssText, contentCSSText, pasteAsPlainText}),
+                    createHTML({
+                        backgroundColor,
+                        color,
+                        placeholderColor,
+                        cssText,
+                        contentCSSText,
+                        pasteAsPlainText,
+                    }),
             },
             keyboardHeight: 0,
             height: 0,

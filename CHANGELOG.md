@@ -1,4 +1,9 @@
 
+## 1.3.1
+#### Added
+- Add `pasteAsPlainText` props on editor
+- Add `removeFormat` props on editor
+
 ## 1.3.0
 #### Added
 - Add `disabled` props to RichEditor and Toolbar
@@ -41,7 +46,7 @@
 - Add `initialFocus` props to the editor initial request focus
 - Add `onHeightChange` props to the editor Callback after height change
 - Add `insertVideo` props to the editor insert video
-- Add `insertText` props to the editor insert text 
+- Add `insertText` props to the editor insert text
 - Add `insertHTML` props to the editor insert html
 
 #### Fix Bug

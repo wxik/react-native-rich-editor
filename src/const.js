@@ -14,7 +14,7 @@ export const actions = {
     heading6: 'heading6',
     insertLine: 'line',
     setParagraph: 'SET_PARAGRAPH',
-    removeFormat: 'REMOVE_FORMAT',
+    removeFormat: 'removeFormat',
     alignLeft: 'justifyLeft',
     alignCenter: 'justifyCenter',
     alignRight: 'justifyRight',
