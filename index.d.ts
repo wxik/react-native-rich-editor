@@ -53,7 +53,7 @@ declare module 'react-native-pell-rich-editor' {
         /**
          * Callback after height change
          */
-        onHeightChange: () => void;
+        onHeightChange?: () => void;
 
         /**
          * Styling for container or for Rich Editor more dark or light settings
