@@ -62,8 +62,12 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `useContainer`
 
 	A boolean value that determines if a View container is wrapped around the WebView. The default value is true. If you are using your own View to wrap this library around, set this value to false. 
-	
-	
+
+* `pasteAsPlainText`
+
+	A boolean value (false as default) that determines if the clipboard paste will keep its format or it will be done as plain text
+
+
 `RichEditor` also has methods that can be used on its `ref` to  set:
 
 *  `setContentHTML(html: string)`
