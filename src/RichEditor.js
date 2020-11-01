@@ -306,6 +306,10 @@ export default class RichTextEditor extends Component {
     this._sendAction(actions.updateHeight);
   }
 
+  updateHeight() {
+    this._sendAction(actions.updateHeight);
+  }
+
   init() {
     let that = this;
     that.isInit = true;
