@@ -26,6 +26,10 @@ const HTML = `
         .audioctn .btnctn {display: flex; height:64px;justify-content:center; flex-direction:column; width: 64px;}
         .audioctn .playbtn {background-color:#000000; border-radius: 25px; width: 50px; height:50px;}
         .audioctn .triangle {width: 0; height: 0; border-width: 12px 0 12px 20.8px;border-color: transparent transparent transparent #FFFFFF; border-style: solid;position: relative; left: 17px; top: 13px;}
+        .collage { height: 450px; }
+        .scrolling-wrapper { height: 150px; display: flex; flex-wrap: nowrap; overflow-x: auto; max-width: 98%; margin-top: 8px; padding-left: 4px;}
+        .scrolling-wrapper .card { flex: 0 0 auto; }
+        .scrolling-wrapper img { height: 150px; margin-right: 8px; }
     </style>
 </head>
 <body>
@@ -148,6 +152,22 @@ const HTML = `
             image: {
                 result: function(url) {
                     if (url) { exec('insertHTML', "<br><div><img src='"+ url +"'/></div><br>");}
+                }
+            },
+            collage: {
+                result: function(obj) {
+                    if (obj.images) {
+                        
+                        var str = "<div class=collage><span data-name='collage' data-images='" + encodeURIComponent(JSON.stringify(obj)) + "'><div><img src='"+ obj.images[0] +"'/></div>";
+                        str += "<div class=scrolling-wrapper>";
+
+                        for (var i = 1; i < obj.images.length; i++) {
+                            str += "<div class=card><img src='"+ obj.images[i] +"'/></div>";
+                        }
+
+                        str += "</div></span></div><br/>&nbsp;";
+                        exec('insertHTML', str);
+                    }
                 }
             },
             video: {

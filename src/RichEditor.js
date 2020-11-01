@@ -281,6 +281,11 @@ export default class RichTextEditor extends Component {
     this._sendAction(actions.updateHeight);
   }
 
+  insertCollage(attributes) {
+    this._sendAction(actions.insertCollage, "result", attributes);
+    this._sendAction(actions.updateHeight);
+  }
+
   insertVideo(attributes) {
     this._sendAction(actions.insertVideo, "result", attributes);
     this._sendAction(actions.updateHeight);
@@ -298,6 +303,10 @@ export default class RichTextEditor extends Component {
 
   insertAudio(attributes) {
     this._sendAction(actions.insertAudio, "result", attributes);
+    this._sendAction(actions.updateHeight);
+  }
+
+  updateHeight() {
     this._sendAction(actions.updateHeight);
   }
 
