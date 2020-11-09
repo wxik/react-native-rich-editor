@@ -306,6 +306,16 @@ export default class RichTextEditor extends Component {
     this._sendAction(actions.updateHeight);
   }
 
+  insertPoll(attributes) {
+    this._sendAction(actions.insertPoll, "result", attributes);
+    this._sendAction(actions.updateHeight);
+  }
+
+  insertYouTubeLink(attributes) {
+    this._sendAction(actions.insertYouTubeLink, "result", attributes);
+    this._sendAction(actions.updateHeight);
+  }
+
   updateHeight() {
     this._sendAction(actions.updateHeight);
   }

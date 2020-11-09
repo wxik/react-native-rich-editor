@@ -30,6 +30,12 @@ const HTML = `
         .scrolling-wrapper { height: 150px; display: flex; flex-wrap: nowrap; overflow-x: auto; max-width: 98%; margin-top: 8px; padding-left: 4px;}
         .scrolling-wrapper .card { flex: 0 0 auto; }
         .scrolling-wrapper img { height: 150px; margin-right: 8px; }
+        .poll p {margin-bottom: 8px;}
+        .poll .container {display: flex; flex-direction:row; margin-bottom: 8px;}
+        .poll .chkctn {padding-top: 5px; margin-right: 4px;}
+        .poll .chk {height: 20px; width: 20px;}
+        .poll .option {border: 1px solid #eeeeee; border-radius: 4px; flex: 1; padding: 8px;}
+        .poll .count {margin-left: 4px; padding-top: 8px; font-size:16px;}
     </style>
 </head>
 <body>
@@ -192,6 +198,32 @@ const HTML = `
                     if (obj.url) {
                         exec('insertHTML', "<br><span data-name='audio' data-track='" + encodeURIComponent(JSON.stringify(obj)) + "' /><div class=audioctn><div class=imgctn><img src='" + obj.artwork + "' /></div><div class=txtctn><div class=title>" + obj.title + "</div><div class=artist>" + obj.artist + "</div></div><div class=btnctn><div class=playbtn><div class=triangle>&nbsp;</div></div></div></div></span><br/><br/>");
                     }
+                }
+            },
+            poll: {
+                result: function(obj) {
+                    var str = "<div class=poll><span data-name='poll' data-poll='" + encodeURIComponent(JSON.stringify(obj)) + "'><p>" + obj.description + "</p>";                    
+
+                    for (var i = 0; i < obj.options.length; i++) {
+                        str += "<div class=container>";
+                        str += "<div class=chkctn><input type=" + (obj.multi ? "checkbox" : "radio") + " class=chk></div>";
+                        str += "<div class=option>" + obj.options[i].text + "</div>";
+                        str += "<span class=count>0" + (obj.displayAs === 'perc' ? "%" : "") + "</span>";
+                        str += "</div>";
+                    }
+                    
+                    str += "</span></div><br/>&nbsp;";
+
+                    exec('insertHTML', str);
+                    }
+            },
+            youtube: {
+                result: function(obj) {                    
+                    var str = "<div class=youtube><span data-name='youtube' data-video='" + encodeURIComponent(JSON.stringify(obj)) + "'>";
+                    str += "<img src='"+ obj.thumbnail +"'/>";
+                    str += "</span></div><br/>&nbsp;"
+
+                    exec('insertHTML', str);
                 }
             },
             content: {
