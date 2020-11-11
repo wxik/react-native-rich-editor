@@ -204,11 +204,11 @@ const HTML = `
                 result: function(obj) {
                     var str = "<div class=poll><span data-name='poll' data-poll='" + encodeURIComponent(JSON.stringify(obj)) + "'><p>" + obj.description + "</p>";                    
 
-                    for (var i = 0; i < obj.options.length; i++) {
+                    for (var i = 0; i < obj.answer.length; i++) {
                         str += "<div class=container>";
-                        str += "<div class=chkctn><input type=" + (obj.multi ? "checkbox" : "radio") + " class=chk></div>";
-                        str += "<div class=option>" + obj.options[i].text + "</div>";
-                        str += "<span class=count>0" + (obj.displayAs === 'perc' ? "%" : "") + "</span>";
+                        str += "<div class=chkctn><input type=" + (obj.mode = 'multiple' ? "checkbox" : "radio") + " class=chk></div>";
+                        str += "<div class=option>" + obj.answer[i].value + "</div>";
+                        str += "<span class=count>0" + (obj.displayAs === 'percentage' ? "%" : "") + "</span>";
                         str += "</div>";
                     }
                     
