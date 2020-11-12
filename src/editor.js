@@ -26,16 +26,16 @@ const HTML = `
         .audioctn .btnctn {display: flex; height:64px;justify-content:center; flex-direction:column; width: 64px;}
         .audioctn .playbtn {background-color:#000000; border-radius: 25px; width: 50px; height:50px;}
         .audioctn .triangle {width: 0; height: 0; border-width: 12px 0 12px 20.8px;border-color: transparent transparent transparent #FFFFFF; border-style: solid;position: relative; left: 17px; top: 13px;}
-        .collage { height: 450px; }
+        span[data-name=collage] { height: 450px; }
         .scrolling-wrapper { height: 150px; display: flex; flex-wrap: nowrap; overflow-x: auto; max-width: 98%; margin-top: 8px; padding-left: 4px;}
         .scrolling-wrapper .card { flex: 0 0 auto; }
         .scrolling-wrapper img { height: 150px; margin-right: 8px; }
-        .poll p {margin-bottom: 8px;}
-        .poll .container {display: flex; flex-direction:row; margin-bottom: 8px;}
-        .poll .chkctn {padding-top: 5px; margin-right: 4px;}
-        .poll .chk {height: 20px; width: 20px;}
-        .poll .option {border: 1px solid #eeeeee; border-radius: 4px; flex: 1; padding: 8px;}
-        .poll .count {margin-left: 4px; padding-top: 8px; font-size:16px;}
+        span[data-name=poll] p {margin-bottom: 8px;}
+        span[data-name=poll] .container {display: flex; flex-direction:row; margin-bottom: 8px;}
+        span[data-name=poll] .chkctn {padding-top: 5px; margin-right: 4px;}
+        span[data-name=poll] .chk {height: 20px; width: 20px;}
+        span[data-name=poll] .option {border: 1px solid #eeeeee; border-radius: 4px; flex: 1; padding: 8px;}
+        span[data-name=poll] .count {margin-left: 4px; padding-top: 8px; font-size:16px;}
     </style>
 </head>
 <body>
@@ -164,14 +164,14 @@ const HTML = `
                 result: function(obj) {
                     if (obj.images) {
                         
-                        var str = "<div class=collage><span data-name='collage' data-images='" + encodeURIComponent(JSON.stringify(obj)) + "'><div><img src='"+ obj.images[0] +"'/></div>";
+                        var str = "<br><span data-name='collage' data-images='" + encodeURIComponent(JSON.stringify(obj)) + "'><div><img src='"+ obj.images[0] +"'/></div>";
                         str += "<div class=scrolling-wrapper>";
 
                         for (var i = 1; i < obj.images.length; i++) {
                             str += "<div class=card><img src='"+ obj.images[i] +"'/></div>";
                         }
 
-                        str += "</div></span></div><br/>&nbsp;";
+                        str += "</div></span><br/><br/>";
                         exec('insertHTML', str);
                     }
                 }
@@ -202,7 +202,7 @@ const HTML = `
             },
             poll: {
                 result: function(obj) {
-                    var str = "<div class=poll><span data-name='poll' data-poll='" + encodeURIComponent(JSON.stringify(obj)) + "'><p>" + obj.description + "</p>";                    
+                    var str = "<br><span data-name='poll' data-poll='" + encodeURIComponent(JSON.stringify(obj)) + "'><p>" + obj.description + "</p>";                    
 
                     for (var i = 0; i < obj.answer.length; i++) {
                         str += "<div class=container>";
@@ -212,16 +212,16 @@ const HTML = `
                         str += "</div>";
                     }
                     
-                    str += "</span></div><br/>&nbsp;";
+                    str += "</span><br/><br/>";
 
                     exec('insertHTML', str);
                     }
             },
             youtube: {
                 result: function(obj) {                    
-                    var str = "<div class=youtube><span data-name='youtube' data-video='" + encodeURIComponent(JSON.stringify(obj)) + "'>";
+                    var str = "<br/><span data-name='youtube' data-video='" + encodeURIComponent(JSON.stringify(obj)) + "'>";
                     str += "<img src='"+ obj.thumbnail +"'/>";
-                    str += "</span></div><br/>&nbsp;"
+                    str += "</span><br/><br/>"
 
                     exec('insertHTML', str);
                 }
@@ -322,6 +322,16 @@ const HTML = `
                 postAction({type: 'CONTENT_FOCUSED'});
             });
             addEventListener(content, 'keyup', function (e) {
+                var selection = window.getSelection();
+                var anchor_node = selection.anchorNode;
+                var previous_node = anchor_node.previousSibling;
+                //alert(anchor_node.nodeName);
+                //alert(e.keyCode);
+                if ((anchor_node.nodeName.toLowerCase() === 'span' || previous_node.nodeName.toLowerCase() === 'span') && (e.keyCode === 8 || e.key === 'Backspace')) {
+                    var range = document.createRange();
+                    range.selectNodeContents(previous_node);
+                    range.deleteContents();
+                }
                 postAction({type: 'CONTENT_CHANGE', data: { key: e.key, keyCode: e.keyCode, shiftKey: e.shiftKey, content: content.innerText }});
             });
             
