@@ -74,6 +74,8 @@ declare module 'react-native-pell-rich-editor' {
 
     export type SelectionChangeListener = (items: string[]) => void;
 
+    export const actions: {[key: string]: string};
+
     export type DefaultActions = ['image', 'bold', 'italic', 'unorderedList', 'orderedList', 'link'];
 
     export class RichEditor extends React.Component<RichEditorProps> {
