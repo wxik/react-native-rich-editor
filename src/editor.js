@@ -7,6 +7,7 @@ function createHTML(options = {}) {
         cssText = '',
         pasteAsPlainText = false,
         pasteListener = false,
+        defaultParagraphSeparator = 'div',
     } = options;
     //ERROR: HTML height not 100%;
     return `
@@ -299,7 +300,7 @@ function createHTML(options = {}) {
 
         editor = init({
             element: document.getElementById('editor'),
-            defaultParagraphSeparator: 'div',
+            defaultParagraphSeparator: '${defaultParagraphSeparator}',
             onChange: function (){
                 setTimeout(function(){
                     postAction({type: 'CONTENT_CHANGE', data: Actions.content.getHtml()});

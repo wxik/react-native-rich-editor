@@ -46,6 +46,11 @@ declare module 'react-native-pell-rich-editor' {
         pasteAsPlainText?: boolean;
 
         /**
+         * HTML element used to insert when the user presses enter. The default value is div.
+         */
+        defaultParagraphSeparator?: string;
+
+        /**
          * Callback called after the editor has been initialized
          */
         editorInitializedCallback?: () => void;

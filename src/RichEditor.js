@@ -25,6 +25,7 @@ export default class RichTextEditor extends Component {
         disabled: false,
         useContainer: true,
         pasteAsPlainText: false,
+        defaultParagraphSeparator: 'div',
         editorInitializedCallback: () => {},
     };
 
@@ -45,6 +46,8 @@ export default class RichTextEditor extends Component {
             editorStyle: {backgroundColor, color, placeholderColor, cssText, contentCSSText} = {},
             html,
             pasteAsPlainText,
+            onPaste,
+            defaultParagraphSeparator,
         } = props;
         that.state = {
             html: {
@@ -57,7 +60,8 @@ export default class RichTextEditor extends Component {
                         cssText,
                         contentCSSText,
                         pasteAsPlainText,
-                        pasteListener: !!that.props.onPaste,
+                        defaultParagraphSeparator,
+                        pasteListener: !!onPaste,
                     }),
             },
             keyboardHeight: 0,
