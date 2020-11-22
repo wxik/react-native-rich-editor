@@ -41,6 +41,11 @@ declare module 'react-native-pell-rich-editor' {
         disabled?: boolean;
 
         /**
+         * Boolean value to enable paste as plain text. The default value is false.
+         */
+        pasteAsPlainText?: boolean;
+
+        /**
          * Callback called after the editor has been initialized
          */
         editorInitializedCallback?: () => void;
