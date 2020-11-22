@@ -6,6 +6,7 @@ function createHTML(options = {}) {
         contentCSSText = '',
         cssText = '',
         pasteAsPlainText = false,
+        pasteListener = false,
     } = options;
     //ERROR: HTML height not 100%;
     return `
@@ -259,15 +260,18 @@ function createHTML(options = {}) {
             addEventListener(content, 'focus', function () {
                 postAction({type: 'CONTENT_FOCUSED'});
             });
-            ${pasteAsPlainText} && addEventListener(content, 'paste', function (e) {
-                // cancel paste
-                e.preventDefault();
-
-                // get text representation of clipboard
-                var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-
-                // insert text manually
-                document.execCommand("insertHTML", false, text);
+            ${pasteListener} && addEventListener(content, 'paste', function (e) {
+                postAction({type: 'CONTENT_PASTED'});
+                if (${pasteAsPlainText}) {
+                    // cancel paste
+                    e.preventDefault();
+    
+                    // get text representation of clipboard
+                    var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+    
+                    // insert text manually
+                    document.execCommand("insertHTML", false, text);
+                }
             });
 
             var message = function (event){

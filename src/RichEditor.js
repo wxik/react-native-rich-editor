@@ -57,6 +57,7 @@ export default class RichTextEditor extends Component {
                         cssText,
                         contentCSSText,
                         pasteAsPlainText,
+                        pasteListener: !!that.props.onPaste,
                     }),
             },
             keyboardHeight: 0,
@@ -143,6 +144,9 @@ export default class RichTextEditor extends Component {
                 case messages.CONTENT_CHANGE: {
                     this.props.onChange && this.props.onChange(message.data);
                     break;
+                }
+                case messages.CONTENT_PASTED: {
+                    this.props.onPaste && this.props.onPaste();
                 }
                 case messages.OFFSET_HEIGHT:
                     this.setWebHeight(message.data);

@@ -56,6 +56,11 @@ declare module 'react-native-pell-rich-editor' {
         onChange?: (text: string) => void;
 
         /**
+         * Callback when the user pastes some content
+         */
+        onPaste?: () => void;
+
+        /**
          * Callback after height change
          */
         onHeightChange?: (height: number) => void;
