@@ -62,6 +62,7 @@ declare module 'react-native-pell-rich-editor' {
             backgroundColor?: string; // editor background color
             color?: string; // editor text color
             placeholderColor?: string; // editor placeholder text color
+            initialCSSText?: string; // editor global css initial text
             contentCSSText?: string; // editor content css text
             cssText?: string; // editor global css text
         };
