@@ -41,7 +41,7 @@ declare module 'react-native-pell-rich-editor' {
         disabled?: boolean;
 
         /**
-         *  String value to set textinput capitalization
+         *  String value to set text auto capitalization
          */
         autoCapitalize?: string;
 
