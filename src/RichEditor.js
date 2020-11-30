@@ -25,6 +25,7 @@ export default class RichTextEditor extends Component {
         disabled: false,
         useContainer: true,
         pasteAsPlainText: false,
+        autoCapitalize: 'none',
         editorInitializedCallback: () => {},
     };
 
@@ -185,7 +186,7 @@ export default class RichTextEditor extends Component {
 
     renderWebView() {
         let that = this;
-        const {html, editorStyle, useContainer, ...rest} = that.props;
+        const {html, editorStyle, useContainer, autoCapitalize, ...rest} = that.props;
         const {html: viewHTML} = that.state;
         // webview dark theme bug
         const opacity = that.state.isInit ? 1 : 0;
@@ -208,7 +209,13 @@ export default class RichTextEditor extends Component {
                     opacity={opacity}
                     onLoad={that.init}
                 />
-                {Platform.OS === 'android' && <TextInput ref={(ref) => (that._input = ref)} style={styles._input} />}
+                {Platform.OS === 'android' && (
+                    <TextInput
+                        ref={(ref) => (that._input = ref)}
+                        style={styles._input}
+                        autoCapitalize={autoCapitalize}
+                    />
+                )}
             </>
         );
     }
