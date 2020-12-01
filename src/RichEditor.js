@@ -25,6 +25,7 @@ export default class RichTextEditor extends Component {
         disabled: false,
         useContainer: true,
         pasteAsPlainText: false,
+        autoCapitalize: 'off',
         defaultParagraphSeparator: 'div',
         editorInitializedCallback: () => {},
     };
@@ -47,6 +48,7 @@ export default class RichTextEditor extends Component {
             html,
             pasteAsPlainText,
             onPaste,
+            autoCapitalize,
             defaultParagraphSeparator,
         } = props;
         that.state = {
@@ -60,8 +62,9 @@ export default class RichTextEditor extends Component {
                         cssText,
                         contentCSSText,
                         pasteAsPlainText,
-                        defaultParagraphSeparator,
                         pasteListener: !!onPaste,
+                        autoCapitalize,
+                        defaultParagraphSeparator,
                     }),
             },
             keyboardHeight: 0,

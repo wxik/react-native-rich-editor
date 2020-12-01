@@ -41,6 +41,13 @@ declare module 'react-native-pell-rich-editor' {
         disabled?: boolean;
 
         /**
+         * String value to set text auto capitalization.
+         * See: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autocapitalize
+         */
+        autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
+
+
+        /**
          * Boolean value to enable paste as plain text. The default value is false.
          */
         pasteAsPlainText?: boolean;
