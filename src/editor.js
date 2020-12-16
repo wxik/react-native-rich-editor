@@ -66,7 +66,7 @@ function createHTML(options = {}) {
         };
 
         var postAction = function(data){
-            editor.content.contentEditable === 'true' && exports.window.postMessage(JSON.stringify(data));
+            (editor.content.contentEditable === 'true' || data.type === 'OFFSET_HEIGHT') && exports.window.postMessage(JSON.stringify(data));
         };
 
         console.log = function (){
