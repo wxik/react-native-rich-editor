@@ -5,6 +5,7 @@
  */
 import React from 'react';
 import {
+    Alert,
     Appearance,
     Button,
     Keyboard,
@@ -23,14 +24,14 @@ import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
 
 const initHTML = `<br/>
-<center><b>Rich Editor</b></center>
+<center><b ontouchstart="_.sendEvent('TitleClick')">Rich Editor</b></center>
 <center>
 <a href="https://github.com/wxik/react-native-rich-editor">React Native</a>
 <span>And</span>
 <a href="https://github.com/wxik/flutter-rich-editor">Flutter</a>
 </center>
 <br/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png" />
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png" ontouchstart="_.sendEvent('ImgClick')"/>
 <br/><br/><br/><br/>
 `;
 
@@ -203,6 +204,19 @@ class Example extends React.Component {
         console.log('KeyDown:', data);
     };
 
+    handleMessage = ({type, data}) => {
+        switch (type) {
+            case 'ImgClick':
+                Alert.alert('Click Image');
+                break;
+            case 'TitleClick':
+                Alert.alert('Click Title');
+                break;
+            default:
+                console.log('onMessage', type, data);
+        }
+    };
+
     render() {
         let that = this;
         const {contentStyle, theme, emojiVisible, disabled} = that.state;
@@ -260,6 +274,7 @@ class Example extends React.Component {
                         onPaste={that.handlePaste}
                         onKeyUp={that.handleKeyUp}
                         onKeyDown={that.handleKeyDown}
+                        onMessage={that.handleMessage}
                         pasteAsPlainText={true}
                     />
                 </ScrollView>

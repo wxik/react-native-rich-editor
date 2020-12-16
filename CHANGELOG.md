@@ -1,6 +1,10 @@
 
 
-## 1.4.2
+## 1.5.0
+- Add `onMessage` props on editor Callback outside postMessage internal type processing
+- Added `_.sendEvent(type, data)` event callback to RN, using onMessage to receive callback
+
+## 1.4.0
 #### Added
 - Add `pasteAsPlainText` props on editor
 - Add `removeFormat` props on editor

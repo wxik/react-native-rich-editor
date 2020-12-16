@@ -40,7 +40,7 @@ function createHTML(options = {}) {
 <div class="content"><div id="editor" class="pell"></div></div>
 <script>
     var __DEV__ = !!${window.__DEV__};
-    (function (exports) {
+    var _ = (function (exports) {
         var placeholderColor = '${placeholderColor}';
 
         var body = document.body, docEle = document.documentElement;
@@ -68,8 +68,11 @@ function createHTML(options = {}) {
             return document.execCommand(command, false, value);
         };
 
+        var _postMessage = function (data){
+            exports.window.postMessage(JSON.stringify(data));
+        }
         var postAction = function(data){
-            (editor.content.contentEditable === 'true' || data.type === 'OFFSET_HEIGHT') && exports.window.postMessage(JSON.stringify(data));
+            editor.content.contentEditable === 'true' && _postMessage(data);
         };
 
         console.log = function (){
@@ -196,7 +199,7 @@ function createHTML(options = {}) {
             UPDATE_HEIGHT: function() {
                 var height = Math.max(docEle.scrollHeight, body.scrollHeight);
                 if (o_height !== height){
-                    postAction({type: 'OFFSET_HEIGHT', data: o_height = height});
+                    _postMessage({type: 'OFFSET_HEIGHT', data: o_height = height});
                 }
             }
         };
@@ -324,6 +327,13 @@ function createHTML(options = {}) {
                 }, 10);
             }
         })
+        return {
+            sendEvent: function (type, data){
+                event.preventDefault();
+                event.stopPropagation();
+                _postMessage({type, data});
+            }
+        }
     })({
         window: window.ReactNativeWebView || window.parent,
     });

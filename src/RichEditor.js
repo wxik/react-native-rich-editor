@@ -175,6 +175,9 @@ export default class RichTextEditor extends Component {
                 case messages.OFFSET_HEIGHT:
                     this.setWebHeight(data);
                     break;
+                default:
+                    this.props.onMessage && this.props.onMessage(message);
+                    break;
             }
         } catch (e) {
             //alert('NON JSON MESSAGE');
