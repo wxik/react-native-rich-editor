@@ -70,6 +70,12 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `onPaste`
   Callback clipboard paste value
 
+* `onKeyUp`
+  Callback Keyup event
+
+* `onKeyDown`
+  Callback Keydown event
+
 
 `RichEditor` also has methods that can be used on its `ref` to  set:
 
