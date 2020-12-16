@@ -333,8 +333,8 @@ export default class RichTextEditor extends Component {
     init() {
         let that = this;
         const {initialFocus, initialContentHTML, placeholder, editorInitializedCallback, disabled} = that.props;
-        that.setContentHTML(initialContentHTML);
-        that.setPlaceholder(placeholder);
+        initialContentHTML && that.setContentHTML(initialContentHTML);
+        placeholder && that.setPlaceholder(placeholder);
         that.setDisable(disabled);
         editorInitializedCallback();
 
