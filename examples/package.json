@@ -33,7 +33,7 @@
     "react-test-renderer": "16.14.0"
   },
   "peerDependencies": {
-    "react-native-pell-rich-editor": "^1.4.0"
+    "react-native-pell-rich-editor": "^1.5.0"
   },
   "jest": {
     "preset": "react-native"
