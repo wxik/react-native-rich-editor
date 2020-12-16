@@ -191,6 +191,18 @@ class Example extends React.Component {
         this.setState({disabled: !this.state.disabled});
     }
 
+    handlePaste = (data) => {
+        console.log('Paste:', data);
+    };
+
+    handleKeyUp = (data) => {
+        console.log('KeyUp:', data);
+    };
+
+    handleKeyDown = (data) => {
+        console.log('KeyDown:', data);
+    };
+
     render() {
         let that = this;
         const {contentStyle, theme, emojiVisible, disabled} = that.state;
@@ -245,6 +257,10 @@ class Example extends React.Component {
                         editorInitializedCallback={that.editorInitializedCallback}
                         onChange={that.handleChange}
                         onHeightChange={that.handleHeightChange}
+                        onPaste={that.handlePaste}
+                        onKeyUp={that.handleKeyUp}
+                        onKeyDown={that.handleKeyDown}
+                        pasteAsPlainText={true}
                     />
                 </ScrollView>
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>

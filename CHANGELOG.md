@@ -1,12 +1,17 @@
 
-## 1.3.2
-#### Fix
-- Toolbar buttons activate/deactivate erratically after backspacing
 
-## 1.3.1
+## 1.4.0
 #### Added
 - Add `pasteAsPlainText` props on editor
 - Add `removeFormat` props on editor
+- Add `autoCapitalize` props on editor of autocapitalize
+- Add `onPaste` props on editor callback paste value
+- Add `onKeyUp` props on editor callback keyup event
+- Add `onKeyDown` props on editor callback keydown event
+
+#### Fix
+- Toolbar buttons activate/deactivate erratically after backspacing
+- disabled editor height fix
 
 ## 1.3.0
 #### Added

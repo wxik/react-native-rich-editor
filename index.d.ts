@@ -44,8 +44,7 @@ declare module 'react-native-pell-rich-editor' {
          * String value to set text auto capitalization.
          * See: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autocapitalize
          */
-        autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
-
+        autoCapitalize?: 'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters';
 
         /**
          * Boolean value to enable paste as plain text. The default value is false.
@@ -69,8 +68,19 @@ declare module 'react-native-pell-rich-editor' {
 
         /**
          * Callback when the user pastes some content
+         * @param {string} data pastes values
          */
-        onPaste?: () => void;
+        onPaste?: (data: string) => void;
+
+        /**
+         * Callback when the user keyup some content
+         */
+        onKeyUp?: ({keyCode: number, key: string}) => void;
+
+        /**
+         * Callback when the user keydown some content
+         */
+        onKeyDown?: ({keyCode: number, key: string}) => void;
 
         /**
          * Callback after height change

@@ -32,17 +32,17 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `initialContentHTML`
 
 	HTML that will be rendered in the content section on load.
-	
-* `initialFocus`	
+
+* `initialFocus`
 * Boolean value to Initial content request focus. The default value is `false`.
 
-* `disabled`	
+* `disabled`
 * Boolean value to disable editor. The default value is `false`.
 
 * `editorInitializedCallback `
 
 	A function that will be called when the editor has been initialized.
-	
+
 * `editorStyle`
 
 	Styling for container or for Rich Editor more dark or light settings. Object containing the following options:
@@ -55,17 +55,20 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 * `onChange`
     Callback after editor data modification
-    
+
 * `onHeightChange`
-    Callback after height change 
-    
+    Callback after height change
+
 * `useContainer`
 
-	A boolean value that determines if a View container is wrapped around the WebView. The default value is true. If you are using your own View to wrap this library around, set this value to false. 
+	A boolean value that determines if a View container is wrapped around the WebView. The default value is true. If you are using your own View to wrap this library around, set this value to false.
 
 * `pasteAsPlainText`
 
 	A boolean value (false as default) that determines if the clipboard paste will keep its format or it will be done as plain text
+
+* `onPaste`
+  Callback clipboard paste value
 
 
 `RichEditor` also has methods that can be used on its `ref` to  set:
@@ -82,7 +85,7 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 This method registers a function that will get called whenver the cursor position changes or a change is made to the styling of the editor at the cursor's position., The callback will be called with an array of `actions` that are active at the cusor position, allowing a toolbar to respond to changes.
 
-*  `registerToolbar(listener: Function)` 
+*  `registerToolbar(listener: Function)`
 
 
 
@@ -103,11 +106,11 @@ This method registers a function that will get called whenver the cursor positio
 
 This is a Component that provides a toolbar for easily controlling an editor. It is designed to be used together with a `RichEditor` component.
 
-The `RichToolbar` has one required property: 
+The `RichToolbar` has one required property:
 
 * `getEditor()`
 
-Which must provide a **function** that returns a `ref` to a `RichEditor` component. 
+Which must provide a **function** that returns a `ref` to a `RichEditor` component.
 
 This is because the `ref` is not created until after the first render, before which the toolbar is rendered. This means that any `ref` passed directly will inevitably be passed as `undefined`.
 
@@ -115,23 +118,23 @@ Other props supported by the `RichToolbar` component are:
 
 * `actions`
 
-	An `array` of `actions` to be provided by this toolbar. The default actions are: 
+	An `array` of `actions` to be provided by this toolbar. The default actions are:
 	* `actions.insertImage`
   	* `actions.setBold`
   	* `actions.setItalic`
   	* `actions.insertBulletsList`
   	* `actions.insertOrderedList`
   	* `actions.insertLink`
-  	
+
 * `onPressAddImage`
-    Functions called when the `addImage` actions are tapped. 
-    
-* `onInsertLink`    
+    Functions called when the `addImage` actions are tapped.
+
+* `onInsertLink`
     Logic for what happens when you press on the add insert link button
 
-* `disabled`	
+* `disabled`
 * Boolean value to disable editor. The default value is `false`.
-        
+
 
 * `iconTint`
 * `unselectedButtonStyle`
@@ -139,23 +142,23 @@ Other props supported by the `RichToolbar` component are:
 * `selectedButtonStyle`
 * `disabledIconTint`
 * `disabledButtonStyle`
-    
+
     These provide options for styling action buttons.
 
 * `iconSize`
-    
+
     Defines the size of the icon in pixels. Default is 50.
 
 * `renderAction`
 
 	Altenatively, you can provide a render function that will be used instead of the default, so you can fully control the tollbar design.
-	
-	
-* `iconMap` 
+
+
+* `iconMap`
 
 	`RichTextToolbar` comes with default icons for the default actions it renders. To override those, or to add icons for non-default actions, provide them in a dictionary to this prop.
-	
-	
+
+
 ### Example Usage:
 
 ```javascript

@@ -14,6 +14,9 @@ export default class RichTextEditor extends Component {
     //     onHeightChange: PropTypes.func,
     //     initialFocus: PropTypes.bool,
     //     disabled: PropTypes.bool,
+    //     onPaste: PropTypes.func,
+    //     onKeyUp: PropTypes.func,
+    //     onKeyDown: PropTypes.func,
     // };
 
     static defaultProps = {
@@ -48,6 +51,8 @@ export default class RichTextEditor extends Component {
             html,
             pasteAsPlainText,
             onPaste,
+            onKeyUp,
+            onKeyDown,
             autoCapitalize,
             defaultParagraphSeparator,
         } = props;
@@ -63,6 +68,8 @@ export default class RichTextEditor extends Component {
                         contentCSSText,
                         pasteAsPlainText,
                         pasteListener: !!onPaste,
+                        keyUpListener: !!onKeyUp,
+                        keyDownListener: !!onKeyDown,
                         autoCapitalize,
                         defaultParagraphSeparator,
                     }),
@@ -122,6 +129,7 @@ export default class RichTextEditor extends Component {
     onMessage(event) {
         try {
             const message = JSON.parse(event.nativeEvent.data);
+            const data = message.data;
             switch (message.type) {
                 case messages.CONTENT_HTML_RESPONSE:
                     if (this.contentResolve) {
@@ -135,7 +143,7 @@ export default class RichTextEditor extends Component {
                     }
                     break;
                 case messages.LOG:
-                    console.log('FROM EDIT:', ...message.data);
+                    console.log('FROM EDIT:', ...data);
                     break;
                 case messages.SELECTION_CHANGE: {
                     const items = message.data;
@@ -149,14 +157,23 @@ export default class RichTextEditor extends Component {
                     break;
                 }
                 case messages.CONTENT_CHANGE: {
-                    this.props.onChange && this.props.onChange(message.data);
+                    this.props.onChange && this.props.onChange(data);
                     break;
                 }
                 case messages.CONTENT_PASTED: {
-                    this.props.onPaste && this.props.onPaste();
+                    this.props.onPaste && this.props.onPaste(data);
+                    break;
+                }
+                case messages.CONTENT_KEYUP: {
+                    this.props.onKeyUp && this.props.onKeyUp(data);
+                    break;
+                }
+                case messages.CONTENT_KEYDOWN: {
+                    this.props.onKeyDown && this.props.onKeyDown(data);
+                    break;
                 }
                 case messages.OFFSET_HEIGHT:
-                    this.setWebHeight(message.data);
+                    this.setWebHeight(data);
                     break;
             }
         } catch (e) {

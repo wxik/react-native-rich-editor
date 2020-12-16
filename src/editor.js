@@ -7,6 +7,8 @@ function createHTML(options = {}) {
         cssText = '',
         pasteAsPlainText = false,
         pasteListener = false,
+        keyDownListener = false,
+        keyUpListener = false,
         autoCapitalize = 'off',
         defaultParagraphSeparator = 'div',
     } = options;
@@ -37,9 +39,10 @@ function createHTML(options = {}) {
 <body>
 <div class="content"><div id="editor" class="pell"></div></div>
 <script>
-    var placeholderColor = '${placeholderColor}';
     var __DEV__ = !!${window.__DEV__};
     (function (exports) {
+        var placeholderColor = '${placeholderColor}';
+
         var body = document.body, docEle = document.documentElement;
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
         var formatBlock = 'formatBlock';
@@ -253,29 +256,37 @@ function createHTML(options = {}) {
                     saveSelection();
                 }, 50);
             }
+
+            var postKeyAction = function (event, type){
+                postAction({type: type, data: {keyCode: event.keyCode, key: event.key}});
+            }
             var handleKeyup = function (event){
                 if (event.keyCode === 8) handleSelecting (event);
+                ${keyUpListener} && postKeyAction(event, "CONTENT_KEYUP")
+            }
+            var handleKeydown = function (event){
+                ${keyDownListener} && postKeyAction(event, "CONTENT_KEYDOWN");
             }
             addEventListener(content, 'touchcancel', handleSelecting);
             addEventListener(content, 'mouseup', handleSelecting);
             addEventListener(content, 'touchend', handleSelecting);
             // Toolbar buttons activate/deactivate erratically after backspacing
             addEventListener(content, 'keyup', handleKeyup);
+            addEventListener(content, 'keydown', handleKeydown);
             addEventListener(content, 'blur', function () {
                 postAction({type: 'SELECTION_CHANGE', data: []});
             });
             addEventListener(content, 'focus', function () {
                 postAction({type: 'CONTENT_FOCUSED'});
             });
-            ${pasteListener} && addEventListener(content, 'paste', function (e) {
-                postAction({type: 'CONTENT_PASTED'});
+            addEventListener(content, 'paste', function (e) {
+                // get text representation of clipboard
+                var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+
+                ${pasteListener} && postAction({type: 'CONTENT_PASTED', data: text});
                 if (${pasteAsPlainText}) {
                     // cancel paste
                     e.preventDefault();
-    
-                    // get text representation of clipboard
-                    var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-    
                     // insert text manually
                     document.execCommand("insertHTML", false, text);
                 }
