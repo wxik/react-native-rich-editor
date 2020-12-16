@@ -41,9 +41,21 @@ declare module 'react-native-pell-rich-editor' {
         disabled?: boolean;
 
         /**
-         *  String value to set text auto capitalization
+         * String value to set text auto capitalization.
+         * See: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autocapitalize
          */
-        autoCapitalize?: string;
+        autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
+
+
+        /**
+         * Boolean value to enable paste as plain text. The default value is false.
+         */
+        pasteAsPlainText?: boolean;
+
+        /**
+         * HTML element used to insert when the user presses enter. The default value is div.
+         */
+        defaultParagraphSeparator?: string;
 
         /**
          * Callback called after the editor has been initialized
@@ -54,6 +66,11 @@ declare module 'react-native-pell-rich-editor' {
          * Callback after editor data modification
          */
         onChange?: (text: string) => void;
+
+        /**
+         * Callback when the user pastes some content
+         */
+        onPaste?: () => void;
 
         /**
          * Callback after height change
@@ -73,6 +90,8 @@ declare module 'react-native-pell-rich-editor' {
     }
 
     export type SelectionChangeListener = (items: string[]) => void;
+
+    export const actions: {[key: string]: string};
 
     export type DefaultActions = ['image', 'bold', 'italic', 'unorderedList', 'orderedList', 'link'];
 

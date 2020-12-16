@@ -26,6 +26,7 @@ export default class RichTextEditor extends Component {
         useContainer: true,
         pasteAsPlainText: false,
         autoCapitalize: 'off',
+        defaultParagraphSeparator: 'div',
         editorInitializedCallback: () => {},
     };
 
@@ -46,7 +47,9 @@ export default class RichTextEditor extends Component {
             editorStyle: {backgroundColor, color, placeholderColor, cssText, contentCSSText} = {},
             html,
             pasteAsPlainText,
+            onPaste,
             autoCapitalize,
+            defaultParagraphSeparator,
         } = props;
         that.state = {
             html: {
@@ -59,7 +62,9 @@ export default class RichTextEditor extends Component {
                         cssText,
                         contentCSSText,
                         pasteAsPlainText,
+                        pasteListener: !!onPaste,
                         autoCapitalize,
+                        defaultParagraphSeparator,
                     }),
             },
             keyboardHeight: 0,
@@ -146,6 +151,9 @@ export default class RichTextEditor extends Component {
                 case messages.CONTENT_CHANGE: {
                     this.props.onChange && this.props.onChange(message.data);
                     break;
+                }
+                case messages.CONTENT_PASTED: {
+                    this.props.onPaste && this.props.onPaste();
                 }
                 case messages.OFFSET_HEIGHT:
                     this.setWebHeight(message.data);
