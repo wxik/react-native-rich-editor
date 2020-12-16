@@ -245,7 +245,7 @@ function createHTML(options = {}) {
             };
 
             var _handleTouchDT = null;
-            var handleTouch = function (event){
+            var handleSelecting = function (event){
                 event.stopPropagation();
                 _handleTouchDT && clearTimeout(_handleTouchDT);
                 _handleTouchDT = setTimeout(function (){
@@ -253,9 +253,14 @@ function createHTML(options = {}) {
                     saveSelection();
                 }, 50);
             }
-            addEventListener(content, 'touchcancel', handleTouch);
-            addEventListener(content, 'mouseup', handleTouch);
-            addEventListener(content, 'touchend', handleTouch);
+            var handleKeyup = function (event){
+                if (event.keyCode === 8) handleSelecting (event);
+            }
+            addEventListener(content, 'touchcancel', handleSelecting);
+            addEventListener(content, 'mouseup', handleSelecting);
+            addEventListener(content, 'touchend', handleSelecting);
+            // Toolbar buttons activate/deactivate erratically after backspacing
+            addEventListener(content, 'keyup', handleKeyup);
             addEventListener(content, 'blur', function () {
                 postAction({type: 'SELECTION_CHANGE', data: []});
             });

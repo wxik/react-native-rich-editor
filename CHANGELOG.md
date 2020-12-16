@@ -1,4 +1,8 @@
 
+## 1.3.2
+#### Fix
+- Toolbar buttons activate/deactivate erratically after backspacing
+
 ## 1.3.1
 #### Added
 - Add `pasteAsPlainText` props on editor
