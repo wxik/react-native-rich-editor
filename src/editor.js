@@ -6,6 +6,7 @@ function createHTML(options = {}) {
         contentCSSText = '',
         cssText = '',
         pasteAsPlainText = false,
+        autoCapitalize = 'off',
     } = options;
     //ERROR: HTML height not 100%;
     return `
@@ -201,7 +202,7 @@ function createHTML(options = {}) {
             content.id = 'content';
             content.contentEditable = true;
             content.spellcheck = false;
-            content.autocapitalize = 'off';
+            content.autocapitalize = '${autoCapitalize}';
             content.autocorrect = 'off';
             content.autocomplete = 'off';
             content.className = "pell-content";
