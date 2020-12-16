@@ -15,6 +15,11 @@ declare module 'react-native-pell-rich-editor' {
          * Default is true
          */
         useContainer?: boolean;
+
+        /**
+         * useContainer is false by inline view of initial height
+         */
+        initialHeight?: number | string;
         /**
          * Wrap the editor content placeholder
          * Default is empty string

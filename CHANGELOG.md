@@ -1,6 +1,6 @@
 
 
-## 1.4.0
+## 1.4.2
 #### Added
 - Add `pasteAsPlainText` props on editor
 - Add `removeFormat` props on editor
@@ -8,6 +8,9 @@
 - Add `onPaste` props on editor callback paste value
 - Add `onKeyUp` props on editor callback keyup event
 - Add `onKeyDown` props on editor callback keydown event
+
+#### Changed
+- useContainer is false of used initialHeight
 
 #### Fix
 - Toolbar buttons activate/deactivate erratically after backspacing
