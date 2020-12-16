@@ -329,6 +329,12 @@ export default class RichTextEditor extends Component {
         }
     }
 
+    commandDOM(command) {
+        if (command) {
+            this._sendAction(actions.content, 'commandDOM', command);
+        }
+    }
+
     init() {
         let that = this;
         const {initialFocus, initialContentHTML, placeholder, editorInitializedCallback, disabled} = that.props;

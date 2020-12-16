@@ -188,6 +188,10 @@ function createHTML(options = {}) {
                             console.log("set placeholderColor error!")
                         }
                     }
+                },
+
+                commandDOM: function (command){
+                    try {new Function("$", command)(exports.document.querySelector.bind(exports.document))} catch(e){console.error(e)};
                 }
             },
 
@@ -336,6 +340,7 @@ function createHTML(options = {}) {
         }
     })({
         window: window.ReactNativeWebView || window.parent,
+        document: document
     });
 </script>
 </body>

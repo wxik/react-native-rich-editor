@@ -24,7 +24,7 @@ import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
 
 const initHTML = `<br/>
-<center><b ontouchstart="_.sendEvent('TitleClick')">Rich Editor</b></center>
+<center><b ontouchstart="_.sendEvent('TitleClick')" id="title">Rich Editor</b></center>
 <center>
 <a href="https://github.com/wxik/react-native-rich-editor">React Native</a>
 <span>And</span>
@@ -207,7 +207,12 @@ class Example extends React.Component {
     handleMessage = ({type, data}) => {
         switch (type) {
             case 'ImgClick':
-                Alert.alert('Click Image');
+                const index = this._tempIndex || 0;
+                const color = ['red', 'blue', 'gray', 'yellow', 'coral'][index];
+                this._tempIndex = index + 1 >= color.length ? 0 : index + 1;
+
+                // command: $ = document.querySelector
+                this.richText.current?.commandDOM(`$('#title').style.color='${color}'`);
                 break;
             case 'TitleClick':
                 Alert.alert('Click Title');

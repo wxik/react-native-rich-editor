@@ -2,7 +2,8 @@
 
 ## 1.5.0
 - Add `onMessage` props on editor Callback outside postMessage internal type processing
-- Added `_.sendEvent(type, data)` event callback to RN, using onMessage to receive callback
+- Add `_.sendEvent(type, data)` event callback to RN, using onMessage to receive callback
+- Add `commandDOM` method can manipulate DOM
 
 ## 1.4.0
 #### Added
