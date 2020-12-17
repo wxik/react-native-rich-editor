@@ -5,6 +5,7 @@
 
 ------
 
+
 > A fully functional Rich Text Editor for both Android and iOS (macOS and windows)?
 
 > If you want to use **flutter**, you can check [here](https://github.com/wxik/flutter-rich-editor) to add **flutter_rich_editor**
@@ -19,6 +20,8 @@ Also, follow instructions [here](https://github.com/react-native-community/react
 
 * [Online Preview](https://wxik.github.io/react-native-rich-editor/web) （Some functions）
 * [Example](./examples)
+
+![](readme/editor.jpg)
 
 ## `RichEditor`
 The editor component. Simply place this component in your view hierarchy to receive a fully functional Rich text Editor.
@@ -123,8 +126,6 @@ This method registers a function that will get called whenver the cursor positio
   editorInitializedCallback={() => this.onEditorInitialized()}
 />
 ```
-
-![](readme/editor.jpg)
 
 
 ## `RichToolbar`
