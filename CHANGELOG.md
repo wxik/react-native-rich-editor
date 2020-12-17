@@ -1,4 +1,11 @@
 
+## 1.5.1
+#### Added
+- Add `onFocus` and `onBlur`
+
+#### Changed
+- `insertVideo` and `insertImage` Add style params to dom
+
 
 ## 1.5.0
 - Add `onMessage` props on editor Callback outside postMessage internal type processing

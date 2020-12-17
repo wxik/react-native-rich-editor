@@ -88,6 +88,16 @@ declare module 'react-native-pell-rich-editor' {
         onKeyDown?: ({keyCode: number, key: string}) => void;
 
         /**
+         * Callback when the editor focus some content
+         */
+        onFocus?: () => void;
+
+        /**
+         * Callback when the editor blur some content
+         */
+        onBlur?: () => void;
+
+        /**
          * Callback after height change
          */
         onHeightChange?: (height: number) => void;
@@ -132,9 +142,9 @@ declare module 'react-native-pell-rich-editor' {
 
         focusContentEditor: () => void;
 
-        insertImage: (attributes: any) => void;
+        insertImage: (attributes: any, style?: string) => void;
 
-        insertVideo: (attributes: any) => void;
+        insertVideo: (attributes: any, style?: string) => void;
 
         insertLink: (title: string, url: string) => void;
 

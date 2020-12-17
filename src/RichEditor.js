@@ -17,6 +17,7 @@ export default class RichTextEditor extends Component {
     //     onPaste: PropTypes.func,
     //     onKeyUp: PropTypes.func,
     //     onKeyDown: PropTypes.func,
+    //     onFocus: PropTypes.func,
     // };
 
     static defaultProps = {
@@ -128,6 +129,7 @@ export default class RichTextEditor extends Component {
 
     onMessage(event) {
         try {
+            const props = this.props;
             const message = JSON.parse(event.nativeEvent.data);
             const data = message.data;
             switch (message.type) {
@@ -153,30 +155,35 @@ export default class RichTextEditor extends Component {
                     break;
                 }
                 case messages.CONTENT_FOCUSED: {
-                    this.focusListeners.map((da) => da());
+                    this.focusListeners.map((da) => da()); // Subsequent versions will be deleted
+                    props.onFocus && props.onFocus();
+                    break;
+                }
+                case messages.CONTENT_BLUR: {
+                    props.onBlur && props.onBlur();
                     break;
                 }
                 case messages.CONTENT_CHANGE: {
-                    this.props.onChange && this.props.onChange(data);
+                    props.onChange && props.onChange(data);
                     break;
                 }
                 case messages.CONTENT_PASTED: {
-                    this.props.onPaste && this.props.onPaste(data);
+                    props.onPaste && props.onPaste(data);
                     break;
                 }
                 case messages.CONTENT_KEYUP: {
-                    this.props.onKeyUp && this.props.onKeyUp(data);
+                    props.onKeyUp && props.onKeyUp(data);
                     break;
                 }
                 case messages.CONTENT_KEYDOWN: {
-                    this.props.onKeyDown && this.props.onKeyDown(data);
+                    props.onKeyDown && props.onKeyDown(data);
                     break;
                 }
                 case messages.OFFSET_HEIGHT:
                     this.setWebHeight(data);
                     break;
                 default:
-                    this.props.onMessage && this.props.onMessage(message);
+                    props.onMessage && props.onMessage(message);
                     break;
             }
         } catch (e) {
@@ -193,8 +200,15 @@ export default class RichTextEditor extends Component {
         }
     };
 
-    _sendAction(type, action, data) {
-        let jsonString = JSON.stringify({type, name: action, data});
+    /**
+     * @param {String} type
+     * @param {String} action
+     * @param {any} data
+     * @param [options]
+     * @private
+     */
+    _sendAction(type, action, data, options) {
+        let jsonString = JSON.stringify({type, name: action, data, options});
         if (this.webviewBridge) {
             this.webviewBridge.postMessage(jsonString);
         }
@@ -265,6 +279,11 @@ export default class RichTextEditor extends Component {
         this.selectionChangeListeners = [...this.selectionChangeListeners, listener];
     }
 
+    /**
+     * Subsequent versions will be deleted, please use onFocus
+     * @deprecated remove
+     * @param listener
+     */
     setContentFocusHandler(listener) {
         this.focusListeners.push(listener);
     }
@@ -306,12 +325,20 @@ export default class RichTextEditor extends Component {
         }
     }
 
-    insertImage(attributes) {
-        this._sendAction(actions.insertImage, 'result', attributes);
+    /**
+     * @param attributes
+     * @param [style]
+     */
+    insertImage(attributes, style) {
+        this._sendAction(actions.insertImage, 'result', attributes, style);
     }
 
-    insertVideo(attributes) {
-        this._sendAction(actions.insertVideo, 'result', attributes);
+    /**
+     * @param attributes
+     * @param [style]
+     */
+    insertVideo(attributes, style) {
+        this._sendAction(actions.insertVideo, 'result', attributes, style);
     }
 
     insertText(text) {

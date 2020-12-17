@@ -42,6 +42,10 @@ function createHTML(options = {}) {
     var __DEV__ = !!${window.__DEV__};
     var _ = (function (exports) {
         var placeholderColor = '${placeholderColor}';
+        var _randomID = 99;
+        var generateId = function (){
+            return "auto_" + (++ _randomID);
+        }
 
         var body = document.body, docEle = document.documentElement;
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
@@ -138,9 +142,9 @@ function createHTML(options = {}) {
                 }
             },
             image: {
-                result: function(url) {
+                result: function(url, style) {
                     if (url){
-                        exec('insertHTML', "<br><div><img src='"+ url +"'/></div><br>");
+                        exec('insertHTML', "<br><div><img style='"+ (style || '')+"' src='"+ url +"'/></div><br>");
                         Actions.UPDATE_HEIGHT();
                     }
                 }
@@ -155,10 +159,10 @@ function createHTML(options = {}) {
             },
             text: { result: function (text){ text && exec('insertText', text); }},
             video: {
-                result: function(url) {
+                result: function(url, style) {
                     if (url) {
                         var thumbnail = url.replace(/.(mp4|m3u8)/g, '') + '-thumbnail';
-                        exec('insertHTML', "<br><div><video src='"+ url +"' poster='"+ thumbnail + "' controls><source src='"+ url +"' type='video/mp4'>No video tag support</video></div><br>");
+                        exec('insertHTML', "<br><div style='"+ (style || '')+"'><video src='"+ url +"' poster='"+ thumbnail + "' controls><source src='"+ url +"' type='video/mp4'>No video tag support</video></div><br>");
                         Actions.UPDATE_HEIGHT();
                     }
                 }
@@ -282,6 +286,7 @@ function createHTML(options = {}) {
             addEventListener(content, 'keydown', handleKeydown);
             addEventListener(content, 'blur', function () {
                 postAction({type: 'SELECTION_CHANGE', data: []});
+                postAction({type: 'CONTENT_BLUR'});
             });
             addEventListener(content, 'focus', function () {
                 postAction({type: 'CONTENT_FOCUSED'});
@@ -306,10 +311,10 @@ function createHTML(options = {}) {
                         var flag = msgData.name === 'result';
                         // insert image or link need current focus
                         flag && focusCurrent();
-                        action[msgData.name](msgData.data);
+                        action[msgData.name](msgData.data, msgData.options);
                         flag && handler();
                     } else {
-                        action(msgData.data);
+                        action(msgData.data, msgData.options);
                     }
                 }
             };
@@ -335,7 +340,9 @@ function createHTML(options = {}) {
             sendEvent: function (type, data){
                 event.preventDefault();
                 event.stopPropagation();
-                _postMessage({type, data});
+                var id = event.target.id;
+                if ( !id ) event.target.id = id = generateId();
+                _postMessage({type, id, data});
             }
         }
     })({
