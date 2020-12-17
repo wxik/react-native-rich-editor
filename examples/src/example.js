@@ -8,6 +8,7 @@ import {
     Alert,
     Appearance,
     Button,
+    Image,
     Keyboard,
     KeyboardAvoidingView,
     Platform,
@@ -17,12 +18,19 @@ import {
     StyleSheet,
     Text,
     TextInput,
+    TouchableOpacity,
     View,
 } from 'react-native';
 import {actions, defaultActions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
 
+const imageList = [
+    'https://img.lesmao.vip/k/h256/R/MeiTu/1293.jpg',
+    'https://pbs.twimg.com/profile_images/1242293847918391296/6uUsvfJZ.png',
+    'https://img.lesmao.vip/k/h256/R/MeiTu/1297.jpg',
+    'https://img.lesmao.vip/k/h256/R/MeiTu/1292.jpg',
+];
 const initHTML = `<br/>
 <center><b onclick="_.sendEvent('TitleClick')" id="title" >Rich Editor</b></center>
 <center>
@@ -31,9 +39,9 @@ const initHTML = `<br/>
 <a href="https://github.com/wxik/flutter-rich-editor">Flutter</a>
 </center>
 <br/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png"  onclick="_.sendEvent('ImgClick')"/>
+<img src="${imageList[0]}"  ontouchstart="_.sendEvent('ImgClick')"/>
 <br/><br/>
-<span ontouchstart="event.preventDefault();" ontouchend="_.sendEvent('SwitchImage')"> Click Switch Image</span>
+<span ontouchend="event.preventDefault();event.stopPropagation();" onClick="_.sendEvent('SwitchImage')"> Click Switch Image</span>
 <br/><br/>
 `;
 
@@ -41,6 +49,7 @@ const phizIcon = require('./assets/phiz.png');
 const htmlIcon = require('./assets/h5.png');
 const videoIcon = require('./assets/video.png');
 const strikethrough = require('./assets/strikethrough.png');
+const keyboardIcon = require('./assets/keyboard.png');
 
 class Example extends React.Component {
     richText = React.createRef();
@@ -51,7 +60,8 @@ class Example extends React.Component {
         const that = this;
         const theme = props.theme || Appearance.getColorScheme();
         const contentStyle = that.createContentStyle(theme);
-        that.state = {theme: theme, contentStyle, emojiVisible: false, disabled: false};
+        that.state = {theme: theme, contentStyle, emojiVisible: false, disabled: false, keyShow: false};
+        that.editorFocus = false;
         that.onHome = ::that.onHome;
         that.save = ::that.save;
         that.onTheme = ::that.onTheme;
@@ -71,15 +81,24 @@ class Example extends React.Component {
 
     componentDidMount() {
         Appearance.addChangeListener(this.themeChange);
-        Keyboard.addListener('keyboardDidShow', this.onKeyBoard);
+        Keyboard.addListener('keyboardDidShow', this.onKeyShow);
+        Keyboard.addListener('keyboardDidHide', this.onKeyHide);
     }
 
     componentWillUnmount() {
         Appearance.removeChangeListener(this.themeChange);
-        Keyboard.removeListener('keyboardDidShow', this.onKeyBoard);
+        Keyboard.removeListener('keyboardDidShow', this.onKeyShow);
+        Keyboard.removeListener('keyboardDidHide', this.onKeyHide);
     }
-    onKeyBoard = () => {
-        TextInput.State.currentlyFocusedInput() && this.setState({emojiVisible: false});
+
+    onKeyHide = () => {
+        this.setState({keyShow: false});
+    };
+
+    onKeyShow = () => {
+        const state = {keyShow: true};
+        TextInput.State.currentlyFocusedInput() && (state.emojiVisible = false);
+        this.setState(state);
     };
 
     editorInitializedCallback() {
@@ -209,11 +228,15 @@ class Example extends React.Component {
     };
 
     handleMessage = ({type, id, data}) => {
+        let index = 0;
         switch (type) {
             case 'ImgClick':
+                index = this.i_tempIndex || 0;
+                this.i_tempIndex = index + 1 >= imageList.length ? 0 : index + 1;
+                this.richText.current?.commandDOM(`$('#${id}').src="${imageList[index]}"`);
                 break;
             case 'TitleClick':
-                const index = this._tempIndex || 0;
+                index = this._tempIndex || 0;
                 const color = ['red', 'blue', 'gray', 'yellow', 'coral'][index];
                 this._tempIndex = index + 1 >= color.length ? 0 : index + 1;
 
@@ -227,11 +250,19 @@ class Example extends React.Component {
     };
 
     handleFocus = () => {
-        console.log('Editor Focus');
+        this.editorFocus = true;
     };
 
     handleBlur = () => {
-        console.log('Editor Blur');
+        this.editorFocus = false;
+    };
+
+    handleKeyboard = () => {
+        if (this.state.keyShow) {
+            this.editorFocus ? this.richText.current?.blurContentEditor() : Keyboard.dismiss();
+        } else {
+            this.richText.current?.focusContentEditor();
+        }
     };
 
     render() {
@@ -335,8 +366,11 @@ class Example extends React.Component {
                         }}
                         insertEmoji={that.handleEmoji}
                         insertHTML={that.insertHTML}
-                        insertVideo={that.insertVideo}
-                    />
+                        insertVideo={that.insertVideo}>
+                        <TouchableOpacity style={styles.Keyboard} onPress={that.handleKeyboard}>
+                            <Image source={keyboardIcon} />
+                        </TouchableOpacity>
+                    </RichToolbar>
                     {emojiVisible && <EmojiView onSelect={that.insertEmoji} />}
                 </KeyboardAvoidingView>
             </SafeAreaView>
@@ -357,12 +391,12 @@ const styles = StyleSheet.create({
     rich: {
         minHeight: 300,
         flex: 1,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderColor: '#e8e8e8',
     },
     richBar: {
         height: 50,
         backgroundColor: '#F5FCFF',
+        borderColor: '#e8e8e8',
+        borderTopWidth: StyleSheet.hairlineWidth,
     },
     scroll: {
         backgroundColor: '#ffffff',
@@ -383,6 +417,15 @@ const styles = StyleSheet.create({
     tib: {
         textAlign: 'center',
         color: '#515156',
+    },
+
+    Keyboard: {
+        position: 'absolute',
+        right: 15,
+        bottom: 60,
+        alignSelf: 'flex-end',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 

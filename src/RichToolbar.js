@@ -206,7 +206,7 @@ export default class RichToolbar extends Component {
     }
 
     render() {
-        const {style, disabled} = this.props;
+        const {style, disabled, children} = this.props;
         const vStyle = [styles.barContainer, style, disabled && this._getButtonDisabledStyle()];
         return (
             <View style={vStyle}>
@@ -219,6 +219,7 @@ export default class RichToolbar extends Component {
                     showsHorizontalScrollIndicator={false}
                     renderItem={({item}) => this._renderAction(item.action, item.selected)}
                 />
+                {children}
             </View>
         );
     }

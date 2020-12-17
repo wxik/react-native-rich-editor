@@ -195,7 +195,7 @@ function createHTML(options = {}) {
                 },
 
                 commandDOM: function (command){
-                    try {new Function("$", command)(exports.document.querySelector.bind(exports.document))} catch(e){console.error(e)};
+                    try {new Function("$", command)(exports.document.querySelector.bind(exports.document))} catch(e){console.log(e.message)};
                 }
             },
 
@@ -281,7 +281,6 @@ function createHTML(options = {}) {
             addEventListener(content, 'touchcancel', handleSelecting);
             addEventListener(content, 'mouseup', handleSelecting);
             addEventListener(content, 'touchend', handleSelecting);
-            // Toolbar buttons activate/deactivate erratically after backspacing
             addEventListener(content, 'keyup', handleKeyup);
             addEventListener(content, 'keydown', handleKeydown);
             addEventListener(content, 'blur', function () {
