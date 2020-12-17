@@ -86,11 +86,16 @@ export default class RichToolbar extends Component {
         }
     }
 
-    setSelectedItems(selectedItems) {
-        if (selectedItems !== this.state.selectedItems) {
+    componentWillUnmount() {
+        this.setState({editor: null});
+    }
+
+    setSelectedItems(items) {
+        const {selectedItems, editor} = this.state;
+        if (editor && items !== selectedItems) {
             this.setState({
-                selectedItems,
-                data: this.state.actions.map((action) => ({action, selected: selectedItems.includes(action)})),
+                items,
+                data: this.state.actions.map((action) => ({action, selected: items.includes(action)})),
             });
         }
     }
@@ -119,6 +124,9 @@ export default class RichToolbar extends Component {
 
     _onPress(action) {
         const {onPressAddImage, onInsertLink} = this.props;
+        const {editor} = this.state;
+        if (!editor) return;
+
         switch (action) {
             case actions.insertLink:
                 if (onInsertLink) return onInsertLink();
@@ -145,8 +153,8 @@ export default class RichToolbar extends Component {
             case actions.setHR:
             case actions.setIndent:
             case actions.setOutdent:
-                this.state.editor.showAndroidKeyboard();
-                this.state.editor._sendAction(action, 'result');
+                editor.showAndroidKeyboard();
+                editor._sendAction(action, 'result');
                 break;
             case actions.insertImage:
                 onPressAddImage && onPressAddImage();
