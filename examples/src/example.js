@@ -39,9 +39,7 @@ const initHTML = `<br/>
 <a href="https://github.com/wxik/flutter-rich-editor">Flutter</a>
 </center>
 <br/>
-<img src="${imageList[0]}"  ontouchstart="_.sendEvent('ImgClick')"/>
-<br/><br/>
-<span ontouchend="event.preventDefault();event.stopPropagation();" onClick="_.sendEvent('SwitchImage')"> Click Switch Image</span>
+<img src="${imageList[0]}" onclick="_.sendEvent('ImgClick')"/>
 <br/><br/>
 `;
 
@@ -231,7 +229,7 @@ class Example extends React.Component {
         let index = 0;
         switch (type) {
             case 'ImgClick':
-                index = this.i_tempIndex || 0;
+                index = this.i_tempIndex || 1;
                 this.i_tempIndex = index + 1 >= imageList.length ? 0 : index + 1;
                 this.richText.current?.commandDOM(`$('#${id}').src="${imageList[index]}"`);
                 break;
