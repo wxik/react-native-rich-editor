@@ -1,6 +1,6 @@
 import {WebViewProps} from 'react-native-webview';
 import {ImageSourcePropType, StyleProp, ViewStyle} from 'react-native';
-import * as React from 'react';
+import React from 'react';
 
 declare module 'react-native-pell-rich-editor' {
     /** The RichTextEditor accepts all props from Webview */
@@ -120,6 +120,13 @@ declare module 'react-native-pell-rich-editor' {
 
     export type DefaultActions = ['image', 'bold', 'italic', 'unorderedList', 'orderedList', 'link'];
 
+    export type IconRecord = {
+        selected: boolean;
+        disabled: boolean;
+        tintColor: any;
+        iconSize: number;
+    };
+
     export class RichEditor extends React.Component<RichEditorProps> {
         // Public API
 
@@ -202,15 +209,7 @@ declare module 'react-native-pell-rich-editor' {
         /**
          * Your own set if images for the toolbar
          */
-        iconMap?: Record<
-            string,
-            ({
-                selected: boolean,
-                disabled: boolean,
-                tintColor: any,
-                iconSize: number,
-            }) => React.Element | ImageSourcePropType
-        >;
+        iconMap?: Record<string, (IconRecord) => React.Element | ImageSourcePropType>;
 
         /**
          * Logic for what happens when you press on the add image button

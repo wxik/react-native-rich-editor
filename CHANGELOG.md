@@ -2,6 +2,7 @@
 ## 1.5.1
 #### Added
 - Add `onFocus` and `onBlur`
+- Add `_.sendEvent` to automatically generate ID to RN, and you can dynamically modify the dom corresponding to the event with commandDOM
 
 #### Changed
 - `insertVideo` and `insertImage` Add style params to dom
