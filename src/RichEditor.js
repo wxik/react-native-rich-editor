@@ -46,6 +46,7 @@ export default class RichTextEditor extends Component {
         that.init = that.init.bind(that);
         that.setRef = that.setRef.bind(that);
         that._keyOpen = false;
+        this._focus = false;
         that.selectionChangeListeners = [];
         const {
             editorStyle: {backgroundColor, color, placeholderColor, cssText, contentCSSText} = {},
@@ -97,7 +98,7 @@ export default class RichTextEditor extends Component {
     }
 
     componentWillUnmount() {
-        // this.keyboardEventListeners.forEach((eventListener) => eventListener.remove());
+        this.keyboardEventListeners.forEach((eventListener) => eventListener.remove());
     }
 
     _onKeyboardWillShow(event) {
@@ -155,11 +156,13 @@ export default class RichTextEditor extends Component {
                     break;
                 }
                 case messages.CONTENT_FOCUSED: {
+                    this._focus = true;
                     this.focusListeners.map((da) => da()); // Subsequent versions will be deleted
                     props.onFocus && props.onFocus();
                     break;
                 }
                 case messages.CONTENT_BLUR: {
+                    this._focus = false;
                     props.onBlur && props.onBlur();
                     break;
                 }
@@ -360,6 +363,14 @@ export default class RichTextEditor extends Component {
         if (command) {
             this._sendAction(actions.content, 'commandDOM', command);
         }
+    }
+
+    dismissKeyboard() {
+        this._focus ? this.blurContentEditor() : Keyboard.dismiss();
+    }
+
+    get isKeyboardOpen() {
+        return this._keyOpen;
     }
 
     init() {

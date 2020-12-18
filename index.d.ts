@@ -137,7 +137,9 @@ declare module 'react-native-pell-rich-editor' {
 
         registerToolbar: (listener: SelectionChangeListener) => void;
 
-        /** Add a listener for the content focused event in WebView */
+        /**
+         * @deprecated please use onFocus
+         */
         setContentFocusHandler: (listener: () => void) => void;
 
         /**
@@ -159,7 +161,15 @@ declare module 'react-native-pell-rich-editor' {
 
         insertHTML: (html: string) => void;
 
-        init: () => void;
+        /**
+         * Returns whether the keyboard is on
+         */
+        isKeyboardOpen: boolean;
+
+        /**
+         * Dismisses the active keyboard and removes focus.
+         */
+        dismissKeyboard: () => void;
     }
 
     export interface RichToolbarProps {

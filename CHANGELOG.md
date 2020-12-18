@@ -1,4 +1,12 @@
 
+## 1.5.2
+### Added
+- Add `dismissKeyboard` Dismisses the active keyboard and removes focus.
+- Add `isKeyboardOpen` Returns whether the keyboard is on
+
+### Fix
+- Keyboard listener on unmount
+
 ## 1.5.1
 #### Added
 - Add `onFocus` and `onBlur`

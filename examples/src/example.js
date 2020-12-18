@@ -58,7 +58,7 @@ class Example extends React.Component {
         const that = this;
         const theme = props.theme || Appearance.getColorScheme();
         const contentStyle = that.createContentStyle(theme);
-        that.state = {theme: theme, contentStyle, emojiVisible: false, disabled: false, keyShow: false};
+        that.state = {theme: theme, contentStyle, emojiVisible: false, disabled: false};
         that.editorFocus = false;
         that.onHome = ::that.onHome;
         that.save = ::that.save;
@@ -89,14 +89,10 @@ class Example extends React.Component {
         Keyboard.removeListener('keyboardDidHide', this.onKeyHide);
     }
 
-    onKeyHide = () => {
-        this.setState({keyShow: false});
-    };
+    onKeyHide = () => {};
 
     onKeyShow = () => {
-        const state = {keyShow: true};
-        TextInput.State.currentlyFocusedInput() && (state.emojiVisible = false);
-        this.setState(state);
+        TextInput.State.currentlyFocusedInput() && this.setState({emojiVisible: false});
     };
 
     editorInitializedCallback() {
@@ -213,15 +209,15 @@ class Example extends React.Component {
         this.setState({disabled: !this.state.disabled});
     }
 
-    handlePaste = (data) => {
+    handlePaste = data => {
         console.log('Paste:', data);
     };
 
-    handleKeyUp = (data) => {
+    handleKeyUp = data => {
         console.log('KeyUp:', data);
     };
 
-    handleKeyDown = (data) => {
+    handleKeyDown = data => {
         console.log('KeyDown:', data);
     };
 
@@ -256,10 +252,11 @@ class Example extends React.Component {
     };
 
     handleKeyboard = () => {
-        if (this.state.keyShow) {
-            this.editorFocus ? this.richText.current?.blurContentEditor() : Keyboard.dismiss();
+        const editor = this.richText.current;
+        if (editor.isKeyboardOpen) {
+            editor.dismissKeyboard();
         } else {
-            this.richText.current?.focusContentEditor();
+            editor.focusContentEditor();
         }
     };
 
