@@ -253,7 +253,6 @@ class Example extends React.Component {
     };
 
     handleKeyboard = () => {
-        console.log('-----');
         const editor = this.richText.current;
         if (editor.isKeyboardOpen) {
             editor.dismissKeyboard();
