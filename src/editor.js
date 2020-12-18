@@ -341,8 +341,8 @@ function createHTML(options = {}) {
             sendEvent: function (type, data){
                 event.preventDefault();
                 event.stopPropagation();
-                var id = event.target.id;
-                if ( !id ) event.target.id = id = generateId();
+                var id = event.currentTarget.id;
+                if ( !id ) event.currentTarget.id = id = generateId();
                 _postMessage({type, id, data});
             }
         }
