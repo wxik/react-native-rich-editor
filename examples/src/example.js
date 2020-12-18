@@ -154,7 +154,9 @@ class Example extends React.Component {
     }
 
     insertHTML() {
-        this.richText.current?.insertHTML(`<span style="color: blue; padding:0 10px;">HTML</span>`);
+        this.richText.current?.insertHTML(
+            `<span onclick="alert(2)" style="color: blue; padding:0 10px;" contenteditable="false">HTML</span>`,
+        );
     }
 
     onPressAddImage() {
@@ -251,6 +253,7 @@ class Example extends React.Component {
     };
 
     handleKeyboard = () => {
+        console.log('-----');
         const editor = this.richText.current;
         if (editor.isKeyboardOpen) {
             editor.dismissKeyboard();
@@ -323,6 +326,9 @@ class Example extends React.Component {
                     />
                 </ScrollView>
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                    <TouchableOpacity style={styles.Keyboard} onPress={that.handleKeyboard}>
+                        <Image source={keyboardIcon} />
+                    </TouchableOpacity>
                     <RichToolbar
                         style={[styles.richBar, themeBg]}
                         editor={that.richText}
@@ -360,11 +366,8 @@ class Example extends React.Component {
                         }}
                         insertEmoji={that.handleEmoji}
                         insertHTML={that.insertHTML}
-                        insertVideo={that.insertVideo}>
-                        <TouchableOpacity style={styles.Keyboard} onPress={that.handleKeyboard}>
-                            <Image source={keyboardIcon} />
-                        </TouchableOpacity>
-                    </RichToolbar>
+                        insertVideo={that.insertVideo}
+                    />
                     {emojiVisible && <EmojiView onSelect={that.insertEmoji} />}
                 </KeyboardAvoidingView>
             </SafeAreaView>
@@ -414,9 +417,9 @@ const styles = StyleSheet.create({
     },
 
     Keyboard: {
-        position: 'absolute',
-        right: 15,
-        bottom: 60,
+        marginRight: 10,
+        marginBottom: 5,
+        padding: 5,
         alignSelf: 'flex-end',
         justifyContent: 'center',
         alignItems: 'center',
