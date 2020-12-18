@@ -6,6 +6,7 @@
 
 ### Fix
 - Keyboard listener on unmount
+- placeholder does not restore [issues 121](https://github.com/wxik/react-native-rich-editor/issues/121)
 
 ## 1.5.1
 #### Added

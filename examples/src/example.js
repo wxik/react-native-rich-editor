@@ -32,15 +32,15 @@ const imageList = [
     'https://img.lesmao.vip/k/h256/R/MeiTu/1292.jpg',
 ];
 const initHTML = `<br/>
-<center><b onclick="_.sendEvent('TitleClick')" id="title" >Rich Editor</b></center>
+<center><b onclick="_.sendEvent('TitleClick')" id="title" contenteditable="false">Rich Editor</b></center>
 <center>
 <a href="https://github.com/wxik/react-native-rich-editor">React Native</a>
 <span>And</span>
 <a href="https://github.com/wxik/flutter-rich-editor">Flutter</a>
 </center>
 <br/>
-<img src="${imageList[0]}" onclick="_.sendEvent('ImgClick')"/>
-<br/><br/>
+<img src="${imageList[0]}" onclick="_.sendEvent('ImgClick')" contenteditable="false"/>
+<br/>Click the picture to switch<br/>
 `;
 
 const phizIcon = require('./assets/phiz.png');
@@ -165,7 +165,6 @@ class Example extends React.Component {
         );
         // insert base64
         // this.richText.current?.insertImage(`data:${image.mime};base64,${image.data}`);
-        // this.richText.current?.blurContentEditor();
     }
 
     onInsertLink() {

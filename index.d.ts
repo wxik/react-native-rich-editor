@@ -102,6 +102,8 @@ declare module 'react-native-pell-rich-editor' {
          */
         onHeightChange?: (height: number) => void;
 
+        onMessage?: (message: {type: string; id: string; data?: any}) => void;
+
         /**
          * Styling for container or for Rich Editor more dark or light settings
          */
@@ -160,6 +162,13 @@ declare module 'react-native-pell-rich-editor' {
         insertText: (text: string) => void;
 
         insertHTML: (html: string) => void;
+
+        /**
+         * $ = document.querySelector
+         * this.richText.current?.commandDOM(`$('#title').style.color='${color}'`);
+         * @param command
+         */
+        commandDOM: (command: string) => void;
 
         /**
          * Returns whether the keyboard is on

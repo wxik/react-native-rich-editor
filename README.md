@@ -65,7 +65,7 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `onMessage`
     Callback outside postMessage internal type processing
     ```
-    <img src="" ontouchstart="_.sendEvent('ImgClick')"/>
+    <img src="" onclick="_.sendEvent('ImgClick')" contenteditable="false"/>
     ```
 
 * `commandDOM`

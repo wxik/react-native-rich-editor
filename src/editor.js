@@ -223,8 +223,10 @@ function createHTML(options = {}) {
             content.autocomplete = 'off';
             content.className = "pell-content";
             content.oninput = function (_ref) {
-                // var firstChild = _ref.target.firstChild;
-                // if (firstChild && firstChild.nodeType === 3) exec(formatBlock, '<' + defaultParagraphSeparator + '>');else if (content.innerHTML === '<br>') content.innerHTML = '';
+                //TODO placeholder https://github.com/wxik/react-native-rich-editor/issues/121
+                var firstChild = _ref.target.firstChild;
+                if (firstChild && firstChild.nodeType === 3) exec(formatBlock, '<' + defaultParagraphSeparator + '>');else if (content.innerHTML === '<br>') content.innerHTML = '';
+
                 settings.onChange(content.innerHTML);
                 saveSelection();
             };
