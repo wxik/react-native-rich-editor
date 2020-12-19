@@ -1,8 +1,8 @@
 
 
 .mobile {
-  width: 320px;
-  height: 640px;
+  width: 375px;
+  height: 812px;
   display: flex;
   flex-direction: column;
   background-color: #F5FCFF;

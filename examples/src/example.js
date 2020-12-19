@@ -5,7 +5,6 @@
  */
 import React from 'react';
 import {
-    Alert,
     Appearance,
     Button,
     Image,
@@ -40,7 +39,7 @@ const initHTML = `<br/>
 </center>
 <br/>
 <img src="${imageList[0]}" onclick="_.sendEvent('ImgClick')" contenteditable="false"/>
-<br/>Click the picture to switch<br/>
+<br/>Click the picture to switch<br/><br/>
 `;
 
 const phizIcon = require('./assets/phiz.png');
@@ -48,6 +47,7 @@ const htmlIcon = require('./assets/h5.png');
 const videoIcon = require('./assets/video.png');
 const strikethrough = require('./assets/strikethrough.png');
 const keyboardIcon = require('./assets/keyboard.png');
+const bulletIcon = require('./assets/bullet.png');
 
 class Example extends React.Component {
     richText = React.createRef();
@@ -341,6 +341,7 @@ class Example extends React.Component {
                         actions={[
                             'insertVideo',
                             ...defaultActions,
+                            actions.checkboxList,
                             actions.setStrikethrough,
                             actions.heading1,
                             actions.heading4,
@@ -350,6 +351,7 @@ class Example extends React.Component {
                         ]} // default defaultActions
                         iconMap={{
                             insertEmoji: phizIcon,
+                            [actions.checkboxList]: bulletIcon,
                             [actions.removeFormat]: ({tintColor}) => (
                                 <Text style={[styles.tib, {color: tintColor}]}>C</Text>
                             ),

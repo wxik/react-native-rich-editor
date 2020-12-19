@@ -29,6 +29,7 @@ function createHTML(options = {}) {
         table {width: 100% !important;}
         table td {width: inherit;}
         table span { font-size: 12px !important; }
+        .todo_box {margin-left: 12px;margin-right: 4px;}
         ${cssText}
     </style>
     <style>
@@ -51,40 +52,78 @@ function createHTML(options = {}) {
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
         var formatBlock = 'formatBlock';
         var editor = null, o_height = 0;
-        var addEventListener = function addEventListener(parent, type, listener) {
+        function addEventListener(parent, type, listener) {
             return parent.addEventListener(type, listener);
         };
-        var appendChild = function appendChild(parent, child) {
+        function appendChild(parent, child) {
             return parent.appendChild(child);
         };
-        var createElement = function createElement(tag) {
+        function createElement(tag) {
             return document.createElement(tag);
         };
-        var queryCommandState = function queryCommandState(command) {
+        function queryCommandState(command) {
             return document.queryCommandState(command);
         };
-        var queryCommandValue = function queryCommandValue(command) {
+        function queryCommandValue(command) {
             return document.queryCommandValue(command);
         };
 
-        var exec = function exec(command) {
+        function exec(command) {
             var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
             return document.execCommand(command, false, value);
         };
 
-        var _postMessage = function (data){
+        function asyncExec(command){
+            var args = Array.prototype.slice.call(arguments);
+            setTimeout(function(){
+                exec.apply(null, args);
+            }, 0);
+        }
+
+        function _postMessage(data){
             exports.window.postMessage(JSON.stringify(data));
         }
-        var postAction = function(data){
+        function postAction(data){
             editor.content.contentEditable === 'true' && _postMessage(data);
         };
 
-        console.log = function (){
-            __DEV__ && postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});
+        // console.log = function (){
+        //     __DEV__ && postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});
+        // }
+
+        function isCheckboxList(node){
+            return node && ((node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('checkboxs')) || isCheckboxList(node.parentNode));
+        }
+
+        function execCheckboxList (node, html){
+            var boxs = createElement('div');
+            boxs.setAttribute("checkboxs", '');
+
+            var checkbox = document.createElement("div");
+            checkbox.innerHTML = html;
+            boxs.appendChild(checkbox);
+
+            node.innerHTML = '';
+            node.appendChild(boxs);
+
+            var selection = window.getSelection();
+
+            var range = document.createRange();
+            range.setStart(checkbox, 2);
+            range.setEnd(checkbox, 2);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            saveSelection();
+
+            return boxs;
+        }
+
+        function createCheckbox(){
+            return "<input contentEditable='false' class='todo_box' type='checkbox'/>";
         }
 
         var anchorNode = void 0, focusNode = void 0, anchorOffset = 0, focusOffset = 0;
-        var saveSelection = function(){
+        function saveSelection(){
             var sel = window.getSelection();
             anchorNode = sel.anchorNode;
             anchorOffset = sel.anchorOffset;
@@ -92,7 +131,7 @@ function createHTML(options = {}) {
             focusOffset = sel.focusOffset;
         }
 
-        var focusCurrent = function (){
+        function focusCurrent(){
             editor.content.focus();
             try {
                 var selection = window.getSelection();
@@ -162,8 +201,23 @@ function createHTML(options = {}) {
                 result: function(url, style) {
                     if (url) {
                         var thumbnail = url.replace(/.(mp4|m3u8)/g, '') + '-thumbnail';
-                        exec('insertHTML', "<br><div style='"+ (style || '')+"'><video src='"+ url +"' poster='"+ thumbnail + "' controls><source src='"+ url +"' type='video/mp4'>No video tag support</video></div><br>");
+                        var html = "<br><div style='"+ (style || '')+"'><video src='"+ url +"' poster='"+ thumbnail + "' controls><source src='"+ url +"' type='video/mp4'>No video tag support</video></div><br>";
+                        exec('insertHTML', html);
                         Actions.UPDATE_HEIGHT();
+                    }
+                }
+            },
+            checkboxList: {
+                result: function() {
+                    if (anchorNode){
+                        var pNode = anchorNode.parentNode;
+                        console.log(pNode)
+                        if (isCheckboxList(anchorNode)){
+                            console.log('已经存在')
+
+                        } else {
+                            execCheckboxList(pNode, createCheckbox() + pNode.innerHTML);
+                        }
                     }
                 }
             },
@@ -223,19 +277,13 @@ function createHTML(options = {}) {
             content.autocomplete = 'off';
             content.className = "pell-content";
             content.oninput = function (_ref) {
-                //TODO placeholder https://github.com/wxik/react-native-rich-editor/issues/121
-                var firstChild = _ref.target.firstChild;
-                if (firstChild && firstChild.nodeType === 3) exec(formatBlock, '<' + defaultParagraphSeparator + '>');else if (content.innerHTML === '<br>') content.innerHTML = '';
+                // var firstChild = _ref.target.firstChild;
+                if (anchorNode === void 0 || anchorNode === content){
+                     asyncExec(formatBlock, '<' + defaultParagraphSeparator + '>');
+                } else if (content.innerHTML === '<br>') content.innerHTML = '';
 
                 settings.onChange(content.innerHTML);
                 saveSelection();
-            };
-            content.onkeydown = function (event) {
-                if (event.key === 'Enter' && queryCommandValue(formatBlock) === 'blockquote') {
-                    setTimeout(function () {
-                        return exec(formatBlock, '<' + defaultParagraphSeparator + '>');
-                    }, 0);
-                }
             };
             appendChild(settings.element, content);
 
@@ -261,7 +309,7 @@ function createHTML(options = {}) {
             };
 
             var _handleTouchDT = null;
-            var handleSelecting = function (event){
+            function handleSelecting(event){
                 event.stopPropagation();
                 _handleTouchDT && clearTimeout(_handleTouchDT);
                 _handleTouchDT = setTimeout(function (){
@@ -270,15 +318,29 @@ function createHTML(options = {}) {
                 }, 50);
             }
 
-            var postKeyAction = function (event, type){
+            function postKeyAction(event, type){
                 postAction({type: type, data: {keyCode: event.keyCode, key: event.key}});
             }
-            var handleKeyup = function (event){
+            function handleKeyup(event){
+                if (event.key === 'Enter'){
+                    if (isCheckboxList(anchorNode)){
+                        exec('insertHTML', createCheckbox())
+                    }
+                }
                 if (event.keyCode === 8) handleSelecting (event);
                 ${keyUpListener} && postKeyAction(event, "CONTENT_KEYUP")
             }
-            var handleKeydown = function (event){
+            function handleKeydown(event){
+                if (event.key === 'Enter'){
+                    if (queryCommandValue(formatBlock) === 'blockquote'){
+                        console.log('delete?: Enter -> blockquote')
+                        asyncExec(formatBlock, '<' + defaultParagraphSeparator + '>');
+                    }
+                }
                 ${keyDownListener} && postKeyAction(event, "CONTENT_KEYDOWN");
+            }
+            function handleFocus (){
+                postAction({type: 'CONTENT_FOCUSED'});
             }
             addEventListener(content, 'touchcancel', handleSelecting);
             addEventListener(content, 'mouseup', handleSelecting);
@@ -289,9 +351,7 @@ function createHTML(options = {}) {
                 postAction({type: 'SELECTION_CHANGE', data: []});
                 postAction({type: 'CONTENT_BLUR'});
             });
-            addEventListener(content, 'focus', function () {
-                postAction({type: 'CONTENT_FOCUSED'});
-            });
+            addEventListener(content, 'focus', handleFocus);
             addEventListener(content, 'paste', function (e) {
                 // get text representation of clipboard
                 var text = (e.originalEvent || e).clipboardData.getData('text/plain');

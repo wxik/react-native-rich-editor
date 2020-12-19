@@ -134,6 +134,7 @@ export default class RichToolbar extends Component {
             case actions.setItalic:
             case actions.insertBulletsList:
             case actions.insertOrderedList:
+            case actions.checkboxList:
             case actions.setUnderline:
             case actions.heading1:
             case actions.heading2:

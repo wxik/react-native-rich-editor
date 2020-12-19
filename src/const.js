@@ -21,6 +21,7 @@ export const actions = {
     alignFull: 'justifyFull',
     insertBulletsList: 'unorderedList',
     insertOrderedList: 'orderedList',
+    checkboxList: 'checkboxList',
     insertLink: 'link',
     insertText: 'text',
     insertHTML: 'html',

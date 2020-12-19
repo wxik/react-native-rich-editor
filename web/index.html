@@ -45,9 +45,9 @@
             <img class="icon" src="../img/icon_format_bold@2x.png" onclick="editor.onToolbarClick(this.id)" id="bold"/>
             <img class="icon" src="../img/icon_format_italic@2x.png" onclick="editor.onToolbarClick(this.id)" id="italic"/>
             <span class="icon" onclick="editor.onToolbarClick(this.id)" id="heading1">H1</span>
-            <span class="icon" onclick="editor.onToolbarClick(this.id)" id="heading2">H2</span>
             <img class="icon" src="../img/icon_format_ul@2x.png" onclick="editor.onToolbarClick(this.id)" id="unorderedList"/>
             <img class="icon" src="../img/icon_format_ol@2x.png" onclick="editor.onToolbarClick(this.id)" id="orderedList"/>
+            <img class="icon" src="../examples/src/assets/bullet.png" onclick="editor.onToolbarClick(this.id)" id="checkboxList"/>
             <img class="icon" src="../img/icon_format_link@2x.png" onclick="editor.onToolbarClick(this.id)" id="link"/>
         </div>
         <div class="bottom">
@@ -58,8 +58,10 @@
 
 <script type="module">
     import {actions, messages} from '../src/const.js';
-    import {HTML} from '../src/editor.js';
-
+    import {createHTML} from '../src/editor.js';
+    const HTML = createHTML({
+        cssText: 'html {overflow-y: auto;}',
+    });
     window.actions = actions;
     const initHTML = `
 <br/>
@@ -70,7 +72,7 @@
 <a href="https://github.com/wxik/flutter-rich-editor">Flutter</a>
 </center>
 <br/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png" />
+<img src="https://img.lesmao.vip/k/h256/R/MeiTu/1293.jpg" />
 <br/><br/>
 `;
     const selectionChangeListeners = [];
@@ -111,7 +113,7 @@
             },
 
             onPressAddImage() {
-                this._sendAction(actions.insertImage, 'result', 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/80px-React-icon.svg.png');
+                this._sendAction(actions.insertImage, 'result', 'https://pbs.twimg.com/profile_images/1242293847918391296/6uUsvfJZ.png');
             },
 
             onToolbarClick(action) {
@@ -123,6 +125,7 @@
                     case actions.heading2:
                     case actions.insertBulletsList:
                     case actions.insertOrderedList:
+                    case actions.checkboxList:
                     case actions.setIndent:
                         editor._sendAction(action, 'result');
                         break;
