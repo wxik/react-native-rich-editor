@@ -20,6 +20,8 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import {getBottomSpace} from 'react-native-iphone-x-helper';
+import KeyboardSpacer from './helper/KeyboardSpacer';
 import {actions, defaultActions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
@@ -324,10 +326,13 @@ class Example extends React.Component {
                         pasteAsPlainText={true}
                     />
                 </ScrollView>
-                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-                    <TouchableOpacity style={styles.Keyboard} onPress={that.handleKeyboard}>
+                <View style={styles.Keyboard}>
+                    <TouchableOpacity onPress={that.handleKeyboard} style={{padding: 5}}>
                         <Image source={keyboardIcon} />
                     </TouchableOpacity>
+                    <KeyboardSpacer />
+                </View>
+                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                     <RichToolbar
                         style={[styles.richBar, themeBg]}
                         editor={that.richText}
@@ -418,9 +423,9 @@ const styles = StyleSheet.create({
     },
 
     Keyboard: {
-        marginRight: 10,
-        marginBottom: 5,
-        padding: 5,
+        position: 'absolute',
+        bottom: 50 + getBottomSpace(),
+        right: 8,
         alignSelf: 'flex-end',
         justifyContent: 'center',
         alignItems: 'center',
