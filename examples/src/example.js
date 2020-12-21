@@ -215,11 +215,11 @@ class Example extends React.Component {
     };
 
     handleKeyUp = data => {
-        console.log('KeyUp:', data);
+        // console.log('KeyUp:', data);
     };
 
     handleKeyDown = data => {
-        console.log('KeyDown:', data);
+        // console.log('KeyDown:', data);
     };
 
     handleMessage = ({type, id, data}) => {
