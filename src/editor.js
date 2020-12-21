@@ -30,6 +30,7 @@ function createHTML(options = {}) {
         table td {width: inherit;}
         table span { font-size: 12px !important; }
         .todo_box {margin-left: 12px;margin-right: 4px;}
+        cl { list-style:none;}
         ${cssText}
     </style>
     <style>
@@ -87,21 +88,23 @@ function createHTML(options = {}) {
             editor.content.contentEditable === 'true' && _postMessage(data);
         };
 
-        // console.log = function (){
-        //     __DEV__ && postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});
-        // }
+        exports.isRN && (
+            console.log = function (){
+                __DEV__ && postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});
+            }
+        )
 
         function formatParagraph(async){
             (async ? asyncExec: exec)(formatBlock, '<' + editor.paragraphSeparator + '>' );
         }
 
         function isCheckboxList(node){
-            return node && ((node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('checkboxs')) || isCheckboxList(node.parentNode));
+            return node && ((node.nodeType === Node.ELEMENT_NODE && node.tagName === 'CL') || isCheckboxList(node.parentNode));
         }
 
         function execCheckboxList (node, html){
             html = html + (node ? node.innerHTML: '');
-            var HTML = "<div checkboxs><div>"+ html +"</div></div>"
+            var HTML = "<cl><li>"+ html +"</div></div>"
 
             if (node){
                 node.innerHTML = HTML;
@@ -131,6 +134,7 @@ function createHTML(options = {}) {
 
         function focusCurrent(){
             editor.content.focus();
+            console.log('focus current')
             try {
                 var selection = window.getSelection();
                 if (anchorNode){
@@ -217,7 +221,7 @@ function createHTML(options = {}) {
                         formatParagraph();
                     }
                     if (isCheckboxList(anchorNode)){
-                        console.log('已经存在')
+                        console.log('exist checkbox list')
                     } else {
                         execCheckboxList(pNode, createCheckbox());
                     }
@@ -269,6 +273,8 @@ function createHTML(options = {}) {
         };
 
         var init = function init(settings) {
+            var _keyDown = false;
+
             var paragraphSeparator = settings[defaultParagraphSeparatorString];
             var content = settings.element.content = createElement('div');
             content.id = 'content';
@@ -284,8 +290,16 @@ function createHTML(options = {}) {
                     formatParagraph(true);
                 } else if (content.innerHTML === '<br>') content.innerHTML = '';
 
-                settings.onChange(content.innerHTML);
                 saveSelection();
+
+                if (_keyDown && anchorNode.innerHTML === '<br>' && isCheckboxList(anchorNode)){
+                    var sib = anchorNode.previousSibling;
+                    if (!sib || sib.childNodes.length > 1){
+                        asyncExec('insertHTML', createCheckbox())
+                    }
+                }
+
+                settings.onChange();
             };
             appendChild(settings.element, content);
 
@@ -324,19 +338,22 @@ function createHTML(options = {}) {
                 postAction({type: type, data: {keyCode: event.keyCode, key: event.key}});
             }
             function handleKeyup(event){
-                if (event.key === 'Enter'){
-                    if (isCheckboxList(anchorNode)){
-                        exec('insertHTML', createCheckbox())
-                    }
-                }
+                _keyDown = false;
                 if (event.keyCode === 8) handleSelecting (event);
                 ${keyUpListener} && postKeyAction(event, "CONTENT_KEYUP")
             }
             function handleKeydown(event){
+                _keyDown = true;
                 if (event.key === 'Enter'){
                     if (queryCommandValue(formatBlock) === 'blockquote'){
                         console.log('delete?: Enter -> blockquote')
                         formatParagraph(true);
+                    }
+                    if (isCheckboxList(anchorNode)){
+                        if (anchorNode && anchorNode.childNodes.length === 1){
+                            exec("removeFormat");
+                            console.log('exist', anchorNode.childNodes)
+                        }
                     }
                 }
                 ${keyDownListener} && postKeyAction(event, "CONTENT_KEYDOWN");
@@ -412,6 +429,7 @@ function createHTML(options = {}) {
         }
     })({
         window: window.ReactNativeWebView || window.parent,
+        isRN: !!window.ReactNativeWebView ,
         document: document
     });
 </script>
