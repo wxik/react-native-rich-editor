@@ -91,31 +91,29 @@ function createHTML(options = {}) {
         //     __DEV__ && postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});
         // }
 
+        function formatParagraph(async){
+            (async ? asyncExec: exec)(formatBlock, '<' + editor.paragraphSeparator + '>' );
+        }
+
         function isCheckboxList(node){
             return node && ((node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('checkboxs')) || isCheckboxList(node.parentNode));
         }
 
         function execCheckboxList (node, html){
-            var boxs = createElement('div');
-            boxs.setAttribute("checkboxs", '');
+            html = html + (node ? node.innerHTML: '');
+            var HTML = "<div checkboxs><div>"+ html +"</div></div>"
 
-            var checkbox = document.createElement("div");
-            checkbox.innerHTML = html;
-            boxs.appendChild(checkbox);
+            if (node){
+                node.innerHTML = HTML;
+            } else {
+                exec("insertHTML", HTML);
+            }
 
-            node.innerHTML = '';
-            node.appendChild(boxs);
-
-            var selection = window.getSelection();
-
-            var range = document.createRange();
-            range.setStart(checkbox, 2);
-            range.setEnd(checkbox, 2);
-            selection.removeAllRanges();
-            selection.addRange(range);
-            saveSelection();
-
-            return boxs;
+            setTimeout(function (){
+                var selection = window.getSelection();
+                selection.selectAllChildren(node || editor.content);
+                selection.collapseToEnd();
+            });
         }
 
         function createCheckbox(){
@@ -209,15 +207,19 @@ function createHTML(options = {}) {
             },
             checkboxList: {
                 result: function() {
+                    var pNode;
                     if (anchorNode){
-                        var pNode = anchorNode.parentNode;
-                        console.log(pNode)
-                        if (isCheckboxList(anchorNode)){
-                            console.log('已经存在')
+                        pNode = anchorNode.parentNode;
+                        if (anchorNode === editor.content) pNode = null;
+                    }
 
-                        } else {
-                            execCheckboxList(pNode, createCheckbox() + pNode.innerHTML);
-                        }
+                    if (anchorNode === editor.content || queryCommandValue(formatBlock) === ''){
+                        formatParagraph();
+                    }
+                    if (isCheckboxList(anchorNode)){
+                        console.log('已经存在')
+                    } else {
+                        execCheckboxList(pNode, createCheckbox());
                     }
                 }
             },
@@ -267,7 +269,7 @@ function createHTML(options = {}) {
         };
 
         var init = function init(settings) {
-            var defaultParagraphSeparator = settings[defaultParagraphSeparatorString] || 'div';
+            var paragraphSeparator = settings[defaultParagraphSeparatorString];
             var content = settings.element.content = createElement('div');
             content.id = 'content';
             content.contentEditable = true;
@@ -278,8 +280,8 @@ function createHTML(options = {}) {
             content.className = "pell-content";
             content.oninput = function (_ref) {
                 // var firstChild = _ref.target.firstChild;
-                if (anchorNode === void 0 || anchorNode === content){
-                     asyncExec(formatBlock, '<' + defaultParagraphSeparator + '>');
+                if ((anchorNode === void 0 || anchorNode === content) && queryCommandValue(formatBlock) === ''){
+                    formatParagraph(true);
                 } else if (content.innerHTML === '<br>') content.innerHTML = '';
 
                 settings.onChange(content.innerHTML);
@@ -288,7 +290,7 @@ function createHTML(options = {}) {
             appendChild(settings.element, content);
 
             if (settings.styleWithCSS) exec('styleWithCSS');
-            exec(defaultParagraphSeparatorString, defaultParagraphSeparator);
+            exec(defaultParagraphSeparatorString, paragraphSeparator);
 
             var actionsHandler = [];
             for (var k in Actions){
@@ -311,7 +313,7 @@ function createHTML(options = {}) {
             var _handleTouchDT = null;
             function handleSelecting(event){
                 event.stopPropagation();
-                _handleTouchDT && clearTimeout(_handleTouchDT);
+                clearTimeout(_handleTouchDT);
                 _handleTouchDT = setTimeout(function (){
                     handler();
                     saveSelection();
@@ -334,7 +336,7 @@ function createHTML(options = {}) {
                 if (event.key === 'Enter'){
                     if (queryCommandValue(formatBlock) === 'blockquote'){
                         console.log('delete?: Enter -> blockquote')
-                        asyncExec(formatBlock, '<' + defaultParagraphSeparator + '>');
+                        formatParagraph(true);
                     }
                 }
                 ${keyDownListener} && postKeyAction(event, "CONTENT_KEYDOWN");
@@ -385,16 +387,18 @@ function createHTML(options = {}) {
                 event.preventDefault();
                 Actions.content.focus();
             });
-            return settings.element;
+            return {content, paragraphSeparator: paragraphSeparator};
         };
 
+        var _handleCTime = null;
         editor = init({
             element: document.getElementById('editor'),
             defaultParagraphSeparator: '${defaultParagraphSeparator}',
             onChange: function (){
-                setTimeout(function(){
+                clearTimeout(_handleCTime);
+                _handleCTime = setTimeout(function(){
                     postAction({type: 'CONTENT_CHANGE', data: Actions.content.getHtml()});
-                }, 10);
+                }, 50);
             }
         })
         return {
