@@ -1,4 +1,11 @@
 
+## 1.5.5
+### Added
+- Add `firstFocusEnd` to Editor When first gaining focus, the cursor moves to the end of the text
+
+### Fix
+- [Toolbar buttons activate/deactivate](https://github.com/wxik/react-native-rich-editor/issues/101)
+
 ## 1.5.2
 ### Added
 - Add `dismissKeyboard` Dismisses the active keyboard and removes focus.

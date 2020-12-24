@@ -57,6 +57,7 @@ export default class RichTextEditor extends Component {
             onKeyDown,
             autoCapitalize,
             defaultParagraphSeparator,
+            firstFocusEnd,
         } = props;
         that.state = {
             html: {
@@ -74,6 +75,7 @@ export default class RichTextEditor extends Component {
                         keyDownListener: !!onKeyDown,
                         autoCapitalize,
                         defaultParagraphSeparator,
+                        firstFocusEnd,
                     }),
             },
             keyboardHeight: 0,

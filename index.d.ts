@@ -105,6 +105,12 @@ declare module 'react-native-pell-rich-editor' {
         onMessage?: (message: {type: string; id: string; data?: any}) => void;
 
         /**
+         * When first gaining focus, the cursor moves to the end of the text
+         * Default is true
+         */
+        firstFocusEnd?: boolean;
+
+        /**
          * Styling for container or for Rich Editor more dark or light settings
          */
         editorStyle?: {

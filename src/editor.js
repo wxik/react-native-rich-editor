@@ -11,6 +11,8 @@ function createHTML(options = {}) {
         keyUpListener = false,
         autoCapitalize = 'off',
         defaultParagraphSeparator = 'div',
+        // When first gaining focus, the cursor moves to the end of the text
+        firstFocusEnd = true,
     } = options;
     //ERROR: HTML height not 100%;
     return `
@@ -123,28 +125,21 @@ function createHTML(options = {}) {
             return "<input contentEditable='false' class='todo_box' type='checkbox'/>";
         }
 
-        var anchorNode = void 0, focusNode = void 0, anchorOffset = 0, focusOffset = 0;
+        var anchorNode = void 0, focusNode = void 0, _focusCollapse = false;
         function saveSelection(){
             var sel = window.getSelection();
             anchorNode = sel.anchorNode;
             anchorOffset = sel.anchorOffset;
-            focusNode = sel.focusNode;
-            focusOffset = sel.focusOffset;
         }
 
         function focusCurrent(){
             editor.content.focus();
-            console.log('focus current')
             try {
                 var selection = window.getSelection();
                 if (anchorNode){
-                    var range = document.createRange();
-                    range.setStart(anchorNode, anchorOffset);
-                    range.setEnd(focusNode, focusOffset);
-                    focusOffset === anchorOffset && range.collapse(false);
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-                } else {
+                    !selection.containsNode(anchorNode) && selection.collapse(anchorNode, anchorOffset);
+                } else if(${firstFocusEnd} && !_focusCollapse ){
+                    _focusCollapse = true;
                     selection.selectAllChildren(editor.content);
                     selection.collapseToEnd();
                 }
@@ -361,15 +356,16 @@ function createHTML(options = {}) {
             function handleFocus (){
                 postAction({type: 'CONTENT_FOCUSED'});
             }
+            function handleBlur (){
+                postAction({type: 'SELECTION_CHANGE', data: []});
+                postAction({type: 'CONTENT_BLUR'});
+            }
             addEventListener(content, 'touchcancel', handleSelecting);
             addEventListener(content, 'mouseup', handleSelecting);
             addEventListener(content, 'touchend', handleSelecting);
             addEventListener(content, 'keyup', handleKeyup);
             addEventListener(content, 'keydown', handleKeydown);
-            addEventListener(content, 'blur', function () {
-                postAction({type: 'SELECTION_CHANGE', data: []});
-                postAction({type: 'CONTENT_BLUR'});
-            });
+            addEventListener(content, 'blur', handleBlur);
             addEventListener(content, 'focus', handleFocus);
             addEventListener(content, 'paste', function (e) {
                 // get text representation of clipboard
