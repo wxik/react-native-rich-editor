@@ -46,8 +46,6 @@ const initHTML = `<br/>
 
 const phizIcon = require('./assets/phiz.png');
 const htmlIcon = require('./assets/h5.png');
-const videoIcon = require('./assets/video.png');
-const strikethrough = require('./assets/strikethrough.png');
 const keyboardIcon = require('./assets/keyboard.png');
 const bulletIcon = require('./assets/bullet.png');
 
@@ -268,6 +266,52 @@ class Example extends React.Component {
         const {contentStyle, theme, emojiVisible, disabled} = that.state;
         const {backgroundColor, color, placeholderColor} = contentStyle;
         const themeBg = {backgroundColor};
+
+        const ToolBar = (
+            <RichToolbar
+                style={[styles.richBar, themeBg]}
+                editor={that.richText}
+                disabled={disabled}
+                iconTint={color}
+                selectedIconTint={'#2095F2'}
+                disabledIconTint={'#8b8b8b'}
+                onPressAddImage={that.onPressAddImage}
+                onInsertLink={that.onInsertLink}
+                iconSize={35} // default 50
+                iconType={'v2'}
+                actions={[
+                    actions.insertVideo,
+                    // ...defaultActions,
+                    actions.insertImage,
+                    actions.setBold,
+                    actions.setItalic,
+                    actions.setStrikethrough,
+                    actions.setUnderline,
+                    actions.insertBulletsList,
+                    actions.insertOrderedList,
+                    actions.insertLink,
+                    actions.removeFormat,
+                    actions.undo,
+                    actions.redo,
+
+                    actions.checkboxList,
+                    actions.heading1,
+                    actions.heading4,
+                    'insertEmoji',
+                    'insertHTML',
+                ]} // default defaultActions
+                iconMap={{
+                    insertEmoji: phizIcon,
+                    [actions.checkboxList]: bulletIcon,
+                    [actions.heading1]: ({tintColor}) => <Text style={[styles.tib, {color: tintColor}]}>H1</Text>,
+                    [actions.heading4]: ({tintColor}) => <Text style={[styles.tib, {color: tintColor}]}>H3</Text>,
+                    insertHTML: htmlIcon,
+                }}
+                insertEmoji={that.handleEmoji}
+                insertHTML={that.insertHTML}
+                insertVideo={that.insertVideo}
+            />
+        );
         return (
             <SafeAreaView style={[styles.container, themeBg]}>
                 <StatusBar barStyle={theme !== 'dark' ? 'dark-content' : 'light-content'} />
@@ -305,6 +349,7 @@ class Example extends React.Component {
                             <Button title={disabled ? 'enable' : 'disable'} onPress={that.onDisabled} />
                         </View>
                     </View>
+                    {ToolBar}
                     <RichEditor
                         // initialFocus={true}
                         disabled={disabled}
@@ -333,47 +378,7 @@ class Example extends React.Component {
                     <KeyboardSpacer />
                 </View>
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-                    <RichToolbar
-                        style={[styles.richBar, themeBg]}
-                        editor={that.richText}
-                        disabled={disabled}
-                        iconTint={color}
-                        selectedIconTint={'#2095F2'}
-                        disabledIconTint={'#8b8b8b'}
-                        onPressAddImage={that.onPressAddImage}
-                        onInsertLink={that.onInsertLink}
-                        iconSize={40} // default 50
-                        actions={[
-                            'insertVideo',
-                            ...defaultActions,
-                            actions.checkboxList,
-                            actions.setStrikethrough,
-                            actions.heading1,
-                            actions.heading4,
-                            actions.removeFormat,
-                            'insertEmoji',
-                            'insertHTML',
-                        ]} // default defaultActions
-                        iconMap={{
-                            insertEmoji: phizIcon,
-                            [actions.checkboxList]: bulletIcon,
-                            [actions.removeFormat]: ({tintColor}) => (
-                                <Text style={[styles.tib, {color: tintColor}]}>C</Text>
-                            ),
-                            [actions.setStrikethrough]: strikethrough,
-                            [actions.heading1]: ({tintColor}) => (
-                                <Text style={[styles.tib, {color: tintColor}]}>H1</Text>
-                            ),
-                            [actions.heading4]: ({tintColor}) => (
-                                <Text style={[styles.tib, {color: tintColor}]}>H3</Text>
-                            ),
-                            insertHTML: htmlIcon,
-                            insertVideo: videoIcon,
-                        }}
-                        insertEmoji={that.handleEmoji}
-                        insertHTML={that.insertHTML}
-                        insertVideo={that.insertVideo}
-                    />
+                    {ToolBar}
                     {emojiVisible && <EmojiView onSelect={that.insertEmoji} />}
                 </KeyboardAvoidingView>
             </SafeAreaView>
@@ -396,7 +401,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     richBar: {
-        height: 50,
+        height: 40,
         backgroundColor: '#F5FCFF',
         borderColor: '#e8e8e8',
         borderTopWidth: StyleSheet.hairlineWidth,

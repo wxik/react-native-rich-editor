@@ -33,6 +33,8 @@ export const actions = {
     setHR: 'horizontalRule',
     setIndent: 'indent',
     setOutdent: 'outdent',
+    undo: 'undo',
+    redo: 'redo',
     setTitlePlaceholder: 'SET_TITLE_PLACEHOLDER',
     setContentPlaceholder: 'SET_CONTENT_PLACEHOLDER',
     setTitleFocusHandler: 'SET_TITLE_FOCUS_HANDLER',

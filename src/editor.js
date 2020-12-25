@@ -166,6 +166,10 @@ function createHTML(options = {}) {
             unorderedList: { state: function() { return queryCommandState('insertUnorderedList'); },result: function() { return exec('insertUnorderedList'); }},
             code: { result: function() { return exec(formatBlock, '<pre>'); }},
             line: { result: function() { return exec('insertHorizontalRule'); }},
+            redo: { result: function() { return exec('redo'); }},
+            undo: { result: function() { return exec('undo'); }},
+            hiliteColor: {  state: function() { return queryCommandState('hiliteColor'); }, result: function(color) { return exec('hiliteColor', color); }},
+            foreColor: { state: function() { return queryCommandState('foreColor'); }, result: function(color) { return exec('foreColor', color); }},
             link: {
                 result: function(data) {
                     data = data || {};

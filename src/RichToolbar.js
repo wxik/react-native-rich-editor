@@ -11,14 +11,30 @@ export const defaultActions = [
     actions.insertLink,
 ];
 
-function getDefaultIcon() {
+function getDefaultIcon({iconType}) {
     const texts = {};
-    texts[actions.insertImage] = require('../img/icon_format_media.png');
-    texts[actions.setBold] = require('../img/icon_format_bold.png');
-    texts[actions.setItalic] = require('../img/icon_format_italic.png');
-    texts[actions.insertBulletsList] = require('../img/icon_format_ul.png');
-    texts[actions.insertOrderedList] = require('../img/icon_format_ol.png');
-    texts[actions.insertLink] = require('../img/icon_format_link.png');
+    // old icons styles
+    if (iconType === 'v2') {
+        texts[actions.insertImage] = require('../img/image.png');
+        texts[actions.setBold] = require('../img/bold.png');
+        texts[actions.setItalic] = require('../img/italic.png');
+        texts[actions.insertBulletsList] = require('../img/bullets_list.png');
+        texts[actions.insertOrderedList] = require('../img/ordered_list.png');
+        texts[actions.insertLink] = require('../img/link.png');
+    } else {
+        texts[actions.insertImage] = require('../img/icon_format_media.png');
+        texts[actions.setBold] = require('../img/icon_format_bold.png');
+        texts[actions.setItalic] = require('../img/icon_format_italic.png');
+        texts[actions.insertBulletsList] = require('../img/icon_format_ul.png');
+        texts[actions.insertOrderedList] = require('../img/icon_format_ol.png');
+        texts[actions.insertLink] = require('../img/icon_format_link.png');
+    }
+    texts[actions.setStrikethrough] = require('../img/strikethrough.png');
+    texts[actions.setUnderline] = require('../img/underline.png');
+    texts[actions.insertVideo] = require('../img/video.png');
+    texts[actions.removeFormat] = require('../img/remove_forma.png');
+    texts[actions.undo] = require('../img/undo.png');
+    texts[actions.redo] = require('../img/redo.png');
     return texts;
 }
 
@@ -38,17 +54,19 @@ export default class RichToolbar extends Component {
     //   renderAction: PropTypes.func,
     //   iconMap: PropTypes.object,
     //   disabled: PropTypes.bool,
+    //   iconType: PropTypes.string,
     // };
 
     static defaultProps = {
         actions: defaultActions,
         disabled: false,
+        // iconType: 'v1',
     };
 
     constructor(props) {
         super(props);
+        this.editor = null;
         this.state = {
-            editor: void 0,
             selectedItems: [],
         };
     }
@@ -57,7 +75,6 @@ export default class RichToolbar extends Component {
         let that = this;
         return (
             nextProps.actions !== that.props.actions ||
-            nextState.editor !== that.state.editor ||
             nextState.selectedItems !== that.state.selectedItems ||
             nextState.actions !== that.state.actions ||
             nextState.style !== that.props.style
@@ -77,22 +94,22 @@ export default class RichToolbar extends Component {
     }
 
     componentDidMount() {
+        setTimeout(this._mount);
+    }
+
+    _mount = () => {
         const {editor: {current: editor} = {current: this.props?.getEditor()}} = this.props;
         if (!editor) {
             throw new Error('Toolbar has no editor!');
         } else {
             editor.registerToolbar((selectedItems) => this.setSelectedItems(selectedItems));
-            this.setState({editor});
+            this.editor = editor;
         }
-    }
-
-    componentWillUnmount() {
-        this.setState({editor: null});
-    }
+    };
 
     setSelectedItems(items) {
-        const {selectedItems, editor} = this.state;
-        if (editor && items !== selectedItems) {
+        const {selectedItems} = this.state;
+        if (this.editor && items !== selectedItems) {
             this.setState({
                 items,
                 data: this.state.actions.map((action) => ({action, selected: items.includes(action)})),
@@ -113,18 +130,17 @@ export default class RichToolbar extends Component {
     }
 
     _getButtonIcon(action) {
-        if (this.props.iconMap && this.props.iconMap[action]) {
-            return this.props.iconMap[action];
-        } else if (getDefaultIcon()[action]) {
-            return getDefaultIcon()[action];
+        const {iconMap, iconType} = this.props;
+        if (iconMap && iconMap[action]) {
+            return iconMap[action];
         } else {
-            return undefined;
+            return getDefaultIcon({iconType})[action];
         }
     }
 
     _onPress(action) {
-        const {onPressAddImage, onInsertLink} = this.props;
-        const {editor} = this.state;
+        const {onPressAddImage, onInsertLink, insertVideo} = this.props;
+        const editor = this.editor;
         if (!editor) return;
 
         switch (action) {
@@ -132,6 +148,8 @@ export default class RichToolbar extends Component {
                 if (onInsertLink) return onInsertLink();
             case actions.setBold:
             case actions.setItalic:
+            case actions.undo:
+            case actions.redo:
             case actions.insertBulletsList:
             case actions.insertOrderedList:
             case actions.checkboxList:
@@ -159,6 +177,9 @@ export default class RichToolbar extends Component {
                 break;
             case actions.insertImage:
                 onPressAddImage && onPressAddImage();
+                break;
+            case actions.insertVideo:
+                insertVideo && insertVideo();
                 break;
             default:
                 this.props[action] && this.props[action]();
