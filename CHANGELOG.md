@@ -4,6 +4,9 @@
 - New toolbar icon, you need to set `iconType={'v1'}` to continue using the old icon
 - New props `redo`, `undo` on editor
 
+Changed
+- toolbar can now be rendered in front of the editor
+
 ## 1.5.5
 ### Added
 - Add `firstFocusEnd` to Editor When first gaining focus, the cursor moves to the end of the text
