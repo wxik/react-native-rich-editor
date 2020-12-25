@@ -228,7 +228,7 @@ export default class RichToolbar extends Component {
     }
 
     render() {
-        const {style, disabled, children} = this.props;
+        const {style, disabled, children, flatContainerStyle} = this.props;
         const vStyle = [styles.barContainer, style, disabled && this._getButtonDisabledStyle()];
         return (
             <View style={vStyle}>
@@ -240,6 +240,7 @@ export default class RichToolbar extends Component {
                     alwaysBounceHorizontal={false}
                     showsHorizontalScrollIndicator={false}
                     renderItem={({item}) => this._renderAction(item.action, item.selected)}
+                    contentContainerStyle={flatContainerStyle}
                 />
                 {children}
             </View>

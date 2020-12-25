@@ -40,7 +40,7 @@ const initHTML = `<br/>
 <a href="https://github.com/wxik/flutter-rich-editor">Flutter</a>
 </center>
 <br/>
-<img src="${imageList[0]}" onclick="_.sendEvent('ImgClick')" contenteditable="false"/>
+<img src="${imageList[0]}" onclick="_.sendEvent('ImgClick')" contenteditable="false" height="170px"/>
 <br/>Click the picture to switch<br/><br/>
 `;
 
@@ -97,7 +97,7 @@ class Example extends React.Component {
 
     editorInitializedCallback() {
         this.richText.current?.registerToolbar(function (items) {
-            console.log('Toolbar click, selected items (insert end callback):', items);
+            // console.log('Toolbar click, selected items (insert end callback):', items);
         });
     }
 
@@ -270,6 +270,7 @@ class Example extends React.Component {
         const ToolBar = (
             <RichToolbar
                 style={[styles.richBar, themeBg]}
+                flatContainerStyle={styles.flatStyle}
                 editor={that.richText}
                 disabled={disabled}
                 iconTint={color}
@@ -433,6 +434,9 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    flatStyle: {
+        paddingHorizontal: 12,
     },
 });
 

@@ -137,7 +137,10 @@ function createHTML(options = {}) {
             try {
                 var selection = window.getSelection();
                 if (anchorNode){
-                    !selection.containsNode(anchorNode) && selection.collapse(anchorNode, anchorOffset);
+                    // if (anchorNode !== selection.anchorNode && !selection.containsNode(anchorNode)){
+                        _focusCollapse = true;
+                        selection.collapse(anchorNode, anchorOffset);
+                    // }
                 } else if(${firstFocusEnd} && !_focusCollapse ){
                     _focusCollapse = true;
                     selection.selectAllChildren(editor.content);
@@ -312,25 +315,30 @@ function createHTML(options = {}) {
                 }
             }
 
-            var handler = function () {
+            function handler() {
                 var activeTools = [];
                 for(var k in actionsHandler){
                     if ( Actions[k].state() ){
                         activeTools.push(k);
                     }
                 }
+                var sel = window.getSelection();
+                console.log(activeTools, "active?", anchorNode, sel.anchorNode, sel.focusNode)
                 postAction({type: 'SELECTION_CHANGE', data: activeTools});
-                return true;
             };
 
-            var _handleTouchDT = null;
-            function handleSelecting(event){
-                event.stopPropagation();
-                clearTimeout(_handleTouchDT);
-                _handleTouchDT = setTimeout(function (){
+            var _handleStateDT = null;
+            function handleState(){
+                clearTimeout(_handleStateDT);
+                _handleStateDT = setTimeout(function (){
                     handler();
                     saveSelection();
                 }, 50);
+            }
+
+            function handleSelecting(event){
+                event.stopPropagation();
+                handleState();
             }
 
             function postKeyAction(event, type){
@@ -392,7 +400,7 @@ function createHTML(options = {}) {
                         // insert image or link need current focus
                         flag && focusCurrent();
                         action[msgData.name](msgData.data, msgData.options);
-                        flag && handler();
+                        flag && handleState();
                     } else {
                         action(msgData.data, msgData.options);
                     }
@@ -403,6 +411,7 @@ function createHTML(options = {}) {
             document.addEventListener('mouseup', function (event) {
                 event.preventDefault();
                 Actions.content.focus();
+                handleSelecting(event);
             });
             return {content, paragraphSeparator: paragraphSeparator};
         };

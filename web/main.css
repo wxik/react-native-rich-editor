@@ -20,7 +20,7 @@ iframe {
 
 .toolbar {
   background-color: #F5FCFF;
-  height: 50px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,9 +77,9 @@ iframe {
 }
 
 .icon {
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
+  height: 35px;
+  width: 35px;
+  line-height: 35px;
   cursor: pointer;
   color: #878b92;
   font-size: 16px;

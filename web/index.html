@@ -41,14 +41,16 @@
         </div>
         <iframe id="editor"></iframe>
         <div class="toolbar">
-            <img class="icon" src="../img/icon_format_media@2x.png" onclick="editor.onToolbarClick(this.id)" id='image'/>
-            <img class="icon" src="../img/icon_format_bold@2x.png" onclick="editor.onToolbarClick(this.id)" id="bold"/>
-            <img class="icon" src="../img/icon_format_italic@2x.png" onclick="editor.onToolbarClick(this.id)" id="italic"/>
+            <img class="icon" src="../img/image@2x.png" onclick="editor.onToolbarClick(this.id)" id='image'/>
+            <img class="icon" src="../img/bold@2x.png" onclick="editor.onToolbarClick(this.id)" id="bold"/>
+            <img class="icon" src="../img/italic@2x.png" onclick="editor.onToolbarClick(this.id)" id="italic"/>
+            <img class="icon" src="../img/strikethrough@2x.png" onclick="editor.onToolbarClick(this.id)" id="strikeThrough"/>
+            <img class="icon" src="../img/underline@2x.png" onclick="editor.onToolbarClick(this.id)" id="underline"/>
             <span class="icon" onclick="editor.onToolbarClick(this.id)" id="heading1">H1</span>
-            <img class="icon" src="../img/icon_format_ul@2x.png" onclick="editor.onToolbarClick(this.id)" id="unorderedList"/>
-            <img class="icon" src="../img/icon_format_ol@2x.png" onclick="editor.onToolbarClick(this.id)" id="orderedList"/>
+            <img class="icon" src="../img/bullets_list@2x.png" onclick="editor.onToolbarClick(this.id)" id="unorderedList"/>
+            <img class="icon" src="../img/ordered_list@2x.png" onclick="editor.onToolbarClick(this.id)" id="orderedList"/>
             <img class="icon" src="../examples/src/assets/bullet.png" onclick="editor.onToolbarClick(this.id)" id="checkboxList"/>
-            <img class="icon" src="../img/icon_format_link@2x.png" onclick="editor.onToolbarClick(this.id)" id="link"/>
+            <img class="icon" src="../img/link@2x.png" onclick="editor.onToolbarClick(this.id)" id="link"/>
         </div>
         <div class="bottom">
             <div class="rounded-bar"></div>
@@ -127,6 +129,9 @@
                     case actions.insertOrderedList:
                     case actions.checkboxList:
                     case actions.setIndent:
+                    case actions.setStrikethrough:
+                    case actions.setUnderline:
+                    case actions.removeFormat:
                         editor._sendAction(action, 'result');
                         break;
                     case actions.insertImage:
