@@ -278,7 +278,6 @@ class Example extends React.Component {
                 onPressAddImage={that.onPressAddImage}
                 onInsertLink={that.onInsertLink}
                 iconSize={35} // default 50
-                iconType={'v2'}
                 actions={[
                     actions.insertVideo,
                     // ...defaultActions,

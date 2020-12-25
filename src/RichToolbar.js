@@ -14,20 +14,20 @@ export const defaultActions = [
 function getDefaultIcon({iconType}) {
     const texts = {};
     // old icons styles
-    if (iconType === 'v2') {
-        texts[actions.insertImage] = require('../img/image.png');
-        texts[actions.setBold] = require('../img/bold.png');
-        texts[actions.setItalic] = require('../img/italic.png');
-        texts[actions.insertBulletsList] = require('../img/bullets_list.png');
-        texts[actions.insertOrderedList] = require('../img/ordered_list.png');
-        texts[actions.insertLink] = require('../img/link.png');
-    } else {
+    if (iconType === 'v1') {
         texts[actions.insertImage] = require('../img/icon_format_media.png');
         texts[actions.setBold] = require('../img/icon_format_bold.png');
         texts[actions.setItalic] = require('../img/icon_format_italic.png');
         texts[actions.insertBulletsList] = require('../img/icon_format_ul.png');
         texts[actions.insertOrderedList] = require('../img/icon_format_ol.png');
         texts[actions.insertLink] = require('../img/icon_format_link.png');
+    } else {
+        texts[actions.insertImage] = require('../img/image.png');
+        texts[actions.setBold] = require('../img/bold.png');
+        texts[actions.setItalic] = require('../img/italic.png');
+        texts[actions.insertBulletsList] = require('../img/bullets_list.png');
+        texts[actions.insertOrderedList] = require('../img/ordered_list.png');
+        texts[actions.insertLink] = require('../img/link.png');
     }
     texts[actions.setStrikethrough] = require('../img/strikethrough.png');
     texts[actions.setUnderline] = require('../img/underline.png');
