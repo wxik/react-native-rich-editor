@@ -173,7 +173,7 @@ export default class RichToolbar extends Component {
             case actions.setIndent:
             case actions.setOutdent:
                 editor.showAndroidKeyboard();
-                editor._sendAction(action, 'result');
+                editor.sendAction(action, 'result');
                 break;
             case actions.insertImage:
                 onPressAddImage && onPressAddImage();

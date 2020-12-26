@@ -39,7 +39,7 @@ export default class RichTextEditor extends Component {
         let that = this;
         that.renderWebView = that.renderWebView.bind(that);
         that.onMessage = that.onMessage.bind(that);
-        that._sendAction = that._sendAction.bind(that);
+        that.sendAction = that.sendAction.bind(that);
         that.registerToolbar = that.registerToolbar.bind(that);
         that._onKeyboardWillShow = that._onKeyboardWillShow.bind(that);
         that._onKeyboardWillHide = that._onKeyboardWillHide.bind(that);
@@ -212,7 +212,7 @@ export default class RichTextEditor extends Component {
      * @param [options]
      * @private
      */
-    _sendAction(type, action, data, options) {
+    sendAction(type, action, data, options) {
         let jsonString = JSON.stringify({type, name: action, data, options});
         if (this.webviewBridge) {
             this.webviewBridge.postMessage(jsonString);
@@ -294,28 +294,28 @@ export default class RichTextEditor extends Component {
     }
 
     setContentHTML(html) {
-        this._sendAction(actions.content, 'setHtml', html);
+        this.sendAction(actions.content, 'setHtml', html);
     }
 
     setPlaceholder(placeholder) {
-        this._sendAction(actions.content, 'setPlaceholder', placeholder);
+        this.sendAction(actions.content, 'setPlaceholder', placeholder);
     }
 
     setContentStyle(styles) {
-        this._sendAction(actions.content, 'setContentStyle', styles);
+        this.sendAction(actions.content, 'setContentStyle', styles);
     }
 
     setDisable(dis) {
-        this._sendAction(actions.content, 'setDisable', !!dis);
+        this.sendAction(actions.content, 'setDisable', !!dis);
     }
 
     blurContentEditor() {
-        this._sendAction(actions.content, 'blur');
+        this.sendAction(actions.content, 'blur');
     }
 
     focusContentEditor() {
         this.showAndroidKeyboard();
-        this._sendAction(actions.content, 'focus');
+        this.sendAction(actions.content, 'focus');
     }
 
     /**
@@ -335,7 +335,7 @@ export default class RichTextEditor extends Component {
      * @param [style]
      */
     insertImage(attributes, style) {
-        this._sendAction(actions.insertImage, 'result', attributes, style);
+        this.sendAction(actions.insertImage, 'result', attributes, style);
     }
 
     /**
@@ -343,27 +343,27 @@ export default class RichTextEditor extends Component {
      * @param [style]
      */
     insertVideo(attributes, style) {
-        this._sendAction(actions.insertVideo, 'result', attributes, style);
+        this.sendAction(actions.insertVideo, 'result', attributes, style);
     }
 
     insertText(text) {
-        this._sendAction(actions.insertText, 'result', text);
+        this.sendAction(actions.insertText, 'result', text);
     }
 
     insertHTML(html) {
-        this._sendAction(actions.insertHTML, 'result', html);
+        this.sendAction(actions.insertHTML, 'result', html);
     }
 
     insertLink(title, url) {
         if (url) {
             this.showAndroidKeyboard();
-            this._sendAction(actions.insertLink, 'result', {title, url});
+            this.sendAction(actions.insertLink, 'result', {title, url});
         }
     }
 
     commandDOM(command) {
         if (command) {
-            this._sendAction(actions.content, 'commandDOM', command);
+            this.sendAction(actions.content, 'commandDOM', command);
         }
     }
 
@@ -386,7 +386,7 @@ export default class RichTextEditor extends Component {
         // initial request focus
         initialFocus && !disabled && that.focusContentEditor();
         // no visible ?
-        that._sendAction(actions.init);
+        that.sendAction(actions.init);
         that.setState({isInit: true});
     }
 
@@ -398,7 +398,7 @@ export default class RichTextEditor extends Component {
         return new Promise((resolve, reject) => {
             this.contentResolve = resolve;
             this.contentReject = reject;
-            this._sendAction(actions.content, 'postHtml');
+            this.sendAction(actions.content, 'postHtml');
 
             this.pendingContentHtml = setTimeout(() => {
                 if (this.contentReject) {
