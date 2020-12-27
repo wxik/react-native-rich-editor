@@ -359,9 +359,17 @@ const HTML = `
             return settings.element;
         };
 
+        var _handleCTime = null;
         editor = init({
             element: document.getElementById('editor'),
             defaultParagraphSeparator: 'div',
+            onChange: function (){
+                clearTimeout(_handleCTime);
+                _handleCTime = setTimeout(function(){
+                    var data = { content: Actions.content.getHtml() };
+                    postAction({type: 'CONTENT_CHANGE', data });
+                }, 50);
+            }
         })
     })(window);
 </script>
