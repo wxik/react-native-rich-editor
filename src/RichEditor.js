@@ -119,8 +119,10 @@ export default class RichTextEditor extends Component {
           this.setWebHeight(message.data);
           break;
         case messages.CONTENT_CHANGE:
-          const { onActivateTagging } = this.props;
+          const { onActivateTagging, onChange } = this.props;
           const { taggingActive, tagText } = this.state;
+
+          onChange && onChange(message.data.content);
 
           if (!PlatformIOS) {
             const contentLastWord = message.data.content.split('\n').pop().split(/(\s+)/).pop();
