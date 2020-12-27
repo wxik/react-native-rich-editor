@@ -317,6 +317,7 @@ const HTML = `
             });
             addEventListener(content, 'blur', function () {
                 postAction({type: 'SELECTION_CHANGE', data: []});
+                postAction({type: 'CONTENT_BLUR'});
             });
             addEventListener(content, 'focus', function () {
                 postAction({type: 'CONTENT_FOCUSED'});

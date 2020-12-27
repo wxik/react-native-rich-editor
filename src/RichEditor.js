@@ -105,14 +105,27 @@ export default class RichTextEditor extends Component {
           console.log("FROM EDIT:", ...message.data);
           break;
         case messages.SELECTION_CHANGE: {
+          const {onFocus} = this.props;
+
           const items = message.data;
           this.state.selectionChangeListeners.map(listener => {
             listener(items);
           });
+
+          onFocus && onFocus();
+          break;
+        }
+        case messages.CONTENT_BLUR: {
+          const {onBlur} = this.props;
+          
+          onBlur && onBlur();
           break;
         }
         case messages.CONTENT_FOCUSED: {
+          const {onFocus} = this.props;
           this.focusListeners.map(da => da());
+
+          onFocus && onFocus();
           break;
         }
         case messages.OFFSET_HEIGHT:
