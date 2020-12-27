@@ -82,7 +82,9 @@ export default class RichToolbar extends Component {
   }
 
   setSelectedItems(selectedItems) {
+    const {onItemsSelected} = this.props;
     if (selectedItems !== this.state.selectedItems) {
+      onItemsSelected && onItemsSelected(selectedItems);
       this.setState({
         selectedItems,
         data: this.getRows(this.state.actions, selectedItems)
