@@ -31,8 +31,9 @@ function createHTML(options = {}) {
         table {width: 100% !important;}
         table td {width: inherit;}
         table span { font-size: 12px !important; }
-        .todo_box {margin-left: 12px;margin-right: 4px;}
-        cl { list-style:none;}
+        .x-todo li {list-style:none;}
+        .x-todo li span:nth-child(1) {position: relative; left: -24px;}
+        .x-todo li span:nth-child(1) input{ position: absolute;}
         ${cssText}
     </style>
     <style>
@@ -70,6 +71,12 @@ function createHTML(options = {}) {
         function queryCommandValue(command) {
             return document.queryCommandValue(command);
         };
+        function query(command){
+            return document.querySelector(command);
+        }
+        function querys(command){
+            return document.querySelectorAll(command);
+        }
 
         function exec(command) {
             var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
@@ -100,13 +107,20 @@ function createHTML(options = {}) {
             (async ? asyncExec: exec)(formatBlock, '<' + editor.paragraphSeparator + '>' );
         }
 
-        function isCheckboxList(node){
-            return node && ((node.nodeType === Node.ELEMENT_NODE && node.tagName === 'CL') || isCheckboxList(node.parentNode));
+        function checkboxNode(node){
+            if (node){
+                if ((node.nodeType === Node.ELEMENT_NODE && node.classList.contains('x-todo'))){
+                    return node;
+                } else {
+                    return checkboxNode(node.parentNode);
+                }
+            }
+            return node;
         }
 
         function execCheckboxList (node, html){
             html = html + (node ? node.innerHTML: '');
-            var HTML = "<cl><li>"+ html +"</div></div>"
+            var HTML = "<ul class='x-todo'><li>"+ html +"</div></div>"
 
             if (node){
                 node.innerHTML = HTML;
@@ -121,8 +135,15 @@ function createHTML(options = {}) {
             });
         }
 
+        function cancelCheckboxList(box){
+            exec("insertUnorderedList");
+            var selection = window.getSelection();
+            selection.selectAllChildren(box);
+            selection.collapseToEnd();
+        }
+
         function createCheckbox(){
-            return "<input contentEditable='false' class='todo_box' type='checkbox'/>";
+            return '<span contenteditable="false"><input type="checkbox"></span><br/>';
         }
 
         var anchorNode = void 0, focusNode = void 0, _focusCollapse = false;
@@ -222,8 +243,9 @@ function createHTML(options = {}) {
                     if (anchorNode === editor.content || queryCommandValue(formatBlock) === ''){
                         formatParagraph();
                     }
-                    if (isCheckboxList(anchorNode)){
-                        console.log('exist checkbox list')
+                    var box = checkboxNode(anchorNode);
+                    if (!!box){
+                        cancelCheckboxList(box.parentNode);
                     } else {
                         execCheckboxList(pNode, createCheckbox());
                     }
@@ -293,11 +315,20 @@ function createHTML(options = {}) {
                 } else if (content.innerHTML === '<br>') content.innerHTML = '';
 
                 saveSelection();
+                var node = anchorNode;
 
-                if (_keyDown && anchorNode.innerHTML === '<br>' && isCheckboxList(anchorNode)){
-                    var sib = anchorNode.previousSibling;
-                    if (!sib || sib.childNodes.length > 1){
-                        asyncExec('insertHTML', createCheckbox())
+                if (_keyDown){
+                    if(node.innerHTML === '<br>'){
+                        if (checkboxNode(node)){
+                            var sib = node.previousSibling;
+                            if (!sib || sib.childNodes.length > 1){
+                                asyncExec('insertHTML', createCheckbox())
+                            }
+                        }
+                    } else if (node.tagName === 'SPAN' && node.childNodes[0] && node.childNodes[0].tagName === 'INPUT'){
+                         // setTimeout(function () {
+                         //     node.parentNode.removeChild(node);
+                         // });
                     }
                 }
 
@@ -354,10 +385,11 @@ function createHTML(options = {}) {
                         console.log('delete?: Enter -> blockquote')
                         formatParagraph(true);
                     }
-                    if (isCheckboxList(anchorNode)){
-                        if (anchorNode && anchorNode.childNodes.length === 1){
-                            exec("removeFormat");
-                            console.log('exist', anchorNode.childNodes)
+                    var box = checkboxNode(anchorNode);
+                    if (!!box){
+                        var node = anchorNode && anchorNode.childNodes[1];
+                        if (node && node.nodeName === 'BR'){
+                           cancelCheckboxList(box.parentNode);
                         }
                     }
                 }
