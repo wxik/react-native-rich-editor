@@ -328,12 +328,12 @@ const HTML = `
                 var previous_node = anchor_node.previousSibling;
                 //alert(anchor_node.nodeName);
                 //alert(e.keyCode);
-                if ((anchor_node.nodeName.toLowerCase() === 'span' || previous_node.nodeName.toLowerCase() === 'span') && (e.keyCode === 8 || e.key === 'Backspace')) {
+                if ((anchor_node.nodeName.toLowerCase() === 'span' || previous_node?.nodeName.toLowerCase() === 'span') && (e.keyCode === 8 || e.key === 'Backspace')) {
                     var range = document.createRange();
                     range.selectNodeContents(previous_node);
                     range.deleteContents();
                 }
-                postAction({type: 'CONTENT_CHANGE', data: { key: e.key, keyCode: e.keyCode, shiftKey: e.shiftKey, content: content.innerText }});
+                postAction({type: 'CONTENT_CHANGE', data: { key: e.key, keyCode: e.keyCode, shiftKey: e.shiftKey, content: content.innerText, html: content.innerHTML }});
             });
             
             var message = function (event){
@@ -367,7 +367,7 @@ const HTML = `
                 clearTimeout(_handleCTime);
                 _handleCTime = setTimeout(function(){
                     var data = { content: Actions.content.getHtml() };
-                    postAction({type: 'CONTENT_CHANGE', data });
+                    //postAction({type: 'CONTENT_CHANGE', data });
                 }, 50);
             }
         })

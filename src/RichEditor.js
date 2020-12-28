@@ -135,7 +135,7 @@ export default class RichTextEditor extends Component {
           const { onActivateTagging, onChange } = this.props;
           const { taggingActive, tagText } = this.state;
 
-          onChange && onChange(message.data.content);
+          onChange && onChange(message.data.html);
 
           if (!PlatformIOS) {
             const contentLastWord = message.data.content.split('\n').pop().split(/(\s+)/).pop();
