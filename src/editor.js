@@ -145,11 +145,9 @@ function createHTML(options = {}) {
 
         var _checkboxFlag = 0;
         function cancelCheckboxList(box){
-             _checkboxFlag = 2;
+            _checkboxFlag = 2;
             exec("insertUnorderedList");
-            var selection = window.getSelection();
-            selection.selectAllChildren(box);
-            selection.collapseToEnd();
+            setCollapse(box);
         }
 
         function createCheckbox(end){
@@ -256,6 +254,7 @@ function createHTML(options = {}) {
                 }
             },
             checkboxList: {
+                state: function(){return checkboxNode(anchorNode)},
                 result: function() {
                     var pNode;
                     if (anchorNode){
@@ -338,7 +337,6 @@ function createHTML(options = {}) {
                 } else if (content.innerHTML === '<br>') content.innerHTML = '';
 
                 saveSelection();
-                console.log(anchorNode)
                 var node = anchorNode;
 
                 if (_keyDown){
@@ -352,9 +350,13 @@ function createHTML(options = {}) {
                     } else if(_checkboxFlag === 2){
                         _checkboxFlag = 0;
                         var lastNode = node;
+                        var sp = createElement(editor.paragraphSeparator);
+                        var br = createElement('br');
+                        sp.appendChild(br);
+
                         setTimeout(function (){
-                            node.parentNode.removeChild(node);
-                            console.log(getCheckbox(node), "remove", node)
+                            node.parentNode.replaceChild(sp, node);
+                            setCollapse(sp);
                         });
                     }
                 }
@@ -408,12 +410,13 @@ function createHTML(options = {}) {
             function handleKeydown(event){
                 _keyDown = true;
                 if (event.key === 'Enter'){
+                    var box;
                     if (queryCommandValue(formatBlock) === 'blockquote'){
                         console.log('delete?: Enter -> blockquote')
                         formatParagraph(true);
-                    }
-                    var box;
-                    if (queryCommandState('insertUnorderedList') && !!(box = checkboxNode(anchorNode))){
+                    } else  if (anchorNode.innerHTML === '<br>' && anchorNode.parentNode !== editor.content){
+                        // setCollapse(editor.content);
+                    } else if (queryCommandState('insertUnorderedList') && !!(box = checkboxNode(anchorNode))){
                         var node = anchorNode && anchorNode.childNodes[1];
                         if (node && node.nodeName === 'BR'){
                             cancelCheckboxList(box.parentNode);
