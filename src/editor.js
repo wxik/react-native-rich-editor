@@ -97,9 +97,12 @@ function createHTML(options = {}) {
             editor.content.contentEditable === 'true' && _postMessage(data);
         };
 
+        var _log = console.log;
         exports.isRN && (
             console.log = function (){
-                __DEV__ && postAction({type: 'LOG', data: Array.prototype.slice.call(arguments)});
+                var data = Array.prototype.slice.call(arguments);
+                __DEV__ && _log.apply(null, data);
+                __DEV__ && postAction({type: 'LOG', data});
             }
         )
 
@@ -171,7 +174,6 @@ function createHTML(options = {}) {
             anchorOffset = sel.anchorOffset;
             focusNode = sel.focusNode;
             focusOffset = sel.focusOffset;
-            console.log(anchorNode)
         }
 
         function focusCurrent(){
@@ -190,6 +192,31 @@ function createHTML(options = {}) {
                 }
             } catch(e){
                 console.log(e)
+            }
+        }
+
+        var _keyDown = false;
+        function handleChange (event){
+            var node = anchorNode;
+            if (_keyDown){
+                if(_checkboxFlag === 1 && checkboxNode(node)){
+                    _checkboxFlag = 0;
+                    var sib = node.previousSibling;
+                    if (!sib || sib.childNodes.length > 1){
+                        exec('insertHTML', createCheckbox(node.nodeType !== Node.TEXT_NODE))
+                        setCollapse(node);
+                    }
+                } else if(_checkboxFlag === 2){
+                    _checkboxFlag = 0;
+                    var sp = createElement(editor.paragraphSeparator);
+                    var br = createElement('br');
+                    sp.appendChild(br);
+                    console.log('remove,', node)
+                    setTimeout(function (){
+                        node.parentNode.replaceChild(sp, node);
+                        setCollapse(sp);
+                    });
+                }
             }
         }
 
@@ -319,7 +346,6 @@ function createHTML(options = {}) {
         };
 
         var init = function init(settings) {
-            var _keyDown = false;
 
             var paragraphSeparator = settings[defaultParagraphSeparatorString];
             var content = settings.element.content = createElement('div');
@@ -337,30 +363,7 @@ function createHTML(options = {}) {
                 } else if (content.innerHTML === '<br>') content.innerHTML = '';
 
                 saveSelection();
-                var node = anchorNode;
-
-                if (_keyDown){
-                    if(_checkboxFlag === 1 && checkboxNode(node)){
-                        _checkboxFlag = 0;
-                        var sib = node.previousSibling;
-                        if (!sib || sib.childNodes.length > 1){
-                            exec('insertHTML', createCheckbox(node.nodeType !== Node.TEXT_NODE))
-                            setCollapse(node);
-                        }
-                    } else if(_checkboxFlag === 2){
-                        _checkboxFlag = 0;
-                        var lastNode = node;
-                        var sp = createElement(editor.paragraphSeparator);
-                        var br = createElement('br');
-                        sp.appendChild(br);
-
-                        setTimeout(function (){
-                            node.parentNode.replaceChild(sp, node);
-                            setCollapse(sp);
-                        });
-                    }
-                }
-
+                handleChange(_ref);
                 settings.onChange();
             };
             appendChild(settings.element, content);
