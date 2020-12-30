@@ -32,8 +32,8 @@ function createHTML(options = {}) {
         table td {width: inherit;}
         table span { font-size: 12px !important; }
         .x-todo li {list-style:none;}
-        .x-todo li span:nth-child(1) {position: relative; left: -24px;}
-        .x-todo li span:nth-child(1) input{ position: absolute;}
+        .x-todo-box {position: relative; left: -24px;}
+        .x-todo-box input{position: absolute;}
         ${cssText}
     </style>
     <style>
@@ -107,19 +107,29 @@ function createHTML(options = {}) {
             (async ? asyncExec: exec)(formatBlock, '<' + editor.paragraphSeparator + '>' );
         }
 
-        function checkboxNode(node){
+        function getNodeByClass(node, className){
             if (node){
-                if ((node.nodeType === Node.ELEMENT_NODE && node.classList.contains('x-todo'))){
+                if ((node.nodeType === Node.ELEMENT_NODE && node.classList.contains(className))){
                     return node;
                 } else {
-                    return checkboxNode(node.parentNode);
+                    return getNodeByClass(node.parentNode, className);
                 }
             }
             return node;
         }
 
+        function setCollapse(node){
+            var selection = window.getSelection();
+            selection.selectAllChildren(node);
+            selection.collapseToEnd();
+        }
+
+        function checkboxNode(node){
+            return getNodeByClass(node, 'x-todo');
+        }
+
         function execCheckboxList (node, html){
-            html = html + (node ? node.innerHTML: '');
+            var html = createCheckbox(node ? node.innerHTML: '');
             var HTML = "<ul class='x-todo'><li>"+ html +"</div></div>"
 
             if (node){
@@ -129,28 +139,41 @@ function createHTML(options = {}) {
             }
 
             setTimeout(function (){
-                var selection = window.getSelection();
-                selection.selectAllChildren(node || editor.content);
-                selection.collapseToEnd();
+                setCollapse(node || editor.content);
             });
         }
 
+        var _checkboxFlag = 0;
         function cancelCheckboxList(box){
+             _checkboxFlag = 2;
             exec("insertUnorderedList");
             var selection = window.getSelection();
             selection.selectAllChildren(box);
             selection.collapseToEnd();
         }
 
-        function createCheckbox(){
-            return '<span contenteditable="false"><input type="checkbox"></span><br/>';
+        function createCheckbox(end){
+            var html = '<span contenteditable="false" class="x-todo-box"><input type="checkbox"></span>';
+            if (end && typeof end !== 'boolean'){
+                html += end;
+            } else if(end !== false){
+                html += "<br/>"
+            }
+            return html;
         }
 
-        var anchorNode = void 0, focusNode = void 0, _focusCollapse = false;
+        function getCheckbox (node){
+            return getNodeByClass(node, "x-todo-box");
+        }
+
+        var anchorNode, focusNode, anchorOffset, focusOffset, _focusCollapse = false;
         function saveSelection(){
             var sel = window.getSelection();
             anchorNode = sel.anchorNode;
             anchorOffset = sel.anchorOffset;
+            focusNode = sel.focusNode;
+            focusOffset = sel.focusOffset;
+            console.log(anchorNode)
         }
 
         function focusCurrent(){
@@ -247,7 +270,7 @@ function createHTML(options = {}) {
                     if (!!box){
                         cancelCheckboxList(box.parentNode);
                     } else {
-                        execCheckboxList(pNode, createCheckbox());
+                        execCheckboxList(pNode);
                     }
                 }
             },
@@ -315,20 +338,24 @@ function createHTML(options = {}) {
                 } else if (content.innerHTML === '<br>') content.innerHTML = '';
 
                 saveSelection();
+                console.log(anchorNode)
                 var node = anchorNode;
 
                 if (_keyDown){
-                    if(node.innerHTML === '<br>'){
-                        if (checkboxNode(node)){
-                            var sib = node.previousSibling;
-                            if (!sib || sib.childNodes.length > 1){
-                                asyncExec('insertHTML', createCheckbox())
-                            }
+                    if(_checkboxFlag === 1 && checkboxNode(node)){
+                        _checkboxFlag = 0;
+                        var sib = node.previousSibling;
+                        if (!sib || sib.childNodes.length > 1){
+                            exec('insertHTML', createCheckbox(node.nodeType !== Node.TEXT_NODE))
+                            setCollapse(node);
                         }
-                    } else if (node.tagName === 'SPAN' && node.childNodes[0] && node.childNodes[0].tagName === 'INPUT'){
-                         // setTimeout(function () {
-                         //     node.parentNode.removeChild(node);
-                         // });
+                    } else if(_checkboxFlag === 2){
+                        _checkboxFlag = 0;
+                        var lastNode = node;
+                        setTimeout(function (){
+                            node.parentNode.removeChild(node);
+                            console.log(getCheckbox(node), "remove", node)
+                        });
                     }
                 }
 
@@ -385,11 +412,13 @@ function createHTML(options = {}) {
                         console.log('delete?: Enter -> blockquote')
                         formatParagraph(true);
                     }
-                    var box = checkboxNode(anchorNode);
-                    if (!!box){
+                    var box;
+                    if (queryCommandState('insertUnorderedList') && !!(box = checkboxNode(anchorNode))){
                         var node = anchorNode && anchorNode.childNodes[1];
                         if (node && node.nodeName === 'BR'){
-                           cancelCheckboxList(box.parentNode);
+                            cancelCheckboxList(box.parentNode);
+                        } else{
+                            _checkboxFlag = 1;
                         }
                     }
                 }
