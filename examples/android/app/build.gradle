@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.examples"
+        applicationId "com.wxik.rn.rich.test"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

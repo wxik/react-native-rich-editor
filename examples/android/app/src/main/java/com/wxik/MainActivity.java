@@ -1,4 +1,4 @@
-package com.examples;
+package com.wxik;
 
 import com.facebook.react.ReactActivity;
 

@@ -453,7 +453,7 @@ function createHTML(options = {}) {
                     // cancel paste
                     e.preventDefault();
                     // insert text manually
-                    document.execCommand("insertHTML", false, text);
+                    exec(insertHTML, text);
                 }
             });
 
