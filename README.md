@@ -188,7 +188,8 @@ Other props supported by the `RichToolbar` component are:
 ### Example Usage:
 
 ```javascript
-<RichToolbar getEditor={() => this.richtext}/>
+const richText = React.createRef() || useRef();
+<RichToolbar editor={that.richText}/>
 ```
 
 #### With Custom Action:
@@ -201,7 +202,7 @@ To define your own custom action:
 
 ```javascript
 <RichToolbar
-	getEditor={() => this.richtext}
+    editor={that.richText}
 	actions={[
 		actions.setBold,
 		actions.setItalic,
