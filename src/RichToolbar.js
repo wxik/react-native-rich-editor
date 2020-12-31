@@ -13,21 +13,21 @@ export const defaultActions = [
 
 function getDefaultIcon({iconType}) {
     const texts = {};
-    // old icons styles
-    if (iconType === 'v1') {
-        texts[actions.insertImage] = require('../img/icon_format_media.png');
-        texts[actions.setBold] = require('../img/icon_format_bold.png');
-        texts[actions.setItalic] = require('../img/icon_format_italic.png');
-        texts[actions.insertBulletsList] = require('../img/icon_format_ul.png');
-        texts[actions.insertOrderedList] = require('../img/icon_format_ol.png');
-        texts[actions.insertLink] = require('../img/icon_format_link.png');
-    } else {
+    // new icon styles of experiment
+    if (iconType === 'v2') {
         texts[actions.insertImage] = require('../img/image.png');
         texts[actions.setBold] = require('../img/bold.png');
         texts[actions.setItalic] = require('../img/italic.png');
         texts[actions.insertBulletsList] = require('../img/bullets_list.png');
         texts[actions.insertOrderedList] = require('../img/ordered_list.png');
         texts[actions.insertLink] = require('../img/link.png');
+    } else {
+        texts[actions.insertImage] = require('../img/icon_format_media.png');
+        texts[actions.setBold] = require('../img/icon_format_bold.png');
+        texts[actions.setItalic] = require('../img/icon_format_italic.png');
+        texts[actions.insertBulletsList] = require('../img/icon_format_ul.png');
+        texts[actions.insertOrderedList] = require('../img/icon_format_ol.png');
+        texts[actions.insertLink] = require('../img/icon_format_link.png');
     }
     texts[actions.setStrikethrough] = require('../img/strikethrough.png');
     texts[actions.setUnderline] = require('../img/underline.png');
@@ -35,6 +35,7 @@ function getDefaultIcon({iconType}) {
     texts[actions.removeFormat] = require('../img/remove_forma.png');
     texts[actions.undo] = require('../img/undo.png');
     texts[actions.redo] = require('../img/redo.png');
+    texts[actions.checkboxList] = require('../img/checkbox.png');
     return texts;
 }
 

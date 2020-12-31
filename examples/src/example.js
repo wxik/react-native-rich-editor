@@ -47,7 +47,6 @@ const initHTML = `<br/>
 const phizIcon = require('./assets/phiz.png');
 const htmlIcon = require('./assets/h5.png');
 const keyboardIcon = require('./assets/keyboard.png');
-const bulletIcon = require('./assets/bullet.png');
 
 class Example extends React.Component {
     richText = React.createRef();
@@ -267,51 +266,6 @@ class Example extends React.Component {
         const {backgroundColor, color, placeholderColor} = contentStyle;
         const themeBg = {backgroundColor};
 
-        const ToolBar = (
-            <RichToolbar
-                style={[styles.richBar, themeBg]}
-                flatContainerStyle={styles.flatStyle}
-                editor={that.richText}
-                disabled={disabled}
-                iconTint={color}
-                selectedIconTint={'#2095F2'}
-                disabledIconTint={'#8b8b8b'}
-                onPressAddImage={that.onPressAddImage}
-                onInsertLink={that.onInsertLink}
-                iconSize={35} // default 50
-                actions={[
-                    actions.insertVideo,
-                    // ...defaultActions,
-                    actions.insertImage,
-                    actions.setBold,
-                    actions.setItalic,
-                    actions.setStrikethrough,
-                    actions.setUnderline,
-                    actions.insertBulletsList,
-                    actions.insertOrderedList,
-                    actions.insertLink,
-                    actions.removeFormat,
-                    actions.undo,
-                    actions.redo,
-
-                    actions.checkboxList,
-                    actions.heading1,
-                    actions.heading4,
-                    'insertEmoji',
-                    'insertHTML',
-                ]} // default defaultActions
-                iconMap={{
-                    insertEmoji: phizIcon,
-                    [actions.checkboxList]: bulletIcon,
-                    [actions.heading1]: ({tintColor}) => <Text style={[styles.tib, {color: tintColor}]}>H1</Text>,
-                    [actions.heading4]: ({tintColor}) => <Text style={[styles.tib, {color: tintColor}]}>H3</Text>,
-                    insertHTML: htmlIcon,
-                }}
-                insertEmoji={that.handleEmoji}
-                insertHTML={that.insertHTML}
-                insertVideo={that.insertVideo}
-            />
-        );
         return (
             <SafeAreaView style={[styles.container, themeBg]}>
                 <StatusBar barStyle={theme !== 'dark' ? 'dark-content' : 'light-content'} />
@@ -349,7 +303,19 @@ class Example extends React.Component {
                             <Button title={disabled ? 'enable' : 'disable'} onPress={that.onDisabled} />
                         </View>
                     </View>
-                    {ToolBar}
+                    <RichToolbar
+                        style={[styles.richBar, themeBg]}
+                        flatContainerStyle={styles.flatStyle}
+                        editor={that.richText}
+                        disabled={disabled}
+                        iconTint={color}
+                        selectedIconTint={'#2095F2'}
+                        disabledIconTint={'#8b8b8b'}
+                        onPressAddImage={that.onPressAddImage}
+                        onInsertLink={that.onInsertLink}
+                        iconSize={35} // default 50
+                        iconType={'v2'}
+                    />
                     <RichEditor
                         // initialFocus={true}
                         disabled={disabled}
@@ -378,7 +344,46 @@ class Example extends React.Component {
                     <KeyboardSpacer />
                 </View>
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-                    {ToolBar}
+                    <RichToolbar
+                        style={[styles.richBar, themeBg]}
+                        flatContainerStyle={styles.flatStyle}
+                        editor={that.richText}
+                        disabled={disabled}
+                        iconTint={color}
+                        selectedIconTint={'#2095F2'}
+                        disabledIconTint={'#8b8b8b'}
+                        onPressAddImage={that.onPressAddImage}
+                        onInsertLink={that.onInsertLink}
+                        iconSize={35} // default 50
+                        iconType={'v2'}
+                        actions={[
+                            actions.insertVideo,
+                            actions.setStrikethrough,
+                            actions.setUnderline,
+                            actions.checkboxList,
+                            actions.removeFormat,
+                            actions.undo,
+                            actions.redo,
+
+                            actions.heading1,
+                            actions.heading4,
+                            'insertEmoji',
+                            'insertHTML',
+                        ]} // default defaultActions
+                        iconMap={{
+                            insertEmoji: phizIcon,
+                            [actions.heading1]: ({tintColor}) => (
+                                <Text style={[styles.tib, {color: tintColor}]}>H1</Text>
+                            ),
+                            [actions.heading4]: ({tintColor}) => (
+                                <Text style={[styles.tib, {color: tintColor}]}>H3</Text>
+                            ),
+                            insertHTML: htmlIcon,
+                        }}
+                        insertEmoji={that.handleEmoji}
+                        insertHTML={that.insertHTML}
+                        insertVideo={that.insertVideo}
+                    />
                     {emojiVisible && <EmojiView onSelect={that.insertEmoji} />}
                 </KeyboardAvoidingView>
             </SafeAreaView>

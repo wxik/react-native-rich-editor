@@ -1,8 +1,8 @@
 
 #1.6.0
 ### Added
-- New toolbar icon, you need to set `iconType={'v1'}` to continue using the old icon
 - New props `redo`, `undo` on editor
+- New props `checkbox list` on editor by `experiment`
 
 Changed
 - toolbar can now be rendered in front of the editor

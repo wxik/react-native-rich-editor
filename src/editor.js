@@ -239,8 +239,16 @@ function createHTML(options = {}) {
             paragraph: { result: function() { return exec(formatBlock, '<p>'); }},
             quote: { result: function() { return exec(formatBlock, '<blockquote>'); }},
             removeFormat: { result: function() { return exec('removeFormat'); }},
-            orderedList: { state: function() { return queryCommandState('insertOrderedList'); }, result: function() { return exec('insertOrderedList'); }},
-            unorderedList: { state: function() { return queryCommandState('insertUnorderedList'); },result: function() { return exec('insertUnorderedList'); }},
+            orderedList: {
+                state: function() { return queryCommandState('insertOrderedList'); },
+                result: function() { if (!!checkboxNode(window.getSelection().anchorNode)) return;return exec('insertOrderedList'); }
+            },
+            unorderedList: {
+                state: function() {
+                    return !checkboxNode(window.getSelection().anchorNode) && queryCommandState('insertUnorderedList');
+                },
+                result: function() { if (!!checkboxNode(window.getSelection().anchorNode)) return; return exec('insertUnorderedList');}
+            },
             code: { result: function() { return exec(formatBlock, '<pre>'); }},
             line: { result: function() { return exec('insertHorizontalRule'); }},
             redo: { result: function() { return exec('redo'); }},
@@ -286,8 +294,9 @@ function createHTML(options = {}) {
                 }
             },
             checkboxList: {
-                state: function(){return checkboxNode(anchorNode)},
+                state: function(){return checkboxNode(window.getSelection().anchorNode)},
                 result: function() {
+                    if (queryCommandState('insertOrderedList')) return;
                     var pNode;
                     if (anchorNode){
                         pNode = anchorNode.parentNode;
@@ -301,7 +310,7 @@ function createHTML(options = {}) {
                     if (!!box){
                         cancelCheckboxList(box.parentNode);
                     } else {
-                        execCheckboxList(pNode);
+                        !queryCommandState('insertUnorderedList') && execCheckboxList(pNode);
                     }
                 }
             },
