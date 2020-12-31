@@ -1,3 +1,18 @@
+function getContentCSS() {
+    return `
+    <style>
+        video {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
+        img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
+        table {width: 100% !important;}
+        table td {width: inherit;}
+        table span { font-size: 12px !important; }
+        .x-todo li {list-style:none;}
+        .x-todo-box {position: relative; left: -24px;}
+        .x-todo-box input{position: absolute;}
+    </style>
+    `;
+}
+
 function createHTML(options = {}) {
     const {
         backgroundColor = '#FFF',
@@ -21,25 +36,18 @@ function createHTML(options = {}) {
 <head>
     <meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
     <style>
-        * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;}
+        * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;box-sizing: border-box;}
         html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em;}
         body { overflow-y: hidden; -webkit-overflow-scrolling: touch;height: 100%;background-color: ${backgroundColor};}
-        img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
-        video {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
         .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;height: 100%;-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
         .pell { height: 100%;} .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
-        table {width: 100% !important;}
-        table td {width: inherit;}
-        table span { font-size: 12px !important; }
-        .x-todo li {list-style:none;}
-        .x-todo-box {position: relative; left: -24px;}
-        .x-todo-box input{position: absolute;}
-        ${cssText}
     </style>
     <style>
         [placeholder]:empty:before { content: attr(placeholder); color: ${placeholderColor};}
         [placeholder]:empty:focus:before { content: attr(placeholder);color: ${placeholderColor};}
     </style>
+    ${getContentCSS()}
+    <style>${cssText}</style>
 </head>
 <body>
 <div class="content"><div id="editor" class="pell"></div></div>
@@ -131,7 +139,7 @@ function createHTML(options = {}) {
 
         function execCheckboxList (node, html){
             var html = createCheckbox(node ? node.innerHTML: '');
-            var HTML = "<ul class='x-todo'><li>"+ html +"</div></div>"
+            var HTML = "<ol class='x-todo'><li>"+ html +"</li></ol>"
             var foNode;
             if (node){
                 node.innerHTML = HTML;
@@ -148,7 +156,7 @@ function createHTML(options = {}) {
         var _checkboxFlag = 0; // 1 = add checkbox; 2 = cancel checkbox
         function cancelCheckboxList(box){
             _checkboxFlag = 2;
-            exec("insertUnorderedList");
+            exec("insertOrderedList");
             setCollapse(box);
         }
 
@@ -240,13 +248,11 @@ function createHTML(options = {}) {
             quote: { result: function() { return exec(formatBlock, '<blockquote>'); }},
             removeFormat: { result: function() { return exec('removeFormat'); }},
             orderedList: {
-                state: function() { return queryCommandState('insertOrderedList'); },
+                state: function() { return !checkboxNode(window.getSelection().anchorNode) && queryCommandState('insertOrderedList'); },
                 result: function() { if (!!checkboxNode(window.getSelection().anchorNode)) return;return exec('insertOrderedList'); }
             },
             unorderedList: {
-                state: function() {
-                    return !checkboxNode(window.getSelection().anchorNode) && queryCommandState('insertUnorderedList');
-                },
+                state: function() { return queryCommandState('insertUnorderedList');},
                 result: function() { if (!!checkboxNode(window.getSelection().anchorNode)) return; return exec('insertUnorderedList');}
             },
             code: { result: function() { return exec(formatBlock, '<pre>'); }},
@@ -310,7 +316,7 @@ function createHTML(options = {}) {
                     if (!!box){
                         cancelCheckboxList(box.parentNode);
                     } else {
-                        !queryCommandState('insertUnorderedList') && execCheckboxList(pNode);
+                        !queryCommandState('insertOrderedList') && execCheckboxList(pNode);
                     }
                 }
             },
@@ -433,7 +439,7 @@ function createHTML(options = {}) {
                         formatParagraph(true);
                     } else  if (anchorNode.innerHTML === '<br>' && anchorNode.parentNode !== editor.content){
                         // setCollapse(editor.content);
-                    } else if (queryCommandState('insertUnorderedList') && !!(box = checkboxNode(anchorNode))){
+                    } else if (queryCommandState('insertOrderedList') && !!(box = checkboxNode(anchorNode))){
                         var node = anchorNode && anchorNode.childNodes[1];
                         if (node && node.nodeName === 'BR'){
                             cancelCheckboxList(box.parentNode);
@@ -504,7 +510,8 @@ function createHTML(options = {}) {
             onChange: function (){
                 clearTimeout(_handleCTime);
                 _handleCTime = setTimeout(function(){
-                    postAction({type: 'CONTENT_CHANGE', data: Actions.content.getHtml()});
+                    var html = Actions.content.getHtml();
+                    postAction({type: 'CONTENT_CHANGE', data: html});
                 }, 50);
             }
         })
@@ -529,4 +536,4 @@ function createHTML(options = {}) {
 }
 
 const HTML = createHTML();
-export {HTML, createHTML};
+export {HTML, createHTML, getContentCSS};

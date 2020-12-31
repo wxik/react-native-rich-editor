@@ -22,7 +22,7 @@ import {
 } from 'react-native';
 import {getBottomSpace} from 'react-native-iphone-x-helper';
 import KeyboardSpacer from './helper/KeyboardSpacer';
-import {actions, defaultActions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
+import {actions, RichEditor, RichToolbar, getContentCSS} from 'react-native-pell-rich-editor';
 import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
 
@@ -57,6 +57,7 @@ class Example extends React.Component {
         const that = this;
         const theme = props.theme || Appearance.getColorScheme();
         const contentStyle = that.createContentStyle(theme);
+        that.richHTML = '';
         that.state = {theme: theme, contentStyle, emojiVisible: false, disabled: false};
         that.editorFocus = false;
         that.onHome = ::that.onHome;
@@ -114,7 +115,7 @@ class Example extends React.Component {
         // Get the data here and call the interface to save the data
         let html = await this.richText.current?.getContentHtml();
         // console.log(html);
-        alert(html);
+        this.props.navigation.push('preview', {html, css: getContentCSS()});
     }
 
     /**
@@ -122,7 +123,7 @@ class Example extends React.Component {
      * @param {string} html
      */
     handleChange(html) {
-        // console.log('editor data:', html);
+        this.richHTML = html;
     }
 
     /**
@@ -278,7 +279,7 @@ class Example extends React.Component {
                 />
                 <View style={styles.nav}>
                     <Button title={'HOME'} onPress={that.onHome} />
-                    <Button title="Save" onPress={that.save} />
+                    <Button title="Preview" onPress={that.save} />
                 </View>
                 <ScrollView style={[styles.scroll, themeBg]} keyboardDismissMode={'none'}>
                     <View>
