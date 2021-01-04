@@ -432,6 +432,7 @@ function createHTML(options = {}) {
             }
             function handleKeydown(event){
                 _keyDown = true;
+                 handleState();
                 if (event.key === 'Enter'){
                     var box;
                     if (queryCommandValue(formatBlock) === 'blockquote'){
