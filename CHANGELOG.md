@@ -1,4 +1,8 @@
 
+#1.6.1
+### Fix
+- Fix Set the checkbox selected state to the value set by the user
+
 #1.6.0
 ### Added
 - New props `redo`, `undo` on editor

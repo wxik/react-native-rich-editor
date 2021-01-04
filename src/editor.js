@@ -459,10 +459,19 @@ function createHTML(options = {}) {
                 postAction({type: 'SELECTION_CHANGE', data: []});
                 postAction({type: 'CONTENT_BLUR'});
             }
+            function handleClick(event){
+                var ele = event.target;
+                if (ele.nodeName === 'INPUT' && ele.type === 'checkbox'){
+                    // Set whether the checkbox is selected by default
+                    if (ele.checked) ele.setAttribute('checked', '');
+                    else ele.removeAttribute('checked');
+                }
+            }
             addEventListener(content, 'touchcancel', handleSelecting);
             addEventListener(content, 'mouseup', handleSelecting);
             addEventListener(content, 'touchend', handleSelecting);
             addEventListener(content, 'keyup', handleKeyup);
+            addEventListener(content, 'click', handleClick);
             addEventListener(content, 'keydown', handleKeydown);
             addEventListener(content, 'blur', handleBlur);
             addEventListener(content, 'focus', handleFocus);
