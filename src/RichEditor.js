@@ -105,22 +105,37 @@ export default class RichTextEditor extends Component {
           console.log("FROM EDIT:", ...message.data);
           break;
         case messages.SELECTION_CHANGE: {
+          const {onFocus} = this.props;
+
           const items = message.data;
           this.state.selectionChangeListeners.map(listener => {
             listener(items);
           });
+
+          onFocus && onFocus();
+          break;
+        }
+        case messages.CONTENT_BLUR: {
+          const {onBlur} = this.props;
+          
+          onBlur && onBlur();
           break;
         }
         case messages.CONTENT_FOCUSED: {
+          const {onFocus} = this.props;
           this.focusListeners.map(da => da());
+
+          onFocus && onFocus();
           break;
         }
         case messages.OFFSET_HEIGHT:
           this.setWebHeight(message.data);
           break;
         case messages.CONTENT_CHANGE:
-          const { onActivateTagging } = this.props;
+          const { onActivateTagging, onChange } = this.props;
           const { taggingActive, tagText } = this.state;
+
+          onChange && onChange(message.data.html);
 
           if (!PlatformIOS) {
             const contentLastWord = message.data.content.split('\n').pop().split(/(\s+)/).pop();
@@ -328,7 +343,9 @@ export default class RichTextEditor extends Component {
     that.props.editorInitializedCallback &&
       that.props.editorInitializedCallback();
 
-    this.focusContentEditor();
+      if (!this.props.blurOnLoad) {
+        this.focusContentEditor();
+      }
 
     this.intervalHeight = setInterval(function() {
       that._sendAction(actions.updateHeight);
