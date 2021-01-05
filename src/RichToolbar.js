@@ -67,6 +67,7 @@ export default class RichToolbar extends Component {
     static defaultProps = {
         actions: defaultActions,
         disabled: false,
+        iconTint: '#71787F',
         iconSize: 20,
         iconGap: 12,
     };
@@ -222,6 +223,7 @@ export default class RichToolbar extends Component {
             : selected
             ? that.props.selectedIconTint
             : that.props.iconTint;
+        console.log('tintColor', tintColor);
         return (
             <TouchableOpacity
                 key={action}
@@ -235,7 +237,7 @@ export default class RichToolbar extends Component {
                         <Image
                             source={icon}
                             style={{
-                                tintColor: tintColor,
+                                tintColor,
                                 height: iconSize,
                                 width: iconSize,
                             }}
