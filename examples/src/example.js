@@ -180,7 +180,7 @@ class Example extends React.Component {
     createContentStyle(theme) {
         // Can be selected for more situations (cssText or contentCSSText).
         const contentStyle = {
-            backgroundColor: '#000033',
+            backgroundColor: '#2e3847',
             color: '#fff',
             placeholderColor: 'gray',
             // cssText: '#editor {background-color: #f3f3f3}', // initial valid
@@ -251,10 +251,10 @@ class Example extends React.Component {
         let that = this;
         const {contentStyle, theme, emojiVisible, disabled} = that.state;
         const {backgroundColor, color, placeholderColor} = contentStyle;
-        const themeBg = {backgroundColor};
+        const dark = theme === 'dark';
 
         return (
-            <SafeAreaView style={[styles.container, themeBg]}>
+            <SafeAreaView style={[styles.container, dark && styles.darkBack]}>
                 <StatusBar barStyle={theme !== 'dark' ? 'dark-content' : 'light-content'} />
                 <InsertLinkModal
                     placeholderColor={placeholderColor}
@@ -267,8 +267,8 @@ class Example extends React.Component {
                     <Button title={'HOME'} onPress={that.onHome} />
                     <Button title="Preview" onPress={that.save} />
                 </View>
-                <ScrollView style={[styles.scroll, themeBg]} keyboardDismissMode={'none'}>
-                    <View>
+                <ScrollView style={[styles.scroll, dark && styles.scrollDark]} keyboardDismissMode={'none'}>
+                    <View style={[styles.topVi, dark && styles.darkBack]}>
                         <View style={styles.item}>
                             <Text style={{color}}>To: </Text>
                             <TextInput
@@ -293,13 +293,12 @@ class Example extends React.Component {
                         </View>
                     </View>
                     <RichToolbar
-                        style={[styles.richBar, themeBg]}
+                        style={[styles.richBar, dark && styles.richBarDark]}
                         flatContainerStyle={styles.flatStyle}
                         editor={that.richText}
                         disabled={disabled}
-                        iconTint={color}
                         selectedIconTint={'#2095F2'}
-                        disabledIconTint={'#8b8b8b'}
+                        disabledIconTint={'#bfbfbf'}
                         onPressAddImage={that.onPressAddImage}
                         onInsertLink={that.onInsertLink}
                     />
@@ -307,9 +306,8 @@ class Example extends React.Component {
                         // initialFocus={true}
                         disabled={disabled}
                         editorStyle={contentStyle} // default light style
-                        containerStyle={themeBg}
                         ref={that.richText}
-                        style={[styles.rich, themeBg]}
+                        style={styles.rich}
                         placeholder={'please input content'}
                         initialContentHTML={initHTML}
                         editorInitializedCallback={that.editorInitializedCallback}
@@ -326,13 +324,13 @@ class Example extends React.Component {
                 </ScrollView>
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                     <RichToolbar
-                        // style={[styles.richBar, themeBg]}
+                        style={[styles.richBar, dark && styles.richBarDark]}
                         flatContainerStyle={styles.flatStyle}
                         editor={that.richText}
                         disabled={disabled}
                         // iconTint={color}
                         selectedIconTint={'#2095F2'}
-                        disabledIconTint={'#8b8b8b'}
+                        disabledIconTint={'#bfbfbf'}
                         onPressAddImage={that.onPressAddImage}
                         onInsertLink={that.onInsertLink}
                         // iconSize={24}
@@ -380,7 +378,7 @@ class Example extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#efefef',
     },
     nav: {
         flexDirection: 'row',
@@ -391,12 +389,25 @@ const styles = StyleSheet.create({
         minHeight: 300,
         flex: 1,
     },
+    topVi: {
+        backgroundColor: '#fafafa',
+    },
     richBar: {
-        borderColor: '#e8e8e8',
+        borderColor: '#efefef',
         borderTopWidth: StyleSheet.hairlineWidth,
+    },
+    richBarDark: {
+        backgroundColor: '#191d20',
+        borderColor: '#696969',
     },
     scroll: {
         backgroundColor: '#ffffff',
+    },
+    scrollDark: {
+        backgroundColor: '#2e3847',
+    },
+    darkBack: {
+        backgroundColor: '#191d20',
     },
     item: {
         borderBottomWidth: StyleSheet.hairlineWidth,
