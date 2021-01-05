@@ -9,6 +9,9 @@ function getContentCSS() {
         .x-todo li {list-style:none;}
         .x-todo-box {position: relative; left: -24px;}
         .x-todo-box input{position: absolute;}
+        blockquote{border-left: 6px solid #ddd;padding: 5px 0 5px 10px;margin: 15px 0 15px 15px;}
+        hr{display: block;height: 0px; border: 0;border-top: 1px solid #ccc; margin: 15px 0; padding: 0;}
+        pre{padding: 10px 5px 10px 10px;margin: 15px 0;display: block;line-height: 18px;background: #F0F0F0;border-radius: 3px;font-size: 13px; font-family: 'monaco', 'Consolas', "Liberation Mono", Courier, monospace; white-space: pre; word-wrap: normal;overflow-x: auto;}
     </style>
     `;
 }
@@ -259,6 +262,13 @@ function createHTML(options = {}) {
             line: { result: function() { return exec('insertHorizontalRule'); }},
             redo: { result: function() { return exec('redo'); }},
             undo: { result: function() { return exec('undo'); }},
+            indent: { result: function() { return exec('indent'); }},
+            outdent: { result: function() { return exec('outdent'); }},
+            outdent: { result: function() { return exec('outdent'); }},
+            justifyCenter: {  state: function() { return queryCommandState('justifyCenter'); }, result: function() { return exec('justifyCenter'); }},
+            justifyLeft: { state: function() { return queryCommandState('justifyLeft'); }, result: function() { return exec('justifyLeft'); }},
+            justifyRight: { state: function() { return queryCommandState('justifyRight'); }, result: function() { return exec('justifyRight'); }},
+            justifyFull: { state: function() { return queryCommandState('justifyFull'); }, result: function() { return exec('justifyFull'); }},
             hiliteColor: {  state: function() { return queryCommandState('hiliteColor'); }, result: function(color) { return exec('hiliteColor', color); }},
             foreColor: { state: function() { return queryCommandState('foreColor'); }, result: function(color) { return exec('foreColor', color); }},
             link: {
@@ -349,6 +359,9 @@ function createHTML(options = {}) {
 
                 commandDOM: function (command){
                     try {new Function("$", command)(exports.document.querySelector.bind(exports.document))} catch(e){console.log(e.message)};
+                },
+                command: function (command){
+                    try {new Function("$", command)(exports.document)} catch(e){console.log(e.message)};
                 }
             },
 
@@ -437,7 +450,7 @@ function createHTML(options = {}) {
                     var box;
                     if (queryCommandValue(formatBlock) === 'blockquote'){
                         console.log('delete?: Enter -> blockquote')
-                        formatParagraph(true);
+                        // formatParagraph(true);
                     } else  if (anchorNode.innerHTML === '<br>' && anchorNode.parentNode !== editor.content){
                         // setCollapse(editor.content);
                     } else if (queryCommandState('insertOrderedList') && !!(box = checkboxNode(anchorNode))){

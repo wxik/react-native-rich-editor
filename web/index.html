@@ -14,7 +14,7 @@
             <feComposite in2="SourceAlpha" operator="atop"></feComposite>
         </filter>
         <filter id="tint-13">
-            <feFlood flood-color="#000033"></feFlood>
+            <feFlood flood-color="#72787e"></feFlood>
             <feComposite in2="SourceAlpha" operator="atop"></feComposite>
         </filter>
     </defs>
@@ -59,12 +59,18 @@
                  id="strikeThrough"/>
             <img class="icon" src="../img/underline@2x.png" onclick="editor.onToolbarClick(this.id)" id="underline"/>
             <span class="icon" onclick="editor.onToolbarClick(this.id)" id="heading1">H1</span>
-            <img class="icon" src="../img/bullets_list@2x.png" onclick="editor.onToolbarClick(this.id)"
+            <img class="icon" src="../img/ul@2x.png" onclick="editor.onToolbarClick(this.id)"
                  id="unorderedList"/>
-            <img class="icon" src="../img/ordered_list@2x.png" onclick="editor.onToolbarClick(this.id)"
+            <img class="icon" src="../img/ol@2x.png" onclick="editor.onToolbarClick(this.id)"
                  id="orderedList"/>
             <img class="icon" src="../img/checkbox@2x.png" onclick="editor.onToolbarClick(this.id)"
                  id="checkboxList"/>
+            <img class="icon" src="../img/code@2x.png" onclick="editor.onToolbarClick(this.id)"
+                 id="code"/>
+            <img class="icon" src="../img/blockquote@2x.png" onclick="editor.onToolbarClick(this.id)"
+                 id="quote"/>
+            <img class="icon" src="../img/line@2x.png" onclick="editor.onToolbarClick(this.id)"
+                 id="line"/>
             <img class="icon" src="../img/link@2x.png" onclick="editor.onToolbarClick(this.id)" id="link"/>
         </div>
         <div class="bottom">
@@ -144,7 +150,11 @@
                     case actions.insertBulletsList:
                     case actions.insertOrderedList:
                     case actions.checkboxList:
-                    case actions.setIndent:
+                    case actions.indent:
+                    case actions.outdent:
+                    case actions.code:
+                    case actions.line:
+                    case actions.blockquote:
                     case actions.setStrikethrough:
                     case actions.setUnderline:
                     case actions.removeFormat:

@@ -7,7 +7,6 @@ import React from 'react';
 import {
     Appearance,
     Button,
-    Image,
     Keyboard,
     KeyboardAvoidingView,
     Platform,
@@ -17,12 +16,9 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    TouchableOpacity,
     View,
 } from 'react-native';
-import {getBottomSpace} from 'react-native-iphone-x-helper';
-import KeyboardSpacer from './helper/KeyboardSpacer';
-import {actions, RichEditor, RichToolbar, getContentCSS} from 'react-native-pell-rich-editor';
+import {actions, getContentCSS, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
 
@@ -45,8 +41,7 @@ const initHTML = `<br/>
 `;
 
 const phizIcon = require('./assets/phiz.png');
-const htmlIcon = require('./assets/h5.png');
-const keyboardIcon = require('./assets/keyboard.png');
+const htmlIcon = require('./assets/html.png');
 
 class Example extends React.Component {
     richText = React.createRef();
@@ -252,15 +247,6 @@ class Example extends React.Component {
         this.editorFocus = false;
     };
 
-    handleKeyboard = () => {
-        const editor = this.richText.current;
-        if (editor.isKeyboardOpen) {
-            editor.dismissKeyboard();
-        } else {
-            editor.focusContentEditor();
-        }
-    };
-
     render() {
         let that = this;
         const {contentStyle, theme, emojiVisible, disabled} = that.state;
@@ -286,6 +272,7 @@ class Example extends React.Component {
                         <View style={styles.item}>
                             <Text style={{color}}>To: </Text>
                             <TextInput
+                                autoCorrect={false}
                                 style={[styles.input, {color}]}
                                 placeholderTextColor={placeholderColor}
                                 placeholder={'stulip@126.com'}
@@ -294,6 +281,7 @@ class Example extends React.Component {
                         <View style={styles.item}>
                             <Text style={{color}}>Subject: </Text>
                             <TextInput
+                                autoCorrect={false}
                                 style={[styles.input, {color}]}
                                 placeholderTextColor={placeholderColor}
                                 placeholder="Rich Editor Bug 😀"
@@ -314,8 +302,6 @@ class Example extends React.Component {
                         disabledIconTint={'#8b8b8b'}
                         onPressAddImage={that.onPressAddImage}
                         onInsertLink={that.onInsertLink}
-                        iconSize={35} // default 50
-                        iconType={'v2'}
                     />
                     <RichEditor
                         // initialFocus={true}
@@ -338,33 +324,32 @@ class Example extends React.Component {
                         pasteAsPlainText={true}
                     />
                 </ScrollView>
-                <View style={styles.Keyboard}>
-                    <TouchableOpacity onPress={that.handleKeyboard} style={{padding: 5}}>
-                        <Image source={keyboardIcon} />
-                    </TouchableOpacity>
-                    <KeyboardSpacer />
-                </View>
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                     <RichToolbar
-                        style={[styles.richBar, themeBg]}
+                        // style={[styles.richBar, themeBg]}
                         flatContainerStyle={styles.flatStyle}
                         editor={that.richText}
                         disabled={disabled}
-                        iconTint={color}
+                        // iconTint={color}
                         selectedIconTint={'#2095F2'}
                         disabledIconTint={'#8b8b8b'}
                         onPressAddImage={that.onPressAddImage}
                         onInsertLink={that.onInsertLink}
-                        iconSize={35} // default 50
-                        iconType={'v2'}
+                        // iconSize={24}
+                        // iconGap={10}
                         actions={[
-                            actions.insertVideo,
-                            actions.setStrikethrough,
-                            actions.setUnderline,
-                            actions.checkboxList,
-                            actions.removeFormat,
                             actions.undo,
                             actions.redo,
+                            actions.insertVideo,
+                            actions.setStrikethrough,
+                            actions.checkboxList,
+                            actions.insertOrderedList,
+                            actions.blockquote,
+                            actions.alignLeft,
+                            actions.alignCenter,
+                            actions.alignRight,
+                            actions.code,
+                            actions.line,
 
                             actions.heading1,
                             actions.heading4,
@@ -407,8 +392,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     richBar: {
-        height: 40,
-        backgroundColor: '#F5FCFF',
         borderColor: '#e8e8e8',
         borderTopWidth: StyleSheet.hairlineWidth,
     },
@@ -433,14 +416,6 @@ const styles = StyleSheet.create({
         color: '#515156',
     },
 
-    Keyboard: {
-        position: 'absolute',
-        bottom: 50 + getBottomSpace(),
-        right: 8,
-        alignSelf: 'flex-end',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     flatStyle: {
         paddingHorizontal: 12,
     },

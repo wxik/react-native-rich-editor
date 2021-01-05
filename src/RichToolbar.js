@@ -3,39 +3,45 @@ import {FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native'
 import {actions} from './const';
 
 export const defaultActions = [
+    actions.keyboard,
     actions.insertImage,
     actions.setBold,
     actions.setItalic,
+    actions.setUnderline,
+    actions.removeFormat,
     actions.insertBulletsList,
-    actions.insertOrderedList,
+    actions.indent,
+    actions.outdent,
     actions.insertLink,
 ];
 
-function getDefaultIcon({iconType}) {
+function getDefaultIcon() {
     const texts = {};
     // new icon styles of experiment
-    if (iconType === 'v2') {
-        texts[actions.insertImage] = require('../img/image.png');
-        texts[actions.setBold] = require('../img/bold.png');
-        texts[actions.setItalic] = require('../img/italic.png');
-        texts[actions.insertBulletsList] = require('../img/bullets_list.png');
-        texts[actions.insertOrderedList] = require('../img/ordered_list.png');
-        texts[actions.insertLink] = require('../img/link.png');
-    } else {
-        texts[actions.insertImage] = require('../img/icon_format_media.png');
-        texts[actions.setBold] = require('../img/icon_format_bold.png');
-        texts[actions.setItalic] = require('../img/icon_format_italic.png');
-        texts[actions.insertBulletsList] = require('../img/icon_format_ul.png');
-        texts[actions.insertOrderedList] = require('../img/icon_format_ol.png');
-        texts[actions.insertLink] = require('../img/icon_format_link.png');
-    }
+    texts[actions.insertImage] = require('../img/image.png');
+    texts[actions.keyboard] = require('../img/keyboard.png');
+    texts[actions.setBold] = require('../img/bold.png');
+    texts[actions.setItalic] = require('../img/italic.png');
+    texts[actions.insertBulletsList] = require('../img/ul.png');
+    texts[actions.insertOrderedList] = require('../img/ol.png');
+    texts[actions.insertLink] = require('../img/link.png');
     texts[actions.setStrikethrough] = require('../img/strikethrough.png');
     texts[actions.setUnderline] = require('../img/underline.png');
     texts[actions.insertVideo] = require('../img/video.png');
-    texts[actions.removeFormat] = require('../img/remove_forma.png');
+    texts[actions.removeFormat] = require('../img/remove_format.png');
     texts[actions.undo] = require('../img/undo.png');
     texts[actions.redo] = require('../img/redo.png');
     texts[actions.checkboxList] = require('../img/checkbox.png');
+    texts[actions.table] = require('../img/table.png');
+    texts[actions.code] = require('../img/code.png');
+    texts[actions.outdent] = require('../img/outdent.png');
+    texts[actions.indent] = require('../img/indent.png');
+    texts[actions.alignLeft] = require('../img/justify_left.png');
+    texts[actions.alignCenter] = require('../img/justify_center.png');
+    texts[actions.alignRight] = require('../img/justify_right.png');
+    texts[actions.alignFull] = require('../img/justify_full.png');
+    texts[actions.blockquote] = require('../img/blockquote.png');
+    texts[actions.line] = require('../img/line.png');
     return texts;
 }
 
@@ -47,6 +53,7 @@ export default class RichToolbar extends Component {
     //   onPressAddImage: PropTypes.func,
     //   onInsertLink: PropTypes.func,
     //   selectedButtonStyle: PropTypes.object,
+    //   itemStyle: PropTypes.object,
     //   iconTint: PropTypes.any,
     //   selectedIconTint: PropTypes.any,
     //   unselectedButtonStyle: PropTypes.object,
@@ -55,13 +62,13 @@ export default class RichToolbar extends Component {
     //   renderAction: PropTypes.func,
     //   iconMap: PropTypes.object,
     //   disabled: PropTypes.bool,
-    //   iconType: PropTypes.string,
     // };
 
     static defaultProps = {
         actions: defaultActions,
         disabled: false,
-        // iconType: 'v1',
+        iconSize: 20,
+        iconGap: 12,
     };
 
     constructor(props) {
@@ -78,6 +85,7 @@ export default class RichToolbar extends Component {
             nextProps.actions !== that.props.actions ||
             nextState.selectedItems !== that.state.selectedItems ||
             nextState.actions !== that.state.actions ||
+            nextState.data !== that.state.data ||
             nextState.style !== that.props.style
         );
     }
@@ -131,11 +139,21 @@ export default class RichToolbar extends Component {
     }
 
     _getButtonIcon(action) {
-        const {iconMap, iconType} = this.props;
+        const {iconMap} = this.props;
         if (iconMap && iconMap[action]) {
             return iconMap[action];
         } else {
-            return getDefaultIcon({iconType})[action];
+            return getDefaultIcon()[action];
+        }
+    }
+
+    handleKeyboard() {
+        const editor = this.editor;
+        if (!editor) return;
+        if (editor.isKeyboardOpen) {
+            editor.dismissKeyboard();
+        } else {
+            editor.focusContentEditor();
         }
     }
 
@@ -161,6 +179,9 @@ export default class RichToolbar extends Component {
             case actions.heading4:
             case actions.heading5:
             case actions.heading6:
+            case actions.code:
+            case actions.blockquote:
+            case actions.line:
             case actions.setParagraph:
             case actions.removeFormat:
             case actions.alignLeft:
@@ -171,8 +192,8 @@ export default class RichToolbar extends Component {
             case actions.setSuperscript:
             case actions.setStrikethrough:
             case actions.setHR:
-            case actions.setIndent:
-            case actions.setOutdent:
+            case actions.indent:
+            case actions.outdent:
                 editor.showAndroidKeyboard();
                 editor.sendAction(action, 'result');
                 break;
@@ -181,6 +202,9 @@ export default class RichToolbar extends Component {
                 break;
             case actions.insertVideo:
                 insertVideo && insertVideo();
+                break;
+            case actions.keyboard:
+                this.handleKeyboard();
                 break;
             default:
                 this.props[action] && this.props[action]();
@@ -191,7 +215,7 @@ export default class RichToolbar extends Component {
     _defaultRenderAction(action, selected) {
         let that = this;
         const icon = that._getButtonIcon(action);
-        const {iconSize = 50, disabled} = that.props;
+        const {iconSize, iconGap, disabled, itemStyle} = that.props;
         const style = selected ? that._getButtonSelectedStyle() : that._getButtonUnselectedStyle();
         const tintColor = disabled
             ? that.props.disabledIconTint
@@ -202,11 +226,11 @@ export default class RichToolbar extends Component {
             <TouchableOpacity
                 key={action}
                 disabled={disabled}
-                style={[{width: iconSize, justifyContent: 'center'}, style]}
+                style={[{width: iconGap + iconSize}, styles.item, itemStyle, style]}
                 onPress={() => that._onPress(action)}>
                 {icon ? (
                     typeof icon === 'function' ? (
-                        icon({selected, disabled, tintColor, iconSize})
+                        icon({selected, disabled, tintColor, iconSize, iconGap})
                     ) : (
                         <Image
                             source={icon}
@@ -251,8 +275,13 @@ export default class RichToolbar extends Component {
 
 const styles = StyleSheet.create({
     barContainer: {
-        height: 50,
-        backgroundColor: '#D3D3D3',
+        height: 40,
+        backgroundColor: '#efefef',
+        alignItems: 'center',
+    },
+
+    item: {
+        justifyContent: 'center',
         alignItems: 'center',
     },
 });

@@ -68,8 +68,15 @@ The editor component. Simply place this component in your view hierarchy to rece
     <img src="" onclick="_.sendEvent('ImgClick')" contenteditable="false"/>
     ```
 
+* `command`
+  Execute JS in the editor
+   ```
+    // $ = document
+    this.richText.current?.commandDOM('$.execCommand('insertHTML', false, "<br/>")');
+    ```
+
 * `commandDOM`
-   Manipulate the DOM in the editor
+  Manipulate the DOM in the editor
    ```
     // $ = document.querySelector
     this.richText.current?.commandDOM(`$('#title').style.color='${color}'`);
@@ -146,11 +153,20 @@ Other props supported by the `RichToolbar` component are:
 
 	An `array` of `actions` to be provided by this toolbar. The default actions are:
 	* `actions.insertImage`
-  	* `actions.setBold`
-  	* `actions.setItalic`
-  	* `actions.insertBulletsList`
-  	* `actions.insertOrderedList`
-  	* `actions.insertLink`
+    * `actions.setBold`
+    * `actions.setItalic`
+    * `actions.insertBulletsList`
+    * `actions.insertOrderedList`
+    * `actions.insertLink`
+    * `actions.keyboard`
+    * `actions.setStrikethrough`
+    * `actions.setUnderline`
+    * `actions.removeFormat`
+    * `actions.insertVideo`
+    * `actions.checkboxList`
+    * `actions.undo`
+    * `actions.redo`
+
 
 * `onPressAddImage`
     Functions called when the `addImage` actions are tapped.

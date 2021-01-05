@@ -367,6 +367,12 @@ export default class RichTextEditor extends Component {
         }
     }
 
+    command(command) {
+        if (command) {
+            this.sendAction(actions.content, 'command', command);
+        }
+    }
+
     dismissKeyboard() {
         this._focus ? this.blurContentEditor() : Keyboard.dismiss();
     }

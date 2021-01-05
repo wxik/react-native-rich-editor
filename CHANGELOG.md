@@ -1,5 +1,13 @@
 
-#1.6.1
+#1.6.2
+### Changed
+- new defaultActions `keyboard` `setStrikethrough` `setUnderline` `removeFormat`
+- new icon styles
+
+ ### Added
+- Add `command` method Execute JS in the editor
+- Add Tools `outdent` `outdent` `justifyCenter` `justifyLeft` `justifyRight`
+
 ### Fix
 - Fix Set the checkbox selected state to the value set by the user
 
