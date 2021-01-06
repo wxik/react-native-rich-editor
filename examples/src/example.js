@@ -339,6 +339,7 @@ class Example extends React.Component {
                             actions.undo,
                             actions.redo,
                             actions.insertVideo,
+                            actions.insertImage,
                             actions.setStrikethrough,
                             actions.checkboxList,
                             actions.insertOrderedList,

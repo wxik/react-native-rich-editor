@@ -4,7 +4,6 @@ import {actions} from './const';
 
 export const defaultActions = [
     actions.keyboard,
-    actions.insertImage,
     actions.setBold,
     actions.setItalic,
     actions.setUnderline,
@@ -276,7 +275,7 @@ export default class RichToolbar extends Component {
 
 const styles = StyleSheet.create({
     barContainer: {
-        height: 40,
+        height: 44,
         backgroundColor: '#efefef',
         alignItems: 'center',
     },
