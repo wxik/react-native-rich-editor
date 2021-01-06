@@ -69,7 +69,7 @@ export default class RichToolbar extends Component {
         disabled: false,
         iconTint: '#71787F',
         iconSize: 20,
-        iconGap: 12,
+        iconGap: 16,
     };
 
     constructor(props) {

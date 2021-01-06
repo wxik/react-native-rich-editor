@@ -81,7 +81,7 @@
 
 <script type="module">
     import {actions, messages} from '../src/const.js';
-    import {createHTML} from '../src/editor.js';
+    import {createHTML} from '../src';
 
     const HTML = createHTML({
         cssText: 'html {overflow-y: auto;}',
@@ -101,7 +101,10 @@
 `;
     const selectionChangeListeners = [];
     const webview = document.querySelector("#editor");
-    webview.srcdoc = HTML;
+    const childDoc = webview.contentWindow.document;
+    childDoc.open();
+    childDoc.write(HTML);
+    childDoc.close();
 
     // toolbar selected
     selectionChangeListeners.push(function (items) {
