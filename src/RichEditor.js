@@ -181,7 +181,7 @@ export default class RichTextEditor extends Component {
                 const text = contentLastWord.replace('#', '');
                 onActivateHashTagging?.(true, text);
                 this.setState({
-                  onActivateHashTagging: true,
+                  hashTaggingActive: true,
                   hashTagText: text,
                 });
               }
