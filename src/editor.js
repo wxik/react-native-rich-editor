@@ -200,7 +200,7 @@ const HTML = `
                             exec('delete');
                         }
                         
-                        exec('insertHTML', '#' + obj.hashtag);
+                        exec('insertHTML', obj.hashtag);
                     }
                 }
             },
