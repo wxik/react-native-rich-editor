@@ -193,6 +193,17 @@ const HTML = `
                     }
                 }
             },
+            hashtag: {
+                result: function(obj) {
+                    if (obj.hashtag) {
+                        for (i = 0; i <= obj.text.length; i++) {
+                            exec('delete');
+                        }
+                        
+                        exec('insertHTML', '#' + obj.hashtag);
+                    }
+                }
+            },
             audio: {
                 result: function(obj) {
                     if (obj.url) {

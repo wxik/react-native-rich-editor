@@ -36,7 +36,9 @@ export default class RichTextEditor extends Component {
       keyboardHeight: 0,
       height: 0,
       taggingActive: false,
+      hashTaggingActive: false,
       tagText: '',
+      hashTagText: '',
     };
     this.focusListeners = [];
   }
@@ -132,8 +134,8 @@ export default class RichTextEditor extends Component {
           this.setWebHeight(message.data);
           break;
         case messages.CONTENT_CHANGE:
-          const { onActivateTagging, onChange } = this.props;
-          const { taggingActive, tagText } = this.state;
+          const { onActivateTagging, onActivateHashTagging, onChange } = this.props;
+          const { taggingActive, hashTaggingActive, tagText, hashTagText } = this.state;
 
           onChange && onChange(message.data.html);
 
@@ -158,6 +160,29 @@ export default class RichTextEditor extends Component {
                 this.setState({
                   taggingActive: true,
                   tagText: text,
+                });
+              }
+            }
+
+            if (contentLastWord === '#') {
+              onActivateHashTagging?.(true, '');
+              this.setState({
+                hashTaggingActive: true,
+                hashTagText: '',
+              });
+            } else if (hashTaggingActive) {
+              if (!contentLastWord.includes('#')) {
+                onActivateHashTagging?.(false, '');
+                this.setState({
+                  hashTaggingActive: false,
+                  hashTagText: '',
+                });
+              } else {
+                const text = contentLastWord.replace('#', '');
+                onActivateHashTagging?.(true, text);
+                this.setState({
+                  onActivateHashTagging: true,
+                  hashTagText: text,
                 });
               }
             }
@@ -189,6 +214,30 @@ export default class RichTextEditor extends Component {
             this.setState({
               taggingActive,
               tagText: text,
+            });
+          }
+
+          if (lastChar !== '#' && message.data.key === '#') {
+            onActivateHashTagging && onActivateHashTagging(true, '');
+            this.setState({
+              hashTaggingActive: true,
+              hashTagText: '',
+            });
+          } else if (hashTaggingActive && message.data.keyCode === 13) {
+            // enter key, select first connection in list
+            const text =  hashTagText + '\n';
+            onActivateHashTagging && onActivateHashTagging(false, text, true);
+          } else if (onActivateHashTagging && message.data.key !== 'Shift' && message.data.keyCode !== 32) {
+            // if not space, continue with tagging
+            // if backspace, but not deleting @, continue with tagging
+            if ( message.data.keyCode !== 8 &&  message.data.key.length > 1) return;
+
+            const text = message.data.keyCode === 8 ? hashTagText.substr(0, hashTagText.length - 1) : hashTagText + message.data.key;
+            const hashtagActive = !(text.length === 0 && lastChar !== '#');
+            onActivateHashTagging && onActivateHashTagging(hashTaggingActive, text);
+            this.setState({
+              hashTaggingActive,
+              hashTagText: text,
             });
           }
           break;
@@ -308,6 +357,11 @@ export default class RichTextEditor extends Component {
 
   insertTag(attributes) {
     this._sendAction(actions.insertTag, "result", attributes);
+    this._sendAction(actions.updateHeight);
+  }
+
+  insertHashTag(attributes) {
+    this._sendAction(actions.insertHashTag, "result", attributes);
     this._sendAction(actions.updateHeight);
   }
 
