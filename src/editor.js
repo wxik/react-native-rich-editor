@@ -346,6 +346,11 @@ const HTML = `
                 }
                 postAction({type: 'CONTENT_CHANGE', data: { key: e.key, keyCode: e.keyCode, shiftKey: e.shiftKey, content: content.innerText, html: content.innerHTML }});
             });
+            addEventListener(content, 'paste', function (e) {
+                // get text representation of clipboard
+                var text = (e.originalEvent || e).clipboardData.getData('text/html');
+                postAction({type: 'CONTENT_PASTED', data: { text }});
+            });
             
             var message = function (event){
                 var msgData = JSON.parse(event.data), action = Actions[msgData.type];

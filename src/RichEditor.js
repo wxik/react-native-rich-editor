@@ -133,6 +133,10 @@ export default class RichTextEditor extends Component {
         case messages.OFFSET_HEIGHT:
           this.setWebHeight(message.data);
           break;
+        case messages.CONTENT_PASTED: {
+          this.props.onPaste && this.props.onPaste(message.data.text);
+          break;
+        }
         case messages.CONTENT_CHANGE:
           const { onActivateTagging, onActivateHashTagging, onChange } = this.props;
           const { taggingActive, hashTaggingActive, tagText, hashTagText } = this.state;
