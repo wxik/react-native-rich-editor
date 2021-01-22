@@ -260,6 +260,10 @@ export default class RichTextEditor extends Component {
     }
   };
 
+  replacePH = html => {
+    return html.replace('{PH}', this.props.placeholder || '');
+  };
+
   renderWebView = () => (
     <WebView
       useWebKit={true}
@@ -276,7 +280,7 @@ export default class RichTextEditor extends Component {
       domStorageEnabled={false}
       bounces={false}
       javaScriptEnabled={true}
-      source={{ html: HTML }}
+      source={{ html: this.replacePH(HTML) }}
       onLoad={() => this.init()}
     />
   );

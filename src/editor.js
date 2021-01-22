@@ -285,6 +285,7 @@ const HTML = `
             content.autocapitalize = 'off';
             content.autocorrect = 'off';
             content.autocomplete = 'off';
+            content.setAttribute('placeholder', '{PH}');
             content.className = "pell-content";
             content.oninput = function (_ref) {
                 var firstChild = _ref.target.firstChild;
