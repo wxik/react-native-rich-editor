@@ -36,6 +36,10 @@ const HTML = `
         span[data-name=poll] .chk {height: 20px; width: 20px;}
         span[data-name=poll] .option {border: 1px solid #eeeeee; border-radius: 4px; flex: 1; padding: 8px;}
         span[data-name=poll] .count {margin-left: 4px; padding-top: 8px; font-size:16px;}
+        div.pell-content[contentEditable="true"]:empty:before {
+            content: attr(placeholder);
+            color: #898c8b
+          }
     </style>
 </head>
 <body>
