@@ -41,6 +41,7 @@ function getDefaultIcon() {
     texts[actions.alignFull] = require('../img/justify_full.png');
     texts[actions.blockquote] = require('../img/blockquote.png');
     texts[actions.line] = require('../img/line.png');
+    texts[actions.fontSize] = require('../img/fontSize.png');
     return texts;
 }
 

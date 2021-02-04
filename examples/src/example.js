@@ -19,6 +19,7 @@ import {
     View,
 } from 'react-native';
 import {actions, getContentCSS, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
+import {XMath} from '@wxik/core';
 import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
 import {defaultActions} from '../../src';
@@ -37,9 +38,6 @@ const initHTML = `<br/>
 <a href="https://github.com/wxik/flutter-rich-editor">Flutter</a>
 </center>
 <br/>
-<div style="padding:10px 0;" contentEditable="false">
-<iframe  width="100%" height="220"  src="https://www.youtube.com/embed/6FrNXgXlCGA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
 <div><center><img src="${imageList[0]}" onclick="_.sendEvent('ImgClick')" contenteditable="false" height="170px"/></center></div>
 <div>
 <br/>Click the picture to switch<br/><br/>
@@ -155,9 +153,20 @@ class Example extends React.Component {
         );
     }
 
+    fontSize = () => {
+        // 1=  10px, 2 = 13px, 3 = 16px, 4 = 18px, 5 = 24px, 6 = 32px, 7 = 48px;
+        const size = [1, 2, 3, 4, 5, 6, 7];
+        this.richText.current?.setFontSize(size[XMath.random(size.length - 1)]);
+    };
+
     insertHTML() {
+        // this.richText.current?.insertHTML(
+        //     `<span onclick="alert(2)" style="color: blue; padding:0 10px;" contenteditable="false">HTML</span>`,
+        // );
         this.richText.current?.insertHTML(
-            `<span onclick="alert(2)" style="color: blue; padding:0 10px;" contenteditable="false">HTML</span>`,
+            `<div style="padding:10px 0;" contentEditable="false">
+                <iframe  width="100%" height="220"  src="https://www.youtube.com/embed/6FrNXgXlCGA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>`,
         );
     }
 
@@ -228,17 +237,13 @@ class Example extends React.Component {
         let index = 0;
         switch (type) {
             case 'ImgClick':
-                index = this.i_tempIndex || 1;
-                this.i_tempIndex = index + 1 >= imageList.length ? 0 : index + 1;
-                this.richText.current?.commandDOM(`$('#${id}').src="${imageList[index]}"`);
+                this.richText.current?.commandDOM(`$('#${id}').src="${imageList[XMath.random(imageList.length - 1)]}"`);
                 break;
             case 'TitleClick':
-                index = this._tempIndex || 0;
-                const color = ['red', 'blue', 'gray', 'yellow', 'coral'][index];
-                this._tempIndex = index + 1 >= color.length ? 0 : index + 1;
+                const color = ['red', 'blue', 'gray', 'yellow', 'coral'];
 
                 // command: $ = document.querySelector
-                this.richText.current?.commandDOM(`$('#${id}').style.color='${color}'`);
+                this.richText.current?.commandDOM(`$('#${id}').style.color='${color[XMath.random(color.length - 1)]}'`);
                 break;
             case 'SwitchImage':
                 break;
@@ -361,6 +366,7 @@ class Example extends React.Component {
                             actions.heading4,
                             'insertEmoji',
                             'insertHTML',
+                            'fontSize',
                         ]} // default defaultActions
                         iconMap={{
                             insertEmoji: phizIcon,
@@ -375,6 +381,7 @@ class Example extends React.Component {
                         insertEmoji={that.handleEmoji}
                         insertHTML={that.insertHTML}
                         insertVideo={that.insertVideo}
+                        fontSize={that.fontSize}
                     />
                     {emojiVisible && <EmojiView onSelect={that.insertEmoji} />}
                 </KeyboardAvoidingView>

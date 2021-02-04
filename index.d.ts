@@ -173,6 +173,11 @@ export class RichEditor extends React.Component<RichEditorProps> {
     insertHTML: (html: string) => void;
 
     /**
+     * 1 = 10px, 2 = 13px, 3 = 16px, 4 = 18px, 5 = 24px, 6 = 32px, 7 = 48px;
+     */
+    setFontSize: (size: 1 | 2 | 3 | 4 | 5 | 6 | 7) => void;
+
+    /**
      * $ = document.querySelector
      * this.richText.current?.commandDOM(`$('#title').style.color='${color}'`);
      */
@@ -259,7 +264,7 @@ export interface RichToolbarProps {
      * Custom actions you want the toolbar to permit.
      * By default the toolbar permits an Action set of type DefaultActions
      */
-    actions?: Partial<DefaultActions> | string[];
+    actions?: Partial<defaultActions> | string[];
 }
 
 export class RichToolbar extends React.Component<RichToolbarProps> {}

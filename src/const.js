@@ -27,6 +27,8 @@ export const actions = {
     insertHTML: 'html',
     insertImage: 'image',
     insertVideo: 'video',
+    fontSize: 'fontSize',
+    fontName: 'fontName',
     setSubscript: 'subscript',
     setSuperscript: 'superscript',
     setStrikethrough: 'strikeThrough',

@@ -361,6 +361,14 @@ export default class RichTextEditor extends Component {
         }
     }
 
+    setFontSize(size) {
+        this.sendAction(actions.fontSize, 'result', size);
+    }
+
+    setFontName(name) {
+        this.sendAction(actions.fontName, 'result', name);
+    }
+
     commandDOM(command) {
         if (command) {
             this.sendAction(actions.content, 'commandDOM', command);

@@ -2,6 +2,8 @@
 #1.7.0
 ### Added
 - Add h1,h2,h3,h4,h5,h6 State mapping
+- `setFontSize` Changes the font size for the selection or at the insertion point. This requires an integer from 1-7 as a value argument.
+- `setFontName` Changes the font name for the selection or at the insertion point. This requires a font name string (like "Arial") as a value argument.
 
 ### Fix
 - [Toolbar active/inactive](https://github.com/wxik/react-native-rich-editor/issues/141)
