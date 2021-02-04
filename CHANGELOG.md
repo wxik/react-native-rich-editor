@@ -1,6 +1,7 @@
 
 #1.7.0
 ### Fix
+- [Toolbar active/inactive](https://github.com/wxik/react-native-rich-editor/issues/141)
 - Adjust the format of `insertImage` to solve the bug that the picture cannot be deleted
 
 #1.6.5

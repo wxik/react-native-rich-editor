@@ -21,6 +21,7 @@ import {
 import {actions, getContentCSS, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
+import {defaultActions} from '../../src';
 
 const imageList = [
     'https://img.lesmao.vip/k/h256/R/MeiTu/1293.jpg',
@@ -36,8 +37,13 @@ const initHTML = `<br/>
 <a href="https://github.com/wxik/flutter-rich-editor">Flutter</a>
 </center>
 <br/>
-<img src="${imageList[0]}" onclick="_.sendEvent('ImgClick')" contenteditable="false" height="170px"/>
+<div style="padding:10px 0;" contentEditable="false">
+<iframe  width="100%" height="220"  src="https://www.youtube.com/embed/6FrNXgXlCGA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<div><center><img src="${imageList[0]}" onclick="_.sendEvent('ImgClick')" contenteditable="false" height="170px"/></center></div>
+<div>
 <br/>Click the picture to switch<br/><br/>
+</div>
 `;
 
 const phizIcon = require('./assets/phiz.png');
@@ -119,6 +125,7 @@ class Example extends React.Component {
      */
     handleChange(html) {
         this.richHTML = html;
+        this.setState({a: Math.random});
     }
 
     /**
@@ -252,7 +259,7 @@ class Example extends React.Component {
         const {contentStyle, theme, emojiVisible, disabled} = that.state;
         const {backgroundColor, color, placeholderColor} = contentStyle;
         const dark = theme === 'dark';
-
+        console.log('render');
         return (
             <SafeAreaView style={[styles.container, dark && styles.darkBack]}>
                 <StatusBar barStyle={theme !== 'dark' ? 'dark-content' : 'light-content'} />

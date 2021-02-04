@@ -44,6 +44,7 @@ function getDefaultIcon() {
     return texts;
 }
 
+// noinspection FallThroughInSwitchStatementJS
 export default class RichToolbar extends Component {
     // static propTypes = {
     //   getEditor?: PropTypes.func.isRequired,
@@ -75,28 +76,27 @@ export default class RichToolbar extends Component {
         super(props);
         this.editor = null;
         this.state = {
-            selectedItems: [],
+            items: [],
         };
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         let that = this;
         return (
-            nextProps.actions !== that.props.actions ||
-            nextState.selectedItems !== that.state.selectedItems ||
+            nextState.items !== that.state.items ||
             nextState.actions !== that.state.actions ||
             nextState.data !== that.state.data ||
-            nextState.style !== that.props.style
+            nextProps.style !== that.props.style
         );
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
         const {actions} = nextProps;
         if (actions !== prevState.actions) {
-            let {selectedItems = []} = prevState;
+            let {items = []} = prevState;
             return {
                 actions,
-                data: actions.map((action) => ({action, selected: selectedItems.includes(action)})),
+                data: actions.map((action) => ({action, selected: items.includes(action)})),
             };
         }
         return null;
@@ -107,7 +107,7 @@ export default class RichToolbar extends Component {
     }
 
     _mount = () => {
-        const {editor: {current: editor} = {current: this.props?.getEditor()}} = this.props;
+        const {editor: {current: editor} = {current: this.props.getEditor?.()}} = this.props;
         if (!editor) {
             throw new Error('Toolbar has no editor!');
         } else {
@@ -117,7 +117,7 @@ export default class RichToolbar extends Component {
     };
 
     setSelectedItems(items) {
-        const {selectedItems} = this.state;
+        const {items: selectedItems} = this.state;
         if (this.editor && items !== selectedItems) {
             this.setState({
                 items,
