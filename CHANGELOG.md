@@ -1,4 +1,12 @@
 
+#1.7.0
+### Fix
+- Adjust the format of `insertImage` to solve the bug that the picture cannot be deleted
+
+#1.6.5
+### Fix
+- Fix `pasteAsPlainText`
+
 #1.6.2
 ### Changed
 - new defaultActions `keyboard` `setStrikethrough` `setUnderline` `removeFormat`

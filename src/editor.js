@@ -1,8 +1,9 @@
 function getContentCSS() {
+    /*img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}*/
     return `
     <style>
         video {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
-        img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
+        img {max-width: 98%;vertical-align: middle;}
         table {width: 100% !important;}
         table td {width: inherit;}
         table span { font-size: 12px !important; }
@@ -285,7 +286,7 @@ function createHTML(options = {}) {
             image: {
                 result: function(url, style) {
                     if (url){
-                        exec('insertHTML', "<br><div><img style='"+ (style || '')+"' src='"+ url +"'/></div><br>");
+                        exec('insertHTML', "<img style='"+ (style || '')+"' src='"+ url +"'/>");
                         Actions.UPDATE_HEIGHT();
                     }
                 }
@@ -498,7 +499,7 @@ function createHTML(options = {}) {
                     // cancel paste
                     e.preventDefault();
                     // insert text manually
-                    exec(insertHTML, text);
+                    exec("insertText", text);
                 }
             });
 
