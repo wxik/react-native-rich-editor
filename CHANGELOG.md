@@ -1,5 +1,8 @@
 
 #1.7.0
+### Added
+- Add h1,h2,h3,h4,h5,h6 State mapping
+
 ### Fix
 - [Toolbar active/inactive](https://github.com/wxik/react-native-rich-editor/issues/141)
 - Adjust the format of `insertImage` to solve the bug that the picture cannot be deleted
