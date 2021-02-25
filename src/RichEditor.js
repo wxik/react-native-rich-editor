@@ -107,7 +107,7 @@ export default class RichTextEditor extends Component {
           console.log("FROM EDIT:", ...message.data);
           break;
         case messages.SELECTION_CHANGE: {
-          const {onFocus} = this.props;
+          const { onFocus } = this.props;
 
           const items = message.data;
           this.state.selectionChangeListeners.map(listener => {
@@ -118,13 +118,13 @@ export default class RichTextEditor extends Component {
           break;
         }
         case messages.CONTENT_BLUR: {
-          const {onBlur} = this.props;
-          
+          const { onBlur } = this.props;
+
           onBlur && onBlur();
           break;
         }
         case messages.CONTENT_FOCUSED: {
-          const {onFocus} = this.props;
+          const { onFocus } = this.props;
           this.focusListeners.map(da => da());
 
           onFocus && onFocus();
@@ -132,6 +132,9 @@ export default class RichTextEditor extends Component {
         }
         case messages.OFFSET_HEIGHT:
           this.setWebHeight(message.data);
+          break;
+        case messages.BODY_HEIGHT:
+          this.props.onBodyHeightChange?.(message.data);
           break;
         case messages.CONTENT_PASTED: {
           this.props.onPaste && this.props.onPaste(message.data.text);
@@ -205,12 +208,12 @@ export default class RichTextEditor extends Component {
             });
           } else if (taggingActive && message.data.keyCode === 13) {
             // enter key, select first connection in list
-            const text =  tagText + '\n';
+            const text = tagText + '\n';
             onActivateTagging && onActivateTagging(false, text, true);
           } else if (taggingActive && message.data.key !== 'Shift' && message.data.keyCode !== 32) {
             // if not space, continue with tagging
             // if backspace, but not deleting @, continue with tagging
-            if ( message.data.keyCode !== 8 &&  message.data.key.length > 1) return;
+            if (message.data.keyCode !== 8 && message.data.key.length > 1) return;
 
             const text = message.data.keyCode === 8 ? tagText.substr(0, tagText.length - 1) : tagText + message.data.key;
             const taggingActive = !(text.length === 0 && lastChar !== '@');
@@ -229,12 +232,12 @@ export default class RichTextEditor extends Component {
             });
           } else if (hashTaggingActive && message.data.keyCode === 13) {
             // enter key, select first connection in list
-            const text =  hashTagText + '\n';
+            const text = hashTagText + '\n';
             onActivateHashTagging && onActivateHashTagging(false, text, true);
           } else if (onActivateHashTagging && message.data.key !== 'Shift' && message.data.keyCode !== 32) {
             // if not space, continue with tagging
             // if backspace, but not deleting @, continue with tagging
-            if ( message.data.keyCode !== 8 &&  message.data.key.length > 1) return;
+            if (message.data.keyCode !== 8 && message.data.key.length > 1) return;
 
             const text = message.data.keyCode === 8 ? hashTagText.substr(0, hashTagText.length - 1) : hashTagText + message.data.key;
             const hashtagActive = !(text.length === 0 && lastChar !== '#');
@@ -340,6 +343,10 @@ export default class RichTextEditor extends Component {
     this._sendAction(actions.content, "setMinHeight", height);
   }
 
+  setBgColor(color) {
+    this._sendAction(actions.content, "setBgColor", color);
+  }
+
   blurContentEditor() {
     this._sendAction(actions.content, "blur");
   }
@@ -402,6 +409,7 @@ export default class RichTextEditor extends Component {
     that.isInit = true;
     that.setContentHTML(this.props.initialContentHTML);
     that.setEditorHeight(this.props.initialEditorHeight);
+    if (this.props.backgroundColor) that.setBgColor(this.props.backgroundColor);
     that.props.editorInitializedCallback &&
       that.props.editorInitializedCallback();
 
@@ -409,7 +417,7 @@ export default class RichTextEditor extends Component {
       this.focusContentEditor();
     }
 
-    this.intervalHeight = setInterval(function() {
+    this.intervalHeight = setInterval(function () {
       that._sendAction(actions.updateHeight);
     }, 200);
   }
