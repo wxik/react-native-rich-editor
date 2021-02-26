@@ -73,7 +73,7 @@ const HTML = `
             window.ReactNativeWebView.postMessage(JSON.stringify(data));
         };
 
-        var editor = null, o_height = 0;
+        var editor = null, o_height = 0, body_height = 0;
         
         var Actions = {
             bold: {
@@ -255,23 +255,31 @@ const HTML = `
                     editor.content.blur();
                 },
                 focus: function() {
-                    var range = document.createRange();
-                    var sel = window.getSelection();
-                    range.setStart(editor.content.lastChild, 0);
-                    range.setStart(editor.content.lastChild, 1);
-                    range.collapse(false);
-                    sel.removeAllRanges();
-                    sel.addRange(range);
+                    if (editor.content.lastChild) {
+                        var range = document.createRange();
+                        var sel = window.getSelection();
+                        range.setStart(editor.content.lastChild, 0);
+                        range.setStart(editor.content.lastChild, 1);
+                        range.collapse(false);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }
 
                     editor.content.focus();
                 },
                 postHtml: function (){
                     postAction({type: 'CONTENT_HTML_RESPONSE', data: editor.content.innerHTML});
+                },
+                setBgColor: function(color) {
+                    document.body.style.backgroundColor = color;
                 }
             },
 
             UPDATE_HEIGHT: function() {
                 var height = Math.max(document.documentElement.clientHeight, document.documentElement.scrollHeight, document.body.clientHeight, document.body.scrollHeight);
+                if (body_height !== document.body.clientHeight) {
+                    postAction({type: 'BODY_HEIGHT', data: body_height = document.body.clientHeight});
+                }
                 if (o_height !== height){
                     postAction({type: 'OFFSET_HEIGHT', data: o_height = height});
                 }
