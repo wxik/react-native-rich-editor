@@ -6,7 +6,8 @@ import {
   PixelRatio,
   Platform,
   StyleSheet,
-  View
+  View,
+  TextInput,
 } from "react-native";
 import { HTML } from "./editor";
 
@@ -31,6 +32,7 @@ export default class RichTextEditor extends Component {
     this._onKeyboardWillShow = this._onKeyboardWillShow.bind(this);
     this._onKeyboardWillHide = this._onKeyboardWillHide.bind(this);
     this.isInit = false;
+    this._keyOpen = false;
     this.state = {
       selectionChangeListeners: [],
       keyboardHeight: 0,
@@ -63,6 +65,7 @@ export default class RichTextEditor extends Component {
   }
 
   _onKeyboardWillShow(event) {
+    this._keyOpen = true;
     // console.log('!!!!', event);
     const newKeyboardHeight = event.endCoordinates.height;
     if (this.state.keyboardHeight === newKeyboardHeight) {
@@ -75,6 +78,7 @@ export default class RichTextEditor extends Component {
   }
 
   _onKeyboardWillHide(event) {
+    this._keyOpen = false;
     this.setState({ keyboardHeight: 0 });
   }
 
@@ -268,24 +272,27 @@ export default class RichTextEditor extends Component {
   };
 
   renderWebView = () => (
-    <WebView
-      useWebKit={true}
-      scrollEnabled={false}
-      {...this.props}
-      hideKeyboardAccessoryView={true}
-      keyboardDisplayRequiresUserAction={false}
-      ref={r => {
-        this.webviewBridge = r;
-      }}
-      onMessage={this.onMessage}
-      originWhitelist={["*"]}
-      dataDetectorTypes={"none"}
-      domStorageEnabled={false}
-      bounces={false}
-      javaScriptEnabled={true}
-      source={{ html: this.replacePH(HTML) }}
-      onLoad={() => this.init()}
-    />
+    <>
+      <WebView
+        useWebKit={true}
+        scrollEnabled={false}
+        {...this.props}
+        hideKeyboardAccessoryView={true}
+        keyboardDisplayRequiresUserAction={false}
+        ref={r => {
+          this.webviewBridge = r;
+        }}
+        onMessage={this.onMessage}
+        originWhitelist={["*"]}
+        dataDetectorTypes={"none"}
+        domStorageEnabled={false}
+        bounces={false}
+        javaScriptEnabled={true}
+        source={{ html: this.replacePH(HTML) }}
+        onLoad={() => this.init()}
+      />
+      {Platform.OS === 'android' && <TextInput ref={(ref) => (this._input = ref)} style={styles._input} />}
+    </>
   );
 
   render() {
@@ -352,7 +359,16 @@ export default class RichTextEditor extends Component {
   }
 
   focusContentEditor() {
+    this.showAndroidKeyboard();
     this._sendAction(actions.content, "focus");
+  }
+
+  showAndroidKeyboard() {
+    let that = this;
+    if (Platform.OS === 'android') {
+      !that._keyOpen && that._input.focus();
+      that.webviewBridge.requestFocus && that.webviewBridge.requestFocus();
+    }
   }
 
   insertImage(attributes) {
@@ -478,5 +494,13 @@ const styles = StyleSheet.create({
     marginLeft: -20,
     marginRight: -20,
     marginTop: 20
-  }
+  },
+  _input: {
+    position: 'absolute',
+    width: 1,
+    height: 1,
+    zIndex: -999,
+    bottom: -999,
+    left: -999,
+  },
 });
