@@ -420,6 +420,15 @@ export default class RichTextEditor extends Component {
     this._sendAction(actions.updateHeight);
   }
 
+  setTaggingOffExternally() {
+    this.setState({
+      taggingActive: false,
+      tagText: null,
+      hashTaggingActive: false,
+      hashTagText: null
+    });
+  }
+
   init() {
     let that = this;
     that.isInit = true;
