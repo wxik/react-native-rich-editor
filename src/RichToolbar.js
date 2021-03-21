@@ -17,31 +17,31 @@ export const defaultActions = [
 function getDefaultIcon() {
     const texts = {};
     // new icon styles of experiment
-    texts[actions.insertImage] = require('../img/image.png');
-    texts[actions.keyboard] = require('../img/keyboard.png');
-    texts[actions.setBold] = require('../img/bold.png');
-    texts[actions.setItalic] = require('../img/italic.png');
-    texts[actions.insertBulletsList] = require('../img/ul.png');
-    texts[actions.insertOrderedList] = require('../img/ol.png');
-    texts[actions.insertLink] = require('../img/link.png');
-    texts[actions.setStrikethrough] = require('../img/strikethrough.png');
-    texts[actions.setUnderline] = require('../img/underline.png');
-    texts[actions.insertVideo] = require('../img/video.png');
-    texts[actions.removeFormat] = require('../img/remove_format.png');
-    texts[actions.undo] = require('../img/undo.png');
-    texts[actions.redo] = require('../img/redo.png');
-    texts[actions.checkboxList] = require('../img/checkbox.png');
-    texts[actions.table] = require('../img/table.png');
-    texts[actions.code] = require('../img/code.png');
-    texts[actions.outdent] = require('../img/outdent.png');
-    texts[actions.indent] = require('../img/indent.png');
-    texts[actions.alignLeft] = require('../img/justify_left.png');
-    texts[actions.alignCenter] = require('../img/justify_center.png');
-    texts[actions.alignRight] = require('../img/justify_right.png');
-    texts[actions.alignFull] = require('../img/justify_full.png');
-    texts[actions.blockquote] = require('../img/blockquote.png');
-    texts[actions.line] = require('../img/line.png');
-    texts[actions.fontSize] = require('../img/fontSize.png');
+    texts[actions.insertImage] = require('../img/image@2x.png');
+    texts[actions.keyboard] = require('../img/keyboard@2x.png');
+    texts[actions.setBold] = require('../img/bold@2x.png');
+    texts[actions.setItalic] = require('../img/italic@2x.png');
+    texts[actions.insertBulletsList] = require('../img/ul@2x.png');
+    texts[actions.insertOrderedList] = require('../img/ol@2x.png');
+    texts[actions.insertLink] = require('../img/link@2x.png');
+    texts[actions.setStrikethrough] = require('../img/strikethrough@2x.png');
+    texts[actions.setUnderline] = require('../img/underline@2x.png');
+    texts[actions.insertVideo] = require('../img/video@2x.png');
+    texts[actions.removeFormat] = require('../img/remove_format@2x.png');
+    texts[actions.undo] = require('../img/undo@2x.png');
+    texts[actions.redo] = require('../img/redo@2x.png');
+    texts[actions.checkboxList] = require('../img/checkbox@2x.png');
+    texts[actions.table] = require('../img/table@2x.png');
+    texts[actions.code] = require('../img/code@2x.png');
+    texts[actions.outdent] = require('../img/outdent@2x.png');
+    texts[actions.indent] = require('../img/indent@2x.png');
+    texts[actions.alignLeft] = require('../img/justify_left@2x.png');
+    texts[actions.alignCenter] = require('../img/justify_center@2x.png');
+    texts[actions.alignRight] = require('../img/justify_right@2x.png');
+    texts[actions.alignFull] = require('../img/justify_full@2x.png');
+    texts[actions.blockquote] = require('../img/blockquote@2x.png');
+    texts[actions.line] = require('../img/line@2x.png');
+    texts[actions.fontSize] = require('../img/fontSize@2x.png');
     return texts;
 }
 
