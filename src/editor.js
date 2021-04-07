@@ -256,10 +256,11 @@ const HTML = `
                 },
                 focus: function() {
                     if (editor.content.lastChild) {
+                        const length = editor.content.lastChild.textContent ? editor.content.lastChild.textContent.length  : 1;
                         var range = document.createRange();
                         var sel = window.getSelection();
                         range.setStart(editor.content.lastChild, 0);
-                        range.setStart(editor.content.lastChild, 1);
+                        range.setStart(editor.content.lastChild, length);
                         range.collapse(false);
                         sel.removeAllRanges();
                         sel.addRange(range);
