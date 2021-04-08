@@ -278,6 +278,7 @@ function createHTML(options = {}) {
                 result: function(data) {
                     data = data || {};
                     var title = data.title;
+                    title = title || window.getSelection().toString();
                     // title = title || window.prompt('Enter the link title');
                     var url = data.url || window.prompt('Enter the link URL');
                     if (url){
