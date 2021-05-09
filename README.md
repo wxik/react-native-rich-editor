@@ -236,5 +236,5 @@ To define your own custom action:
 
 ---
 ### Thank you very much for the support of [JetBrains](https://jb.gg/OpenSource)
-![JetBrains](readme/jetbrains.png)
+![https://jb.gg/OpenSource](readme/jetbrains.png)
 
