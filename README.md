@@ -233,3 +233,8 @@ To define your own custom action:
 	customAction={this.handleCustomAction}
 />
 ```
+
+---
+### Thank you very much for the support of [JetBrains](https://jb.gg/OpenSource)
+![JetBrains](readme/jetbrains.png)
+
