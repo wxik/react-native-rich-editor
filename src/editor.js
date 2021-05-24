@@ -48,7 +48,7 @@ function createHTML(options = {}) {
     </style>
     <style>
         [placeholder]:empty:before { content: attr(placeholder); color: ${placeholderColor};}
-        [placeholder]:empty:focus:before { content: attr(placeholder);color: ${placeholderColor};}
+        [placeholder]:empty:focus:before { content: attr(placeholder);color: ${placeholderColor};display:block;}
     </style>
     ${getContentCSS()}
     <style>${cssText}</style>
