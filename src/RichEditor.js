@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {WebView} from 'react-native-webview';
 import {actions, messages} from './const';
-import {Dimensions, Keyboard, Platform, StyleSheet, TextInput, View} from 'react-native';
+import {Keyboard, Platform, StyleSheet, TextInput, View} from 'react-native';
 import {createHTML} from './editor';
 
 const PlatformIOS = Platform.OS === 'ios';
