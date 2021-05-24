@@ -159,6 +159,14 @@ class Example extends React.Component {
         this.richText.current?.setFontSize(size[XMath.random(size.length - 1)]);
     };
 
+    foreColor = ()=> {
+        this.richText.current?.setForeColor('blue');
+    }
+
+    hiliteColor = ()=> {
+        this.richText.current?.setHiliteColor('red');
+    }
+
     insertHTML() {
         // this.richText.current?.insertHTML(
         //     `<span onclick="alert(2)" style="color: blue; padding:0 10px;" contenteditable="false">HTML</span>`,
@@ -363,6 +371,8 @@ class Example extends React.Component {
                             actions.code,
                             actions.line,
 
+                            actions.foreColor,
+                            actions.hiliteColor,
                             actions.heading1,
                             actions.heading4,
                             'insertEmoji',
@@ -371,6 +381,12 @@ class Example extends React.Component {
                         ]} // default defaultActions
                         iconMap={{
                             insertEmoji: phizIcon,
+                            [actions.foreColor]: ({tintColor}) => (
+                                <Text style={[styles.tib, {color: 'blue'}]}>FC</Text>
+                            ),
+                            [actions.hiliteColor]: ({tintColor}) => (
+                                <Text style={[styles.tib, {color: tintColor, backgroundColor: 'red'}]}>BC</Text>
+                            ),
                             [actions.heading1]: ({tintColor}) => (
                                 <Text style={[styles.tib, {color: tintColor}]}>H1</Text>
                             ),
@@ -383,6 +399,8 @@ class Example extends React.Component {
                         insertHTML={that.insertHTML}
                         insertVideo={that.insertVideo}
                         fontSize={that.fontSize}
+                        foreColor={that.foreColor}
+                        hiliteColor={that.hiliteColor}
                     />
                     {emojiVisible && <EmojiView onSelect={that.insertEmoji} />}
                 </KeyboardAvoidingView>

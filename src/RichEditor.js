@@ -365,6 +365,14 @@ export default class RichTextEditor extends Component {
         this.sendAction(actions.fontSize, 'result', size);
     }
 
+    setForeColor (color){
+        this.sendAction(actions.foreColor, 'result', color);
+    }
+
+    setHiliteColor (color) {
+        this.sendAction(actions.hiliteColor, 'result', color);
+    }
+
     setFontName(name) {
         this.sendAction(actions.fontName, 'result', name);
     }

@@ -40,6 +40,8 @@ export const actions = {
     code: 'code',
     table: 'table',
     line: 'line',
+    foreColor: 'foreColor',
+    hiliteColor: 'hiliteColor',
     blockquote: 'quote',
     keyboard: 'keyboard',
     setTitlePlaceholder: 'SET_TITLE_PLACEHOLDER',
