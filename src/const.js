@@ -13,7 +13,7 @@ export const actions = {
     heading5: 'heading5',
     heading6: 'heading6',
     insertLine: 'line',
-    setParagraph: 'SET_PARAGRAPH',
+    setParagraph: 'paragraph',
     removeFormat: 'removeFormat',
     alignLeft: 'justifyLeft',
     alignCenter: 'justifyCenter',

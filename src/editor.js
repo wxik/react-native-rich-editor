@@ -48,7 +48,7 @@ function createHTML(options = {}) {
     </style>
     <style>
         [placeholder]:empty:before { content: attr(placeholder); color: ${placeholderColor};}
-        [placeholder]:empty:focus:before { content: attr(placeholder);color: ${placeholderColor};}
+        [placeholder]:empty:focus:before { content: attr(placeholder);color: ${placeholderColor};display:block;}
     </style>
     ${getContentCSS()}
     <style>${cssText}</style>
@@ -242,6 +242,8 @@ function createHTML(options = {}) {
             italic: { state: function() { return queryCommandState('italic'); }, result: function() { return exec('italic'); }},
             underline: { state: function() { return queryCommandState('underline'); }, result: function() { return exec('underline'); }},
             strikeThrough: { state: function() { return queryCommandState('strikeThrough'); }, result: function() { return exec('strikeThrough'); }},
+            subscript: { state: function() { return queryCommandState('subscript'); }, result: function() { return exec('subscript'); }},
+            superscript: { state: function() { return queryCommandState('superscript'); }, result: function() { return exec('superscript'); }},
             heading1: { state: function() { return queryCommandValue(formatBlock) === 'h1'; }, result: function() { return exec(formatBlock, '<h1>'); }},
             heading2: { state: function() { return queryCommandValue(formatBlock) === 'h2'; }, result: function() { return exec(formatBlock, '<h2>'); }},
             heading3: { state: function() { return queryCommandValue(formatBlock) === 'h3'; }, result: function() { return exec(formatBlock, '<h3>'); }},
@@ -278,6 +280,7 @@ function createHTML(options = {}) {
                 result: function(data) {
                     data = data || {};
                     var title = data.title;
+                    title = title || window.getSelection().toString();
                     // title = title || window.prompt('Enter the link title');
                     var url = data.url || window.prompt('Enter the link URL');
                     if (url){
