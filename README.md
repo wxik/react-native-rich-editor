@@ -64,20 +64,20 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 * `onMessage`
     Callback outside postMessage internal type processing
-    ```
+    ```html
     <img src="" onclick="_.sendEvent('ImgClick')" contenteditable="false"/>
     ```
 
 * `command`
   Execute JS in the editor
-   ```
+   ```js
     // $ = document
     this.richText.current?.commandDOM('$.execCommand('insertHTML', false, "<br/>")');
     ```
 
 * `commandDOM`
   Manipulate the DOM in the editor
-   ```
+   ```js
     // $ = document.querySelector
     this.richText.current?.commandDOM(`$('#title').style.color='${color}'`);
     ```
