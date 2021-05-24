@@ -1,4 +1,12 @@
 
+#1.8.0
+
+### This version merges with netizens to provide PR, thank you very much
+
+### Added
+- `foreColor` & `hiliteColor`
+- Add @1x resources to solve the problem that some user resources are not found
+
 #1.7.0
 ### Added
 - Add h1,h2,h3,h4,h5,h6 State mapping

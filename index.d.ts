@@ -178,6 +178,18 @@ export class RichEditor extends React.Component<RichEditorProps> {
     setFontSize: (size: 1 | 2 | 3 | 4 | 5 | 6 | 7) => void;
 
     /**
+     * The background color of the selected text
+     * @param color
+     */
+    setHiliteColor: (color: string)=> void;
+
+    /**
+     * The color of the selected text
+     * @param color
+     */
+    setForeColor: (color: string)=> void;
+
+    /**
      * $ = document.querySelector
      * this.richText.current?.commandDOM(`$('#title').style.color='${color}'`);
      */
