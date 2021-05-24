@@ -320,6 +320,7 @@ class Example extends React.Component {
                         editorStyle={contentStyle} // default light style
                         ref={that.richText}
                         style={styles.rich}
+                        // containerStyle={{borderRadius: 24}}
                         placeholder={'please input content'}
                         initialContentHTML={initHTML}
                         editorInitializedCallback={that.editorInitializedCallback}
