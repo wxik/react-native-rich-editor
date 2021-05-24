@@ -21,6 +21,8 @@ function getDefaultIcon() {
     texts[actions.keyboard] = require('../img/keyboard.png');
     texts[actions.setBold] = require('../img/bold.png');
     texts[actions.setItalic] = require('../img/italic.png');
+    texts[actions.setSubscript] = require('../img/subscript.png');
+    texts[actions.setSuperscript] = require('../img/superscript.png');
     texts[actions.insertBulletsList] = require('../img/ul.png');
     texts[actions.insertOrderedList] = require('../img/ol.png');
     texts[actions.insertLink] = require('../img/link.png');
