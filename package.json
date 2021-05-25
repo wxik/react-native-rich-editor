@@ -1,11 +1,11 @@
 {
   "name": "react-native-pell-rich-editor",
   "description": "React Native Rich Editor",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "main": "src/index.js",
   "author": {
     "name": "wxik",
-    "email": "stulip@126.com"
+    "email": "io@wxik.com"
   },
   "repository": {
     "type": "git",
