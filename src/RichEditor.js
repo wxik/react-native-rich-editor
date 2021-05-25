@@ -45,8 +45,10 @@ export default class RichTextEditor extends Component {
         that._onKeyboardWillHide = that._onKeyboardWillHide.bind(that);
         that.init = that.init.bind(that);
         that.setRef = that.setRef.bind(that);
+        that.onViewLayout = that.onViewLayout.bind(that);
         that._keyOpen = false;
-        this._focus = false;
+        that._focus = false;
+        that.layout = {};
         that.selectionChangeListeners = [];
         const {
             editorStyle: {backgroundColor, color, placeholderColor, cssText, contentCSSText} = {},
@@ -133,64 +135,66 @@ export default class RichTextEditor extends Component {
     }*/
 
     onMessage(event) {
+        const that = this;
+        const {
+            onFocus, onBlur, onChange, onPaste,
+            onKeyUp, onKeyDown, onMessage,
+            onCursorPosition,
+        } = that.props;
         try {
-            const props = this.props;
             const message = JSON.parse(event.nativeEvent.data);
             const data = message.data;
             switch (message.type) {
                 case messages.CONTENT_HTML_RESPONSE:
-                    if (this.contentResolve) {
-                        this.contentResolve(message.data);
-                        this.contentResolve = undefined;
-                        this.contentReject = undefined;
-                        if (this.pendingContentHtml) {
-                            clearTimeout(this.pendingContentHtml);
-                            this.pendingContentHtml = undefined;
+                    if (that.contentResolve) {
+                        that.contentResolve(message.data);
+                        that.contentResolve = undefined;
+                        that.contentReject = undefined;
+                        if (that.pendingContentHtml) {
+                            clearTimeout(that.pendingContentHtml);
+                            that.pendingContentHtml = undefined;
                         }
                     }
                     break;
                 case messages.LOG:
                     console.log('FROM EDIT:', ...data);
                     break;
-                case messages.SELECTION_CHANGE: {
+                case messages.SELECTION_CHANGE:
                     const items = message.data;
-                    this.selectionChangeListeners.map((listener) => {
+                    that.selectionChangeListeners.map((listener) => {
                         listener(items);
                     });
                     break;
-                }
-                case messages.CONTENT_FOCUSED: {
-                    this._focus = true;
-                    this.focusListeners.map((da) => da()); // Subsequent versions will be deleted
-                    props.onFocus && props.onFocus();
+                case messages.CONTENT_FOCUSED:
+                    that._focus = true;
+                    that.focusListeners.map((da) => da()); // Subsequent versions will be deleted
+                    onFocus?.();
                     break;
-                }
-                case messages.CONTENT_BLUR: {
-                    this._focus = false;
-                    props.onBlur && props.onBlur();
+                case messages.CONTENT_BLUR:
+                    that._focus = false;
+                    onBlur?.();
                     break;
-                }
-                case messages.CONTENT_CHANGE: {
-                    props.onChange && props.onChange(data);
+                case messages.CONTENT_CHANGE:
+                    onChange?.(data);
                     break;
-                }
-                case messages.CONTENT_PASTED: {
-                    props.onPaste && props.onPaste(data);
+                case messages.CONTENT_PASTED:
+                    onPaste?.(data);
                     break;
-                }
-                case messages.CONTENT_KEYUP: {
-                    props.onKeyUp && props.onKeyUp(data);
+                case messages.CONTENT_KEYUP:
+                    onKeyUp?.(data);
                     break;
-                }
-                case messages.CONTENT_KEYDOWN: {
-                    props.onKeyDown && props.onKeyDown(data);
+                case messages.CONTENT_KEYDOWN:
+                    onKeyDown?.(data);
                     break;
-                }
                 case messages.OFFSET_HEIGHT:
-                    this.setWebHeight(data);
+                    that.setWebHeight(data);
+                    break;
+                case messages.OFFSET_Y:
+                    let offsetY = Number.parseInt(Number.parseInt(data) + that.layout.y);
+                    offsetY > 0 && onCursorPosition(offsetY);
                     break;
                 default:
-                    props.onMessage && props.onMessage(message);
+                    onMessage?.(message);
                     break;
             }
         } catch (e) {
@@ -198,7 +202,7 @@ export default class RichTextEditor extends Component {
         }
     }
 
-    setWebHeight = (height) => {
+    setWebHeight (height) {
         // console.log(height);
         const {onHeightChange, useContainer} = this.props;
         if (height !== this.state.height) {
@@ -260,9 +264,14 @@ export default class RichTextEditor extends Component {
                     opacity={opacity}
                     onLoad={that.init}
                 />
-                {Platform.OS === 'android' && <TextInput ref={(ref) => (that._input = ref)} style={styles._input} />}
+                {Platform.OS === 'android' && <TextInput ref={(ref) => (that._input = ref)} style={styles._input}/>}
             </>
         );
+    }
+
+    onViewLayout ({nativeEvent: { layout}}) {
+        // const {x, y, width, height} = layout;
+        this.layout = layout;
     }
 
     render() {
@@ -273,7 +282,7 @@ export default class RichTextEditor extends Component {
         // If set to false, it will not use a View wrapper
         const {useContainer, style, initialHeight = 0} = this.props;
         return useContainer ? (
-            <View style={[style, {height: height || initialHeight}]}>{this.renderWebView()}</View>
+            <View style={[style, {height: height || initialHeight}]} onLayout={this.onViewLayout}>{this.renderWebView()}</View>
         ) : (
             this.renderWebView()
         );
@@ -367,11 +376,11 @@ export default class RichTextEditor extends Component {
         this.sendAction(actions.fontSize, 'result', size);
     }
 
-    setForeColor (color){
+    setForeColor(color) {
         this.sendAction(actions.foreColor, 'result', color);
     }
 
-    setHiliteColor (color) {
+    setHiliteColor(color) {
         this.sendAction(actions.hiliteColor, 'result', color);
     }
 

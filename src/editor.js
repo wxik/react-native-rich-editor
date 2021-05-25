@@ -45,7 +45,7 @@ function createHTML(options = {}) {
         html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em;}
         body { overflow-y: hidden; -webkit-overflow-scrolling: touch;height: 100%;background-color: ${backgroundColor};}
         .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;height: 100%;-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
-        .pell { height: 100%;background-color: red;} .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
+        .pell { height: 100%;} .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
     </style>
     <style>
         [placeholder]:empty:before { content: attr(placeholder); color: ${placeholderColor};}
@@ -70,7 +70,7 @@ function createHTML(options = {}) {
         var body = document.body, docEle = document.documentElement;
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
         var formatBlock = 'formatBlock';
-        var editor = null, o_height = 0;
+        var editor = null, editorFoucs = false, o_height = 0;
         function addEventListener(parent, type, listener) {
             return parent.addEventListener(type, listener);
         };
@@ -215,6 +215,8 @@ function createHTML(options = {}) {
         var _keyDown = false;
         function handleChange (event){
             var node = anchorNode;
+            Actions.UPDATE_HEIGHT();
+            Actions.UPDATE_OFFSET_Y();
             if (_keyDown){
                 if(_checkboxFlag === 1 && checkboxNode(node)){
                     _checkboxFlag = 0;
@@ -374,7 +376,7 @@ function createHTML(options = {}) {
 
             init: function (){
                 if (${useContainer}){
-                    setInterval(Actions.UPDATE_HEIGHT, 150);
+                    // setInterval(Actions.UPDATE_HEIGHT, 150);
                     Actions.UPDATE_HEIGHT();
                 } else {
                     body.style.height = docEle.clientHeight + 'px';
@@ -387,6 +389,16 @@ function createHTML(options = {}) {
                 var height = body.scrollHeight;
                 if (o_height !== height){
                     _postMessage({type: 'OFFSET_HEIGHT', data: o_height = height});
+                }
+            },
+
+            UPDATE_OFFSET_Y: function (){
+                if (!${useContainer}) return;
+                if (anchorNode){
+                    var offsetY = anchorNode.offsetTop || anchorNode.parentNode.offsetTop;
+                    if (offsetY){
+                        _postMessage({type: 'OFFSET_Y', data: offsetY});
+                    }
                 }
             }
         };
@@ -480,9 +492,11 @@ function createHTML(options = {}) {
                 ${keyDownListener} && postKeyAction(event, "CONTENT_KEYDOWN");
             }
             function handleFocus (){
+                editorFoucs = true;
                 postAction({type: 'CONTENT_FOCUSED'});
             }
             function handleBlur (){
+                editorFoucs = false;
                 postAction({type: 'SELECTION_CHANGE', data: []});
                 postAction({type: 'CONTENT_BLUR'});
             }
