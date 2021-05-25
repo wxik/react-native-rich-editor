@@ -7,6 +7,7 @@
 - `foreColor` & `hiliteColor`
 - Add @1x resources to solve the problem that some user resources are not found
 - Add `onCursorPosition` Enter the position of the cursor
+- Add `caretColor` cursor/selection color
 
 #1.7.0
 ### Added

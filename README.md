@@ -52,6 +52,7 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 	- `backgroundColor`: Editor background color
 	- `color`: Editor text color
+    - `caretColor` cursor/selection color
 	- `placeholderColor`: Editor placeholder text color
 	- `contentCSSText`: editor content css text（initial valid）
 	- `cssText`: editor global css text（initial valid）

@@ -207,6 +207,7 @@ class Example extends React.Component {
         const contentStyle = {
             backgroundColor: '#2e3847',
             color: '#fff',
+            caretColor: 'red', // initial valid// initial valid
             placeholderColor: 'gray',
             // cssText: '#editor {background-color: #f3f3f3}', // initial valid
             contentCSSText: 'font-size: 16px; min-height: 200px;', // initial valid

@@ -120,6 +120,7 @@ export interface RichEditorProps extends WebViewProps {
     editorStyle?: {
         backgroundColor?: string; // editor background color
         color?: string; // editor text color
+        caretColor?: string; // cursor/selection color
         placeholderColor?: string; // editor placeholder text color
         contentCSSText?: string; // editor content css text
         cssText?: string; // editor global css text
