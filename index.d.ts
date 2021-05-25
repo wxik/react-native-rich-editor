@@ -97,6 +97,11 @@ export interface RichEditorProps extends WebViewProps {
     onBlur?: () => void;
 
     /**
+     * Callback Enter the position of the cursor
+     */
+    onCursorPosition?: (offsetY: number)=> void;
+
+    /**
      * Callback after height change
      */
     onHeightChange?: (height: number) => void;
