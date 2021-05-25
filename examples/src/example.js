@@ -22,7 +22,6 @@ import {actions, getContentCSS, RichEditor, RichToolbar} from 'react-native-pell
 import {XMath} from '@wxik/core';
 import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
-import {defaultActions} from '../../src';
 
 const imageList = [
     'https://img.lesmao.vip/k/h256/R/MeiTu/1293.jpg',
@@ -208,7 +207,7 @@ class Example extends React.Component {
             color: '#fff',
             placeholderColor: 'gray',
             // cssText: '#editor {background-color: #f3f3f3}', // initial valid
-            contentCSSText: 'font-size: 16px; min-height: 200px; height: 100%;', // initial valid
+            contentCSSText: 'font-size: 16px; min-height: 200px;', // initial valid
         };
         if (theme === 'light') {
             contentStyle.backgroundColor = '#fff';
@@ -327,6 +326,7 @@ class Example extends React.Component {
                         editorStyle={contentStyle} // default light style
                         ref={that.richText}
                         style={styles.rich}
+                        useContainer={true}
                         // containerStyle={{borderRadius: 24}}
                         placeholder={'please input content'}
                         initialContentHTML={initHTML}

@@ -11,7 +11,7 @@ function getContentCSS() {
         .x-todo-box {position: relative; left: -24px;}
         .x-todo-box input{position: absolute;}
         blockquote{border-left: 6px solid #ddd;padding: 5px 0 5px 10px;margin: 15px 0 15px 15px;}
-        hr{display: block;height: 0px; border: 0;border-top: 1px solid #ccc; margin: 15px 0; padding: 0;}
+        hr{display: block;height: 0; border: 0;border-top: 1px solid #ccc; margin: 15px 0; padding: 0;}
         pre{padding: 10px 5px 10px 10px;margin: 15px 0;display: block;line-height: 18px;background: #F0F0F0;border-radius: 3px;font-size: 13px; font-family: 'monaco', 'Consolas', "Liberation Mono", Courier, monospace; white-space: pre; word-wrap: normal;overflow-x: auto;}
     </style>
     `;
@@ -32,6 +32,7 @@ function createHTML(options = {}) {
         defaultParagraphSeparator = 'div',
         // When first gaining focus, the cursor moves to the end of the text
         firstFocusEnd = true,
+        useContainer = true,
     } = options;
     //ERROR: HTML height not 100%;
     return `
@@ -44,7 +45,7 @@ function createHTML(options = {}) {
         html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em;}
         body { overflow-y: hidden; -webkit-overflow-scrolling: touch;height: 100%;background-color: ${backgroundColor};}
         .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;height: 100%;-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
-        .pell { height: 100%;} .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
+        .pell { height: 100%;background-color: red;} .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
     </style>
     <style>
         [placeholder]:empty:before { content: attr(placeholder); color: ${placeholderColor};}
@@ -54,7 +55,7 @@ function createHTML(options = {}) {
     <style>${cssText}</style>
 </head>
 <body>
-<div class="content"><div id="editor" class="pell"></div></div>
+<div class="content"><div id="editor" class="pell"/></div>
 <script>
     var __DEV__ = !!${window.__DEV__};
     var _ = (function (exports) {
@@ -372,12 +373,18 @@ function createHTML(options = {}) {
             },
 
             init: function (){
-                setInterval(Actions.UPDATE_HEIGHT, 150);
-                Actions.UPDATE_HEIGHT();
+                if (${useContainer}){
+                    setInterval(Actions.UPDATE_HEIGHT, 150);
+                    Actions.UPDATE_HEIGHT();
+                } else {
+                    body.style.height = docEle.clientHeight + 'px';
+                }
             },
 
             UPDATE_HEIGHT: function() {
-                var height = Math.max(docEle.scrollHeight, body.scrollHeight);
+                if (!${useContainer}) return;
+                // var height = Math.max(docEle.scrollHeight, body.scrollHeight);
+                var height = body.scrollHeight;
                 if (o_height !== height){
                     _postMessage({type: 'OFFSET_HEIGHT', data: o_height = height});
                 }
