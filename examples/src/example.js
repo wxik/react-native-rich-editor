@@ -272,7 +272,6 @@ class Example extends React.Component {
         const {contentStyle, theme, emojiVisible, disabled} = that.state;
         const {backgroundColor, color, placeholderColor} = contentStyle;
         const dark = theme === 'dark';
-        console.log('render');
         return (
             <SafeAreaView style={[styles.container, dark && styles.darkBack]}>
                 <StatusBar barStyle={theme !== 'dark' ? 'dark-content' : 'light-content'} />
