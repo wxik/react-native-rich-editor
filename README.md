@@ -23,6 +23,13 @@ Also, follow instructions [here](https://github.com/react-native-community/react
 
 ![](readme/editor.jpg)
 
+---
+## Scroll problem
+###`usecontainer = {true}` Need to be placed in ScrolView and add a callback method `oncursorPosition` to handle scroll bar positioning, refer to Examples
+```this.scrollRef.current.scrollTo({y: scrollY - 30, duration: 100, animated: true});```
+
+---
+
 ## `RichEditor`
 The editor component. Simply place this component in your view hierarchy to receive a fully functional Rich text Editor.
 
