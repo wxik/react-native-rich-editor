@@ -26,7 +26,7 @@ Also, follow instructions [here](https://github.com/react-native-community/react
 ---
 ## Scroll problem
 ###`usecontainer = {true}` Need to be placed in ScrolView and add a callback method `oncursorPosition` to handle scroll bar positioning, refer to Examples
-```this.scrollRef.current.scrollTo({y: scrollY - 30, duration: 100, animated: true});```
+```this.scrollRef.current.scrollTo({y: scrollY - 30, animated: true});```
 
 ---
 

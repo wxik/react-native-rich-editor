@@ -271,7 +271,7 @@ class Example extends React.Component {
 
     handleCursorPosition = (scrollY) => {
         // Positioning scroll bar
-        this.scrollRef.current.scrollTo({y: scrollY - 30, duration: 100, animated: true});
+        this.scrollRef.current.scrollTo({y: scrollY - 30, animated: true});
     }
 
     render() {

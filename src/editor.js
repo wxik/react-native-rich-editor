@@ -395,8 +395,9 @@ function createHTML(options = {}) {
 
             UPDATE_OFFSET_Y: function (){
                 if (!${useContainer}) return;
-                if (anchorNode){
-                    var offsetY = anchorNode.offsetTop || anchorNode.parentNode.offsetTop;
+                var node = anchorNode || window.getSelection().anchorNode;
+                if (node){
+                    var offsetY = node.offsetTop || node.parentNode.offsetTop;
                     if (offsetY){
                         _postMessage({type: 'OFFSET_Y', data: offsetY});
                     }
@@ -494,6 +495,9 @@ function createHTML(options = {}) {
             }
             function handleFocus (){
                 editorFoucs = true;
+                setTimeout(function (){
+                    Actions.UPDATE_OFFSET_Y();
+                });
                 postAction({type: 'CONTENT_FOCUSED'});
             }
             function handleBlur (){
