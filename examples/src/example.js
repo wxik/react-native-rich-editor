@@ -339,7 +339,7 @@ class Example extends React.Component {
                         initialHeight={400}
                         // containerStyle={{borderRadius: 24}}
                         placeholder={'please input content'}
-                        initialContentHTML={initHTML}
+                        // initialContentHTML={initHTML}
                         editorInitializedCallback={that.editorInitializedCallback}
                         onChange={that.handleChange}
                         onHeightChange={that.handleHeightChange}

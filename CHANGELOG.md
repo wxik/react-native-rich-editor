@@ -1,6 +1,10 @@
 
-#1.8.1
+#1.8.3
+###Fix
+- Fix Some input methods appear on the screen in English  [#154](https://github.com/wxik/react-native-rich-editor/issues/154)
+- Fix The cursor positioning problem after getting the focus in the `ScrollView`
 
+#1.8.1
 ### Fix
 - Fix the problem that `initialHeight` does not take effect
 - Fix the problem that the `height` does not decrease after the text content is reduced

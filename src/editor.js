@@ -40,6 +40,7 @@ function createHTML(options = {}) {
 <!DOCTYPE html>
 <html>
 <head>
+    <title>RN Rich Text Editor</title>
     <meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
     <style>
         * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;box-sizing: border-box;}
@@ -71,7 +72,7 @@ function createHTML(options = {}) {
         var body = document.body, docEle = document.documentElement;
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
         var formatBlock = 'formatBlock';
-        var editor = null, editorFoucs = false, o_height = 0;
+        var editor = null, editorFoucs = false, o_height = 0, compositionStatus = 0, paragraphStatus = 0;
         function addEventListener(parent, type, listener) {
             return parent.addEventListener(type, listener);
         };
@@ -419,7 +420,12 @@ function createHTML(options = {}) {
             content.oninput = function (_ref) {
                 // var firstChild = _ref.target.firstChild;
                 if ((anchorNode === void 0 || anchorNode === content) && queryCommandValue(formatBlock) === ''){
-                    formatParagraph(true);
+                    if ( !compositionStatus ){
+                        formatParagraph(true);
+                        paragraphStatus = 0;
+                    } else {
+                        paragraphStatus = 1;
+                    }
                 } else if (content.innerHTML === '<br>') content.innerHTML = '';
 
                 saveSelection();
@@ -533,6 +539,13 @@ function createHTML(options = {}) {
                     exec("insertText", text);
                 }
             });
+            addEventListener(content, 'compositionstart', function(){
+                compositionStatus = 1;
+            })
+            addEventListener(content, 'compositionend', function (){
+                compositionStatus = 0;
+                paragraphStatus && formatParagraph(true);
+            })
 
             var message = function (event){
                 var msgData = JSON.parse(event.data), action = Actions[msgData.type];
