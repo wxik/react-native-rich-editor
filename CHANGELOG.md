@@ -1,4 +1,15 @@
 
+#1.8.1
+
+### Fix
+- Fix the problem that `initialHeight` does not take effect
+- Fix the problem that the `height` does not decrease after the text content is reduced
+
+### Tips
+- `useContainer = true` Need to implement `onCursorPosition` and handle focus scrolling. Refer to examples
+- The `height` setting will not be less than `initialHeight`
+
+
 #1.8.0
 
 ### This version merges with netizens to provide PR, thank you very much

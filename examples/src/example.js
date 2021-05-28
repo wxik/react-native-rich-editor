@@ -336,6 +336,7 @@ class Example extends React.Component {
                         ref={that.richText}
                         style={styles.rich}
                         useContainer={true}
+                        initialHeight={400}
                         // containerStyle={{borderRadius: 24}}
                         placeholder={'please input content'}
                         initialContentHTML={initHTML}
@@ -431,6 +432,8 @@ const styles = StyleSheet.create({
     rich: {
         minHeight: 300,
         flex: 1,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderColor: '#e3e3e3'
     },
     topVi: {
         backgroundColor: '#fafafa',

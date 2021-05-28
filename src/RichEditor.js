@@ -32,6 +32,7 @@ export default class RichTextEditor extends Component {
         autoCapitalize: 'off',
         defaultParagraphSeparator: 'div',
         editorInitializedCallback: () => {},
+        initialHeight: 0,
     };
 
     constructor(props) {
@@ -61,6 +62,7 @@ export default class RichTextEditor extends Component {
             defaultParagraphSeparator,
             firstFocusEnd,
             useContainer,
+            initialHeight,
         } = props;
         that.state = {
             html: {
@@ -84,7 +86,7 @@ export default class RichTextEditor extends Component {
                     }),
             },
             keyboardHeight: 0,
-            height: 0,
+            height: initialHeight,
             isInit: false,
         };
         that.focusListeners = [];
@@ -204,10 +206,12 @@ export default class RichTextEditor extends Component {
     }
 
     setWebHeight (height) {
-        // console.log(height);
-        const {onHeightChange, useContainer} = this.props;
+        const {onHeightChange, useContainer, initialHeight} = this.props;
         if (height !== this.state.height) {
-            useContainer && this.setState({height});
+            const maxHeight = Math.max(height, initialHeight);
+            if (useContainer && maxHeight >= initialHeight){
+                this.setState({height: maxHeight});
+            }
             onHeightChange && onHeightChange(height);
         }
     };
@@ -281,9 +285,9 @@ export default class RichTextEditor extends Component {
         // useContainer is an optional prop with default value of true
         // If set to true, it will use a View wrapper with styles and height.
         // If set to false, it will not use a View wrapper
-        const {useContainer, style, initialHeight = 0} = this.props;
+        const {useContainer, style} = this.props;
         return useContainer ? (
-            <View style={[style, {height: height || initialHeight}]} onLayout={this.onViewLayout}>{this.renderWebView()}</View>
+            <View style={[style, {height}]} onLayout={this.onViewLayout}>{this.renderWebView()}</View>
         ) : (
             this.renderWebView()
         );
