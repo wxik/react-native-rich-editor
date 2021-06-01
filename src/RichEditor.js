@@ -193,7 +193,7 @@ export default class RichTextEditor extends Component {
                     that.setWebHeight(data);
                     break;
                 case messages.OFFSET_Y:
-                    let offsetY = Number.parseInt(Number.parseInt(data) + that.layout.y);
+                    let offsetY = Number.parseInt(Number.parseInt(data) + that.layout.y || 0);
                     offsetY > 0 && onCursorPosition(offsetY);
                     break;
                 default:
