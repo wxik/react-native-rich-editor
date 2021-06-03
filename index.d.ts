@@ -177,6 +177,8 @@ export class RichEditor extends React.Component<RichEditorProps> {
     insertText: (text: string) => void;
 
     insertHTML: (html: string) => void;
+    
+    preCode: (type: string) => void;
 
     /**
      * 1 = 10px, 2 = 13px, 3 = 16px, 4 = 18px, 5 = 24px, 6 = 32px, 7 = 48px;

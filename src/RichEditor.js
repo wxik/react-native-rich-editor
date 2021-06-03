@@ -377,6 +377,10 @@ export default class RichTextEditor extends Component {
         }
     }
 
+    preCode (type){
+        this.sendAction(actions.code, 'result', type);
+    }
+
     setFontSize(size) {
         this.sendAction(actions.fontSize, 'result', size);
     }
