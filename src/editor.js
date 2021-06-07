@@ -393,7 +393,7 @@ function createHTML(options = {}) {
                     // setInterval(Actions.UPDATE_HEIGHT, 150);
                     Actions.UPDATE_HEIGHT();
                 } else {
-                    body.style.height = docEle.clientHeight + 'px';
+                    body.style.height = '100%'; //docEle.clientHeight + 'px';
                 }
             },
 
