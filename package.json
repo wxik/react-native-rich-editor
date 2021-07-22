@@ -2,6 +2,8 @@
   "name": "react-native-pell-rich-editor",
   "description": "React Native Rich Editor",
   "version": "1.8.5",
+  "private": false,
+  "license": "Apache-2.0",
   "main": "src/index.js",
   "author": {
     "name": "wxik",
