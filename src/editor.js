@@ -591,7 +591,25 @@ function createHTML(options = {}) {
                 clearTimeout(_handleCTime);
                 _handleCTime = setTimeout(function(){
                     var html = Actions.content.getHtml();
-                    postAction({type: 'CONTENT_CHANGE', data: html});
+                    const { anchorNode, anchorOffset } = window.getSelection();
+                    const selection = {
+                        text: anchorNode.data,
+                        index: anchorOffset,
+                    };
+
+                    if (!selection.text) {
+                        let closestText = anchorNode.previousSibling;
+                        while (closestText && !closestText.textContent) {
+                            closestText = closestText.previousSibling;
+                        }
+
+                        if (closestText) {
+                            selection.text = closestText.textContent;
+                            selection.index = selection.text.length;
+                        }
+                    }
+
+                    postAction({type: 'CONTENT_CHANGE', data: { html, selection } });
                 }, 50);
             }
         })
