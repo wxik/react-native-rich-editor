@@ -266,6 +266,11 @@ export interface RichToolbarProps {
     style?: StyleProp<ViewStyle>;
 
     /**
+     * Flat container style prop for the toolbar
+     */
+    flatContainerStyle?: StyleProp<ViewStyle>;
+
+    /**
      * Your own set if images for the toolbar
      */
     iconMap?: Record<string, (IconRecord) => React.Element | ImageSourcePropType>;
