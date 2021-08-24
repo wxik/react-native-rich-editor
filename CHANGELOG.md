@@ -2,6 +2,8 @@
 #1.8.6
 ### Changed
 - Add `autoCorrect` props of default false
+### PR
+- [initialCSSText](https://github.com/wxik/react-native-rich-editor/pull/111)
 
 #1.8.4 - 1.8.5
 ###Fix
