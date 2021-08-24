@@ -3,6 +3,8 @@
   "description": "React Native Rich Editor",
   "version": "1.8.5",
   "main": "src/index.js",
+  "license": "MIT",
+  "private": false,
   "author": {
     "name": "wxik",
     "email": "io@wxik.com"

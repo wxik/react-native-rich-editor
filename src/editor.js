@@ -396,7 +396,8 @@ function createHTML(options = {}) {
                     // setInterval(Actions.UPDATE_HEIGHT, 150);
                     Actions.UPDATE_HEIGHT();
                 } else {
-                    body.style.height = docEle.clientHeight + 'px';
+                    // react-native-webview There is a bug in the body and html height setting of a certain version of 100%
+                    // body.style.height = docEle.clientHeight + 'px';
                 }
             },
 

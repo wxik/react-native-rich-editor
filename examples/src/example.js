@@ -89,8 +89,7 @@ class Example extends React.Component {
         Keyboard.removeListener('keyboardDidHide', this.onKeyHide);
     }
 
-    onKeyHide = () => {
-    };
+    onKeyHide = () => {};
 
     onKeyShow = () => {
         TextInput.State.currentlyFocusedInput() && this.setState({emojiVisible: false});
@@ -163,11 +162,11 @@ class Example extends React.Component {
 
     foreColor = () => {
         this.richText.current?.setForeColor('blue');
-    }
+    };
 
     hiliteColor = () => {
         this.richText.current?.setHiliteColor('red');
-    }
+    };
 
     insertHTML() {
         // this.richText.current?.insertHTML(
@@ -270,10 +269,10 @@ class Example extends React.Component {
         this.editorFocus = false;
     };
 
-    handleCursorPosition = (scrollY) => {
+    handleCursorPosition = scrollY => {
         // Positioning scroll bar
         this.scrollRef.current.scrollTo({y: scrollY - 30, animated: true});
-    }
+    };
 
     render() {
         let that = this;
@@ -282,7 +281,7 @@ class Example extends React.Component {
         const dark = theme === 'dark';
         return (
             <SafeAreaView style={[styles.container, dark && styles.darkBack]}>
-                <StatusBar barStyle={theme !== 'dark' ? 'dark-content' : 'light-content'}/>
+                <StatusBar barStyle={theme !== 'dark' ? 'dark-content' : 'light-content'} />
                 <InsertLinkModal
                     placeholderColor={placeholderColor}
                     color={color}
@@ -291,11 +290,15 @@ class Example extends React.Component {
                     ref={that.linkModal}
                 />
                 <View style={styles.nav}>
-                    <Button title={'HOME'} onPress={that.onHome}/>
-                    <Button title="Preview" onPress={that.save}/>
+                    <Button title={'HOME'} onPress={that.onHome} />
+                    <Button title="Preview" onPress={that.save} />
                 </View>
-                <ScrollView style={[styles.scroll, dark && styles.scrollDark]} keyboardDismissMode={'none'}
-                            ref={that.scrollRef} scrollEventThrottle={20}>
+                <ScrollView
+                    style={[styles.scroll, dark && styles.scrollDark]}
+                    keyboardDismissMode={'none'}
+                    ref={that.scrollRef}
+                    nestedScrollEnabled={true}
+                    scrollEventThrottle={20}>
                     <View style={[styles.topVi, dark && styles.darkBack]}>
                         <View style={styles.item}>
                             <Text style={{color}}>To: </Text>
@@ -316,8 +319,8 @@ class Example extends React.Component {
                             />
                         </View>
                         <View style={styles.item}>
-                            <Button title={theme} onPress={that.onTheme}/>
-                            <Button title={disabled ? 'enable' : 'disable'} onPress={that.onDisabled}/>
+                            <Button title={theme} onPress={that.onTheme} />
+                            <Button title={disabled ? 'enable' : 'disable'} onPress={that.onDisabled} />
                         </View>
                     </View>
                     <RichToolbar
@@ -336,7 +339,7 @@ class Example extends React.Component {
                         editorStyle={contentStyle} // default light style
                         ref={that.richText}
                         style={styles.rich}
-                        useContainer={true}
+                        useContainer={false}
                         initialHeight={400}
                         // containerStyle={{borderRadius: 24}}
                         placeholder={'please input content'}
@@ -392,9 +395,7 @@ class Example extends React.Component {
                         ]} // default defaultActions
                         iconMap={{
                             insertEmoji: phizIcon,
-                            [actions.foreColor]: ({tintColor}) => (
-                                <Text style={[styles.tib, {color: 'blue'}]}>FC</Text>
-                            ),
+                            [actions.foreColor]: ({tintColor}) => <Text style={[styles.tib, {color: 'blue'}]}>FC</Text>,
                             [actions.hiliteColor]: ({tintColor}) => (
                                 <Text style={[styles.tib, {color: tintColor, backgroundColor: 'red'}]}>BC</Text>
                             ),
@@ -413,7 +414,7 @@ class Example extends React.Component {
                         foreColor={that.foreColor}
                         hiliteColor={that.hiliteColor}
                     />
-                    {emojiVisible && <EmojiView onSelect={that.insertEmoji}/>}
+                    {emojiVisible && <EmojiView onSelect={that.insertEmoji} />}
                 </KeyboardAvoidingView>
             </SafeAreaView>
         );
@@ -434,7 +435,7 @@ const styles = StyleSheet.create({
         minHeight: 300,
         flex: 1,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderColor: '#e3e3e3'
+        borderColor: '#e3e3e3',
     },
     topVi: {
         backgroundColor: '#fafafa',

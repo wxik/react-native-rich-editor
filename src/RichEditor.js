@@ -255,6 +255,7 @@ export default class RichTextEditor extends Component {
                     scrollEnabled={false}
                     hideKeyboardAccessoryView={true}
                     keyboardDisplayRequiresUserAction={false}
+                    nestedScrollEnabled={true}
                     {...rest}
                     ref={that.setRef}
                     onMessage={that.onMessage}
