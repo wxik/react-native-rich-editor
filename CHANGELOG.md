@@ -6,6 +6,8 @@
 - [initialCSSText](https://github.com/wxik/react-native-rich-editor/pull/111)
 ### Added
 - `onInput` callback input value
+### Fix
+- Fix `blockquote` Enter new line
 
 #1.8.4 - 1.8.5
 ###Fix

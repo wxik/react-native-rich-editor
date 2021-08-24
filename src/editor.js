@@ -77,7 +77,7 @@ function createHTML(options = {}) {
         var body = document.body, docEle = document.documentElement;
         var defaultParagraphSeparatorString = 'defaultParagraphSeparator';
         var formatBlock = 'formatBlock';
-        var editor = null, editorFoucs = false, o_height = 0, compositionStatus = 0, paragraphStatus = 0;
+        var editor = null, editorFoucs = false, o_height = 0, compositionStatus = 0, paragraphStatus = 0, enterStatus = 0;
         function addEventListener(parent, type, listener) {
             return parent.addEventListener(type, listener);
         };
@@ -443,7 +443,19 @@ function createHTML(options = {}) {
                     } else {
                         paragraphStatus = 1;
                     }
-                } else if (content.innerHTML === '<br>') content.innerHTML = '';
+                } else if (content.innerHTML === '<br>'){
+                     content.innerHTML = '';
+                } else if (enterStatus && queryCommandValue(formatBlock) === 'blockquote') {
+                    formatParagraph();
+                } else if (queryCommandValue(formatBlock) === 'pre'){
+                        // // code
+                        //  var node = anchorNode && anchorNode.childNodes[1];
+                        //  console.log(node, anchorNode)
+                        //  if (node && node.nodeName === 'BR'){
+                        //      event.preventDefault();
+                        //      console.log(anchorNode)
+                        //  }
+                }
 
                 saveSelection();
                 handleChange(_ref);
@@ -490,6 +502,7 @@ function createHTML(options = {}) {
                 postAction({type: type, data: {keyCode: event.keyCode, key: event.key}});
             }
             function handleKeyup(event){
+                enterStatus = 0;
                 _keyDown = false;
                 if (event.keyCode === 8) handleSelecting (event);
                 ${keyUpListener} && postKeyAction(event, "CONTENT_KEYUP")
@@ -498,11 +511,9 @@ function createHTML(options = {}) {
                 _keyDown = true;
                  handleState();
                 if (event.key === 'Enter'){
+                    enterStatus = 1; // set enter true
                     var box;
-                    if (queryCommandValue(formatBlock) === 'blockquote'){
-                        console.log('delete?: Enter -> blockquote')
-                        // formatParagraph(true);
-                    } else  if (anchorNode.innerHTML === '<br>' && anchorNode.parentNode !== editor.content){
+                    if (anchorNode.innerHTML === '<br>' && anchorNode.parentNode !== editor.content){
                         // setCollapse(editor.content);
                     } else if (queryCommandState('insertOrderedList') && !!(box = checkboxNode(anchorNode))){
                         var node = anchorNode && anchorNode.childNodes[1];
