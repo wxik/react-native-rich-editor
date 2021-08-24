@@ -277,6 +277,8 @@ function createHTML(options = {}) {
                 if (node.nodeName === 'PRE'){
                     type && node.setAttribute("type", type);
                     node.innerHTML = "<code type='"+(type || '') +"'>" + node.innerHTML + "</code>";
+                    // var br = createElement("br");
+                    // node.parentNode.insertBefore(br, node.nextSibling);
                     setTimeout(function (){
                         setCollapse(node.firstChild);
                     });
@@ -447,14 +449,6 @@ function createHTML(options = {}) {
                      content.innerHTML = '';
                 } else if (enterStatus && queryCommandValue(formatBlock) === 'blockquote') {
                     formatParagraph();
-                } else if (queryCommandValue(formatBlock) === 'pre'){
-                        // // code
-                        //  var node = anchorNode && anchorNode.childNodes[1];
-                        //  console.log(node, anchorNode)
-                        //  if (node && node.nodeName === 'BR'){
-                        //      event.preventDefault();
-                        //      console.log(anchorNode)
-                        //  }
                 }
 
                 saveSelection();
@@ -513,6 +507,7 @@ function createHTML(options = {}) {
                 if (event.key === 'Enter'){
                     enterStatus = 1; // set enter true
                     var box;
+                    var block = queryCommandValue(formatBlock);
                     if (anchorNode.innerHTML === '<br>' && anchorNode.parentNode !== editor.content){
                         // setCollapse(editor.content);
                     } else if (queryCommandState('insertOrderedList') && !!(box = checkboxNode(anchorNode))){
@@ -523,6 +518,18 @@ function createHTML(options = {}) {
                         } else{
                             // add checkbox
                             _checkboxFlag = 1;
+                        }
+                    }
+                    if (block === 'pre' && anchorNode.innerHTML === '<br>'){
+                        // code end enter new line (Unfinished)
+                        if (!anchorNode.nextSibling){
+                            event.preventDefault();
+                            var node = anchorNode.parentNode;
+                            var br = createElement("br");
+                            node.parentNode.insertBefore(br, node.nextSibling);
+                            setTimeout(function (){
+                                setCollapse(br);
+                            });
                         }
                     }
                 }

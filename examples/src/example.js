@@ -38,10 +38,8 @@ const initHTML = `<br/>
 </center>
 <br/>
 <div><center><img src="${imageList[0]}" onclick="_.sendEvent('ImgClick')" contenteditable="false" height="170px"/></center></div>
-<div>
 <pre type="javascript"><code>const editor = ReactNative;</code><code>console.log(editor);</code></pre>
 <br/>Click the picture to switch<br/><br/>
-</div>
 `;
 
 const phizIcon = require('./assets/phiz.png');
