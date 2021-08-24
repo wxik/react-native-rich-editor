@@ -1,8 +1,8 @@
 
 
 .mobile {
-  width: 320px;
-  height: 640px;
+  width: 375px;
+  height: 812px;
   display: flex;
   flex-direction: column;
   background-color: #F5FCFF;
@@ -20,7 +20,7 @@ iframe {
 
 .toolbar {
   background-color: #F5FCFF;
-  height: 50px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,7 +56,7 @@ iframe {
 }
 
 .nav {
-  height: 44px;
+  height: 34px;
   border-bottom: 1px solid #f3f3f3;
   display: flex;
   align-items: center;
@@ -77,12 +77,12 @@ iframe {
 }
 
 .icon {
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
+  width: 20px;
+  padding: 0 4px;
+  line-height: 35px;
   cursor: pointer;
-  color: #878b92;
   font-size: 16px;
+  filter: url(#tint-13);
 
 }
 .icon:active {
@@ -90,5 +90,5 @@ iframe {
 }
 
 .icon.selected {
-  filter:brightness(20%);
+  filter: url(#tint-12);
 }

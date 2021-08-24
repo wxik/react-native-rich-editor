@@ -75,3 +75,4 @@ typings/
 .serverless
 
 .idea
+.DS_Store

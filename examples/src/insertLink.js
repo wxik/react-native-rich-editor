@@ -9,7 +9,7 @@ import React from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Modal from 'react-native-modal';
 
-export class InsertLinkModal extends React.Component {
+export class InsertLinkModal extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -42,6 +42,9 @@ export class InsertLinkModal extends React.Component {
         const {color, placeholderColor, backgroundColor} = this.props;
         return (
             <Modal
+                animationIn={'fadeIn'}
+                animationOut={'fadeOut'}
+                coverScreen={false}
                 isVisible={isModalVisible}
                 backdropColor={color}
                 backdropOpacity={0.3}

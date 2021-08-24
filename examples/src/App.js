@@ -9,10 +9,12 @@
 import React, {Component} from 'react';
 import {Example} from './example';
 import {Welcome} from './welcome';
+import {Preview} from './preview';
 
 const Routes = {
     index: Welcome,
     rich: Example,
+    preview: Preview,
 };
 
 type Props = {};
