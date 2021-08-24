@@ -31,6 +31,7 @@ function createHTML(options = {}) {
         keyDownListener = false,
         keyUpListener = false,
         autoCapitalize = 'off',
+        autoCorrect = false,
         defaultParagraphSeparator = 'div',
         // When first gaining focus, the cursor moves to the end of the text
         firstFocusEnd = true,
@@ -47,7 +48,9 @@ function createHTML(options = {}) {
         * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;box-sizing: border-box;}
         html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em; height: 100%}
         body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: ${backgroundColor};caret-color: ${caretColor};}
-        .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;${!useContainer?"height:100%;":''}-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
+        .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;${
+        !useContainer ? 'height:100%;' : ''
+    }-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
         .pell { height: 100%;} .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
     </style>
     <style>
@@ -426,7 +429,7 @@ function createHTML(options = {}) {
             content.contentEditable = true;
             content.spellcheck = false;
             content.autocapitalize = '${autoCapitalize}';
-            content.autocorrect = 'off';
+            content.autocorrect = ${autoCorrect};
             content.autocomplete = 'off';
             content.className = "pell-content";
             content.oninput = function (_ref) {

@@ -1,4 +1,8 @@
 
+#1.8.6
+### Changed
+- Add `autoCorrect` props of default false
+
 #1.8.4 - 1.8.5
 ###Fix
 - Fix code wrapping
