@@ -74,4 +74,5 @@ export const messages = {
     SELECTED_TEXT_CHANGED: 'SELECTED_TEXT_CHANGED',
     OFFSET_HEIGHT: 'OFFSET_HEIGHT',
     OFFSET_Y: 'OFFSET_Y',
+    ON_INPUT: 'ON_INPUT',
 };

@@ -87,6 +87,12 @@ export interface RichEditorProps extends WebViewProps {
     onKeyDown?: ({keyCode: number, key: string}) => void;
 
     /**
+     * Callback input chat
+     * Android and iOS inputType are not the same
+     */
+    onInput?: ({data: string, inputType: string}) => void;
+
+    /**
      * Callback when the editor focus some content
      */
     onFocus?: () => void;
@@ -178,7 +184,7 @@ export class RichEditor extends React.Component<RichEditorProps> {
     insertText: (text: string) => void;
 
     insertHTML: (html: string) => void;
-    
+
     preCode: (type: string) => void;
 
     /**

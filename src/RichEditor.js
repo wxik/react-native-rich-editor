@@ -58,6 +58,7 @@ export default class RichTextEditor extends Component {
             onPaste,
             onKeyUp,
             onKeyDown,
+            onInput,
             autoCapitalize,
             autoCorrect,
             defaultParagraphSeparator,
@@ -81,6 +82,7 @@ export default class RichTextEditor extends Component {
                         pasteListener: !!onPaste,
                         keyUpListener: !!onKeyUp,
                         keyDownListener: !!onKeyDown,
+                        inputListener: !!onInput,
                         autoCapitalize,
                         autoCorrect,
                         defaultParagraphSeparator,
@@ -142,7 +144,7 @@ export default class RichTextEditor extends Component {
 
     onMessage(event) {
         const that = this;
-        const {onFocus, onBlur, onChange, onPaste, onKeyUp, onKeyDown, onMessage, onCursorPosition} = that.props;
+        const {onFocus, onBlur, onChange, onPaste, onKeyUp, onKeyDown, onInput, onMessage, onCursorPosition} = that.props;
         try {
             const message = JSON.parse(event.nativeEvent.data);
             const data = message.data;
@@ -187,6 +189,9 @@ export default class RichTextEditor extends Component {
                     break;
                 case messages.CONTENT_KEYDOWN:
                     onKeyDown?.(data);
+                    break;
+                case messages.ON_INPUT:
+                    onInput?.(data);
                     break;
                 case messages.OFFSET_HEIGHT:
                     that.setWebHeight(data);
@@ -256,7 +261,7 @@ export default class RichTextEditor extends Component {
                     scrollEnabled={false}
                     hideKeyboardAccessoryView={true}
                     keyboardDisplayRequiresUserAction={false}
-                    nestedScrollEnabled={true}
+                    nestedScrollEnabled={!useContainer}
                     {...rest}
                     ref={that.setRef}
                     onMessage={that.onMessage}

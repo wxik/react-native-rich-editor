@@ -235,13 +235,30 @@ class Example extends React.Component {
         console.log('Paste:', data);
     };
 
+    /**
+     * @deprecated Android keyCode 229
+     * @param data
+     */
     handleKeyUp = data => {
         // console.log('KeyUp:', data);
     };
 
+    /**
+     * @deprecated Android keyCode 229
+     * @param data
+     */
     handleKeyDown = data => {
         // console.log('KeyDown:', data);
     };
+
+    /**
+     *
+     * @param data
+     * @param {string} inputType
+     */
+    onInput = ({data, inputType}) => {
+        // console.log(inputType, data)
+    }
 
     handleMessage = ({type, id, data}) => {
         let index = 0;
@@ -339,7 +356,7 @@ class Example extends React.Component {
                         editorStyle={contentStyle} // default light style
                         ref={that.richText}
                         style={styles.rich}
-                        useContainer={false}
+                        useContainer={true}
                         initialHeight={400}
                         // containerStyle={{borderRadius: 24}}
                         placeholder={'please input content'}
@@ -350,6 +367,7 @@ class Example extends React.Component {
                         onPaste={that.handlePaste}
                         onKeyUp={that.handleKeyUp}
                         onKeyDown={that.handleKeyDown}
+                        onInput={that.onInput}
                         onMessage={that.handleMessage}
                         onFocus={that.handleFocus}
                         onBlur={that.handleBlur}

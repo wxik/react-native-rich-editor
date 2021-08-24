@@ -4,6 +4,8 @@
 - Add `autoCorrect` props of default false
 ### PR
 - [initialCSSText](https://github.com/wxik/react-native-rich-editor/pull/111)
+### Added
+- `onInput` callback input value
 
 #1.8.4 - 1.8.5
 ###Fix

@@ -31,6 +31,7 @@ function createHTML(options = {}) {
         pasteListener = false,
         keyDownListener = false,
         keyUpListener = false,
+        inputListener = false,
         autoCapitalize = 'off',
         autoCorrect = false,
         defaultParagraphSeparator = 'div',
@@ -447,6 +448,7 @@ function createHTML(options = {}) {
                 saveSelection();
                 handleChange(_ref);
                 settings.onChange();
+                ${inputListener} && postAction({type: "ON_INPUT", data: {inputType: _ref.inputType, data: _ref.data}});
             };
             appendChild(settings.element, content);
 
@@ -555,10 +557,10 @@ function createHTML(options = {}) {
                     exec("insertText", text);
                 }
             });
-            addEventListener(content, 'compositionstart', function(){
+            addEventListener(content, 'compositionstart', function(event){
                 compositionStatus = 1;
             })
-            addEventListener(content, 'compositionend', function (){
+            addEventListener(content, 'compositionend', function (event){
                 compositionStatus = 0;
                 paragraphStatus && formatParagraph(true);
             })

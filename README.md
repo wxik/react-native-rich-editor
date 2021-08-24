@@ -41,7 +41,7 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 * `initialContentHTML`
 
-	HTML that will be rendered in the content section on load.
+    HTML that will be rendered in the content section on load.
 
 * `initialFocus`
 * Boolean value to Initial content request focus. The default value is `false`.
@@ -51,18 +51,18 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 * `editorInitializedCallback `
 
-	A function that will be called when the editor has been initialized.
+    A function that will be called when the editor has been initialized.
 
 * `editorStyle`
 
-	Styling for container or for Rich Editor more dark or light settings. Object containing the following options:
+    Styling for container or for Rich Editor more dark or light settings. Object containing the following options:
 
-	- `backgroundColor`: Editor background color
-	- `color`: Editor text color
+    - `backgroundColor`: Editor background color
+    - `color`: Editor text color
     - `caretColor` cursor/selection color
-	- `placeholderColor`: Editor placeholder text color
-	- `contentCSSText`: editor content css text（initial valid）
-	- `cssText`: editor global css text（initial valid）
+    - `placeholderColor`: Editor placeholder text color
+    - `contentCSSText`: editor content css text（initial valid）
+    - `cssText`: editor global css text（initial valid）
 
 * `onChange`
     Callback after editor data modification
@@ -91,22 +91,25 @@ The editor component. Simply place this component in your view hierarchy to rece
     ```
 
 * `useContainer`
-	A boolean value that determines if a View container is wrapped around the WebView. The default value is true. If you are using your own View to wrap this library around, set this value to false.
+    A boolean value that determines if a View container is wrapped around the WebView. The default value is true. If you are using your own View to wrap this library around, set this value to false.
 
 * `initialHeight`
     useContainer is false by inline view of initial height
 
 * `pasteAsPlainText`
-	A boolean value (false as default) that determines if the clipboard paste will keep its format or it will be done as plain text
+    A boolean value (false as default) that determines if the clipboard paste will keep its format or it will be done as plain text
 
 * `onPaste`
   Callback clipboard paste value
 
 * `onKeyUp`
-  Callback Keyup event
+  Callback Keyup event (Android 229 bug)
 
 * `onKeyDown`
-  Callback Keydown event
+  Callback Keydown event (Android 229 bug)
+
+* `onInput`
+  Callback input value
 
 * `onFocus`
   Callback editor focus
