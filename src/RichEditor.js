@@ -52,7 +52,8 @@ export default class RichTextEditor extends Component {
         that.layout = {};
         that.selectionChangeListeners = [];
         const {
-            editorStyle: {backgroundColor, color, placeholderColor, cssText, contentCSSText, caretColor} = {},
+            editorStyle: {backgroundColor, color, placeholderColor, initialCSSText, cssText, contentCSSText} = {},
+            editorStyle: {backgroundColor, color, placeholderColor, initialCSSText, cssText, contentCSSText, caretColor} = {},
             html,
             pasteAsPlainText,
             onPaste,
@@ -74,6 +75,7 @@ export default class RichTextEditor extends Component {
                         color,
                         caretColor,
                         placeholderColor,
+                        initialCSSText,
                         cssText,
                         contentCSSText,
                         pasteAsPlainText,
