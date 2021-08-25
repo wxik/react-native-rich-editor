@@ -47,6 +47,7 @@ export default class RichTextEditor extends Component {
         that.init = that.init.bind(that);
         that.setRef = that.setRef.bind(that);
         that.onViewLayout = that.onViewLayout.bind(that);
+        that.unmount = false;
         that._keyOpen = false;
         that._focus = false;
         that.layout = {};
@@ -98,6 +99,7 @@ export default class RichTextEditor extends Component {
     }
 
     componentDidMount() {
+        this.unmount = false;
         if (PlatformIOS) {
             this.keyboardEventListeners = [
                 Keyboard.addListener('keyboardWillShow', this._onKeyboardWillShow),
@@ -112,6 +114,7 @@ export default class RichTextEditor extends Component {
     }
 
     componentWillUnmount() {
+        this.unmount = true;
         this.keyboardEventListeners.forEach(eventListener => eventListener.remove());
     }
 
@@ -213,7 +216,7 @@ export default class RichTextEditor extends Component {
         const {onHeightChange, useContainer, initialHeight} = this.props;
         if (height !== this.state.height) {
             const maxHeight = Math.max(height, initialHeight);
-            if (useContainer && maxHeight >= initialHeight) {
+            if (!this.unmount && useContainer && maxHeight >= initialHeight) {
                 this.setState({height: maxHeight});
             }
             onHeightChange && onHeightChange(height);
@@ -229,7 +232,7 @@ export default class RichTextEditor extends Component {
      */
     sendAction(type, action, data, options) {
         let jsonString = JSON.stringify({type, name: action, data, options});
-        if (this.webviewBridge) {
+        if (!this.unmount && this.webviewBridge) {
             this.webviewBridge.postMessage(jsonString);
         }
     }
@@ -436,7 +439,7 @@ export default class RichTextEditor extends Component {
         initialFocus && !disabled && that.focusContentEditor();
         // no visible ?
         that.sendAction(actions.init);
-        that.setState({isInit: true});
+        !that.unmount && that.setState({isInit: true});
     }
 
     /**
