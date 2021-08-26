@@ -661,7 +661,7 @@ function createHTML(options = {}) {
 
             if (canUseMention) {
                 if (prevKey === '@') {
-                    range.commonAncestorContainer.nodeValue = value.replace('@', '');
+                    // range.commonAncestorContainer.nodeValue = value.replace('@', '');
                     // range.setStart(range.startContainer, range.startOffset - 1);
                     // range.setEnd(range.startContainer, range.startOffset);
                     _postMessage({type: 'USE_MENTION'});
