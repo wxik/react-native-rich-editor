@@ -14,6 +14,7 @@ function getContentCSS() {
         hr{display: block;height: 0; border: 0;border-top: 1px solid #ccc; margin: 15px 0; padding: 0;}
         pre{padding: 10px 5px 10px 10px;margin: 15px 0;display: block;line-height: 18px;background: #F0F0F0;border-radius: 6px;font-size: 13px; font-family: 'monaco', 'Consolas', "Liberation Mono", Courier, monospace; word-break: break-all; word-wrap: break-word;overflow-x: auto;}
         pre code {display: block;font-size: inherit;white-space: pre-wrap;color: inherit;}
+        .mention{ color: #3a86ff; background: #e7f0fe; padding: 1px 0; }
     </style>
     `;
 }
@@ -285,6 +286,19 @@ function createHTML(options = {}) {
                 }
                 return flag;
              }},
+            mention: { result: function (mentionInfo) {
+                var selection = window.getSelection();
+                let range = selection.getRangeAt(0);
+                range.deleteContents();
+
+                var mentionNode = document.createRange().createContextualFragment('<a class="mention" mention-id=' + mentionInfo.memberId + ' mention-application-id="' + mentionInfo.applicationId + '" mention-application-slug="members" mention-application-name="Members" title=' + mentionInfo.title + ' contenteditable="false" draggable="true">@'+ mentionInfo.title +'</a>').firstChild;
+
+                range.insertNode(mentionNode);
+
+                for(let position = 0; position != text.length; position++) {
+                    selection.modify("move", "right", "character");
+                };
+            }},
             line: { result: function() { return exec('insertHorizontalRule'); }},
             redo: { result: function() { return exec('redo'); }},
             undo: { result: function() { return exec('undo'); }},
@@ -498,6 +512,7 @@ function createHTML(options = {}) {
             function handleKeyup(event){
                 enterStatus = 0;
                 _keyDown = false;
+                handleMention(event);
                 if (event.keyCode === 8) handleSelecting (event);
                 ${keyUpListener} && postKeyAction(event, "CONTENT_KEYUP")
             }
@@ -548,11 +563,19 @@ function createHTML(options = {}) {
                 postAction({type: 'CONTENT_BLUR'});
             }
             function handleClick(event){
-                var ele = event.target;
-                if (ele.nodeName === 'INPUT' && ele.type === 'checkbox'){
+                const clickTarget = event.target;
+                const clickTargetClassNames = clickTarget.className.split(' ');
+                const isClassNamesIncludeMention = clickTargetClassNames.includes('mention');
+
+                if (clickTarget.nodeName === 'INPUT' && clickTarget.type === 'checkbox'){
                     // Set whether the checkbox is selected by default
-                    if (ele.checked) ele.setAttribute('checked', '');
-                    else ele.removeAttribute('checked');
+                    if (clickTarget.checked) clickTarget.setAttribute('checked', '');
+                    else clickTarget.removeAttribute('checked');
+                }
+
+                if (isClassNamesIncludeMention) {
+                    var mendtionId = clickTarget.getAttribute('mention-id')
+                    onMentionClick(mendtionId);
                 }
             }
             addEventListener(content, 'touchcancel', handleSelecting);
@@ -619,6 +642,36 @@ function createHTML(options = {}) {
                 }, 50);
             }
         })
+
+        var onMentionClick = function(mentionId) {
+            _postMessage({type: 'MENTION_SELECT', mentionId: mentionId});
+        };
+
+        var handleMention = function(event) {
+            var selection = window.getSelection();
+            let range = selection.getRangeAt(0);
+            range.deleteContents();
+
+            const cursorPosition = range.startOffset;
+            const value = range.commonAncestorContainer.nodeValue;
+
+            const regex = /\\s/g;
+            const prevKey = range.commonAncestorContainer.nodeValue[cursorPosition - 1] ?? '';
+            const canUseMention = range.commonAncestorContainer.nodeValue[cursorPosition - 2].match(regex);
+
+            if (canUseMention) {
+                if (prevKey === '@') {
+                    range.commonAncestorContainer.nodeValue = value.replace('@', '');
+                    // range.setStart(range.startContainer, range.startOffset - 1);
+                    // range.setEnd(range.startContainer, range.startOffset);
+
+                    alert(JSON.stringify(range))
+
+                    // _postMessage({type: 'USE_MENTION'});
+                }
+            }
+        };
+
         return {
             sendEvent: function (type, data){
                 event.preventDefault();
@@ -626,7 +679,9 @@ function createHTML(options = {}) {
                 var id = event.currentTarget.id;
                 if ( !id ) event.currentTarget.id = id = generateId();
                 _postMessage({type, id, data});
-            }
+            },
+            onMentionClick,
+            handleMention
         }
     })({
         window: window.ReactNativeWebView || window.parent,
