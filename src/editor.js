@@ -664,10 +664,7 @@ function createHTML(options = {}) {
                     range.commonAncestorContainer.nodeValue = value.replace('@', '');
                     // range.setStart(range.startContainer, range.startOffset - 1);
                     // range.setEnd(range.startContainer, range.startOffset);
-
-                    alert(JSON.stringify(range))
-
-                    // _postMessage({type: 'USE_MENTION'});
+                    _postMessage({type: 'USE_MENTION'});
                 }
             }
         };
