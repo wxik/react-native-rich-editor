@@ -291,7 +291,7 @@ function createHTML(options = {}) {
                 let range = selection.getRangeAt(0);
                 range.deleteContents();
 
-                var mentionNode = document.createRange().createContextualFragment('<a class="mention" mention-id=' + mentionInfo.memberId + ' mention-application-id="' + mentionInfo.applicationId + '" mention-application-slug="members" mention-application-name="Members" title=' + mentionInfo.title + ' contenteditable="false" draggable="true">@'+ mentionInfo.title +'</a>').firstChild;
+                var mentionNode = document.createRange().createContextualFragment('<a class="mention" mention-id=' + mentionInfo.memberId + ' mention-application-id="' + mentionInfo.applicationId + '" mention-application-slug="members" mention-application-name="Members" title="' + mentionInfo.title + '" contenteditable="false" draggable="true">@'+ mentionInfo.title +'</a>').firstChild;
 
                 range.insertNode(mentionNode);
 
