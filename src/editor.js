@@ -295,9 +295,10 @@ function createHTML(options = {}) {
 
                 range.insertNode(mentionNode);
 
-                for(let position = 0; position != text.length; position++) {
-                    selection.modify("move", "right", "character");
-                };
+                range.setStartAfter(mentionNode);
+                range.setEndAfter(mentionNode);
+                selection.removeAllRanges();
+                selection.addRange(range);
             }},
             line: { result: function() { return exec('insertHorizontalRule'); }},
             redo: { result: function() { return exec('redo'); }},
