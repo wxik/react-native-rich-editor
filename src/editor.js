@@ -299,6 +299,9 @@ function createHTML(options = {}) {
                 range.setEndAfter(mentionNode);
                 selection.removeAllRanges();
                 selection.addRange(range);
+
+                var html = Actions.content.getHtml();
+                postAction({type: 'CONTENT_CHANGE', data: html});
             }},
             line: { result: function() { return exec('insertHorizontalRule'); }},
             redo: { result: function() { return exec('redo'); }},
