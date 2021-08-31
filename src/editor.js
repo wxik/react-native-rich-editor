@@ -291,7 +291,7 @@ function createHTML(options = {}) {
                 let range = selection.getRangeAt(0);
                 range.deleteContents();
 
-                var mentionNode = document.createRange().createContextualFragment('<a class="mention" mention-id=' + mentionInfo.memberId + ' mention-application-id="' + mentionInfo.applicationId + '" mention-application-slug="members" mention-application-name="Members" title="' + mentionInfo.title + '" contenteditable="false" draggable="true">@'+ mentionInfo.title +'</a>').firstChild;
+                var mentionNode = document.createRange().createContextualFragment('<a class="mention" mention-id="' + mentionInfo.mentionId + '" mention-application-id="' + mentionInfo.applicationId + '" mention-application-slug="members" mention-application-name="Members" title="' + mentionInfo.title + '" contenteditable="false" draggable="true">@'+ mentionInfo.title +'</a>').firstChild;
 
                 range.insertNode(mentionNode);
 
@@ -523,6 +523,7 @@ function createHTML(options = {}) {
             function handleKeydown(event){
                 _keyDown = true;
                  handleState();
+                 handleMention(event);
                 if (event.key === 'Enter'){
                     enterStatus = 1; // set enter true
                     var box;
@@ -652,24 +653,17 @@ function createHTML(options = {}) {
         };
 
         var handleMention = function(event) {
-            var selection = window.getSelection();
-            let range = selection.getRangeAt(0);
-            range.deleteContents();
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
 
             const cursorPosition = range.startOffset;
             const value = range.commonAncestorContainer.nodeValue;
 
-            const regex = /\\s/g;
-            const prevKey = range.commonAncestorContainer.nodeValue[cursorPosition - 1] ?? '';
-            const canUseMention = range.commonAncestorContainer.nodeValue[cursorPosition - 2].match(regex);
+            const key = value[cursorPosition - 1];
+            const isPrewChar = value.length > 2 ? value[cursorPosition - 2].match(/\\w/g) : false;
 
-            if (canUseMention) {
-                if (prevKey === '@') {
-                    // range.commonAncestorContainer.nodeValue = value.replace('@', '');
-                    // range.setStart(range.startContainer, range.startOffset - 1);
-                    // range.setEnd(range.startContainer, range.startOffset);
-                    _postMessage({type: 'USE_MENTION'});
-                }
+            if (key === '@' && !isPrewChar) {
+                _postMessage({type: 'USE_MENTION'});
             }
         };
 
