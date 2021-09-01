@@ -287,7 +287,7 @@ function createHTML(options = {}) {
                 return flag;
              }},
             mention: { result: function (mentionInfo) {
-                function insertTextAtCursor(value, stepback) {
+                function insertTextAtCursor(stepback) {
 
                 var sel, range, mentionNode;
                 if (window.getSelection) {
@@ -310,13 +310,13 @@ function createHTML(options = {}) {
                         sel.removeAllRanges();
                         sel.addRange(range);
                     }
-                        } else if (document.selection && document.selection.createRange) {
-                            range = document.selection.createRange();
-                            range.pasteHTML(text);
-                        }
+                } else if (document.selection && document.selection.createRange) {
+                        range = document.selection.createRange();
+                        range.pasteHTML(text);
                     }
+                }
 
-                insertTextAtCursor('asdasd', true)
+                insertTextAtCursor(true)
 
                 var html = Actions.content.getHtml();
                 postAction({type: 'CONTENT_CHANGE', data: html});
