@@ -320,6 +320,7 @@ function createHTML(options = {}) {
 
                 var html = Actions.content.getHtml();
                 postAction({type: 'CONTENT_CHANGE', data: html});
+                Actions.UPDATE_HEIGHT();
             }},
             line: { result: function() { return exec('insertHorizontalRule'); }},
             redo: { result: function() { return exec('redo'); }},
