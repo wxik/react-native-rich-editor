@@ -295,7 +295,7 @@ function createHTML(options = {}) {
 
                     if (sel.getRangeAt && sel.rangeCount) {
                         range = sel.getRangeAt(0);
-                        mentionNode = range.createContextualFragment('<a class="mention" mention-id=' + mentionInfo.memberId + ' mention-application-id="' + mentionInfo.applicationId + '" mention-application-slug="members" mention-application-name="Members" title="' + mentionInfo.title + '" contenteditable="false" draggable="true">@'+ mentionInfo.title +'</a>').firstChild;
+                        mentionNode = range.createContextualFragment('<a class="mention" mention-id=' + mentionInfo.mentionId + ' mention-application-id="' + mentionInfo.applicationId + '" mention-application-slug="members" mention-application-name="Members" title="' + mentionInfo.title + '" contenteditable="false" draggable="true">@'+ mentionInfo.title +'</a>').firstChild;
 
                         if (stepback) {
                             clone = range.cloneRange();
