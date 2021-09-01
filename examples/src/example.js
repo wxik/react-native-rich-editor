@@ -270,6 +270,14 @@ class Example extends React.Component {
                 // command: $ = document.querySelector
                 this.richText.current?.commandDOM(`$('#${id}').style.color='${color[XMath.random(color.length - 1)]}'`);
                 break;
+            case 'USE_MENTION':
+                const user = {
+                    title: 'Alex Hubar',
+                    memberId: '123123123213123',
+                    applicationId: '987987987987'
+                }
+                this.richText.current?.sendAction('mention', 'result', user)
+                break;
             case 'SwitchImage':
                 break;
         }
@@ -314,7 +322,7 @@ class Example extends React.Component {
                     ref={that.scrollRef}
                     nestedScrollEnabled={true}
                     scrollEventThrottle={20}>
-                    <View style={[styles.topVi, dark && styles.darkBack]}>
+                    {/* <View style={[styles.topVi, dark && styles.darkBack]}>
                         <View style={styles.item}>
                             <Text style={{color}}>To: </Text>
                             <TextInput
@@ -337,7 +345,7 @@ class Example extends React.Component {
                             <Button title={theme} onPress={that.onTheme} />
                             <Button title={disabled ? 'enable' : 'disable'} onPress={that.onDisabled} />
                         </View>
-                    </View>
+                    </View> */}
                     <RichToolbar
                         style={[styles.richBar, dark && styles.richBarDark]}
                         flatContainerStyle={styles.flatStyle}
@@ -358,7 +366,7 @@ class Example extends React.Component {
                         initialHeight={400}
                         // containerStyle={{borderRadius: 24}}
                         placeholder={'please input content'}
-                        initialContentHTML={initHTML}
+                        initialContentHTML=""
                         editorInitializedCallback={that.editorInitializedCallback}
                         onChange={that.handleChange}
                         onHeightChange={that.handleHeightChange}

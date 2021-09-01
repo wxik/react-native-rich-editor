@@ -287,18 +287,36 @@ function createHTML(options = {}) {
                 return flag;
              }},
             mention: { result: function (mentionInfo) {
-                var selection = window.getSelection();
-                let range = selection.getRangeAt(0);
-                range.deleteContents();
+                function insertTextAtCursor(stepback) {
 
-                var mentionNode = document.createRange().createContextualFragment('<a class="mention" mention-id="' + mentionInfo.mentionId + '" mention-application-id="' + mentionInfo.applicationId + '" mention-application-slug="members" mention-application-name="Members" title="' + mentionInfo.title + '" contenteditable="false" draggable="true">@'+ mentionInfo.title +'</a>').firstChild;
+                var sel, range, mentionNode;
+                if (window.getSelection) {
+                    sel = window.getSelection();
 
-                range.insertNode(mentionNode);
+                    if (sel.getRangeAt && sel.rangeCount) {
+                        range = sel.getRangeAt(0);
+                        mentionNode = range.createContextualFragment('<a class="mention" mention-id=' + mentionInfo.mentionId + ' mention-application-id="' + mentionInfo.applicationId + '" mention-application-slug="members" mention-application-name="Members" title="' + mentionInfo.title + '" contenteditable="false" draggable="true">@'+ mentionInfo.title +'</a>').firstChild;
 
-                range.setStartAfter(mentionNode);
-                range.setEndAfter(mentionNode);
-                selection.removeAllRanges();
-                selection.addRange(range);
+                        if (stepback) {
+                            clone = range.cloneRange();
+                            clone.setStart(range.startContainer, range.startOffset - 1);
+                            clone.setEnd(range.startContainer, range.startOffset);
+                            clone.deleteContents();
+                        }
+
+                        range.insertNode(mentionNode);
+                        range.setStartAfter(mentionNode);
+                        range.setEndAfter(mentionNode);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }
+                } else if (document.selection && document.selection.createRange) {
+                        range = document.selection.createRange();
+                        range.pasteHTML(text);
+                    }
+                }
+
+                insertTextAtCursor(true)
 
                 var html = Actions.content.getHtml();
                 postAction({type: 'CONTENT_CHANGE', data: html});
