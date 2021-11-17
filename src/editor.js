@@ -19,6 +19,8 @@ function getContentCSS() {
     `;
 }
 
+let editorStyles = '';
+
 function createHTML(options = {}) {
     const {
         backgroundColor = '#FFF',
@@ -40,6 +42,24 @@ function createHTML(options = {}) {
         firstFocusEnd = true,
         useContainer = true,
     } = options;
+
+    const styles = `
+        <style>
+            ${initialCSSText}
+            * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;box-sizing: border-box;}
+            html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em; height: 100%}
+            body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: ${backgroundColor};caret-color: ${caretColor};}
+            .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;${!useContainer ? 'height:100%;' : ''}-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
+            .pell { height: 100%;} .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
+        </style>
+        <style>
+            [placeholder]:empty:before { content: attr(placeholder); color: ${placeholderColor};}
+            [placeholder]:empty:focus:before { content: attr(placeholder);color: ${placeholderColor};display:block;}
+        </style>
+        ${getContentCSS()}
+        <style>${cssText}</style>
+    `;
+    editorStyles = styles;
     //ERROR: HTML height not 100%;
     return `
 <!DOCTYPE html>
@@ -47,20 +67,7 @@ function createHTML(options = {}) {
 <head>
     <title>RN Rich Text Editor</title>
     <meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
-    <style>
-        ${initialCSSText}
-        * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;box-sizing: border-box;}
-        html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em; height: 100%}
-        body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: ${backgroundColor};caret-color: ${caretColor};}
-        .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;${!useContainer ? 'height:100%;' : ''}-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
-        .pell { height: 100%;} .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
-    </style>
-    <style>
-        [placeholder]:empty:before { content: attr(placeholder); color: ${placeholderColor};}
-        [placeholder]:empty:focus:before { content: attr(placeholder);color: ${placeholderColor};display:block;}
-    </style>
-    ${getContentCSS()}
-    <style>${cssText}</style>
+    ${styles}
 </head>
 <body>
 <div class="content"><div id="editor" class="pell"/></div>
@@ -709,4 +716,4 @@ function createHTML(options = {}) {
 }
 
 const HTML = createHTML();
-export {HTML, createHTML, getContentCSS};
+export {HTML, createHTML, getContentCSS, editorStyles};
