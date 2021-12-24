@@ -1,3 +1,6 @@
+#1.8.7
+### Fix
+- Fix Non-rendering problems caused by transparency  [[issues](https://github.com/wxik/react-native-rich-editor/issues/132)]
 
 #1.8.6
 ### Changed

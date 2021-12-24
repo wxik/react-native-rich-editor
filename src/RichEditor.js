@@ -93,7 +93,6 @@ export default class RichTextEditor extends Component {
             },
             keyboardHeight: 0,
             height: initialHeight,
-            isInit: false,
         };
         that.focusListeners = [];
     }
@@ -256,10 +255,8 @@ export default class RichTextEditor extends Component {
 
     renderWebView() {
         let that = this;
-        const {html, editorStyle, useContainer, ...rest} = that.props;
+        const {html, editorStyle, useContainer, style, ...rest} = that.props;
         const {html: viewHTML} = that.state;
-        // webview dark theme bug
-        const opacity = that.state.isInit ? 1 : 0;
         return (
             <>
                 <WebView
@@ -268,6 +265,7 @@ export default class RichTextEditor extends Component {
                     hideKeyboardAccessoryView={true}
                     keyboardDisplayRequiresUserAction={false}
                     nestedScrollEnabled={!useContainer}
+                    style={[styles.webview, style]}
                     {...rest}
                     ref={that.setRef}
                     onMessage={that.onMessage}
@@ -277,7 +275,6 @@ export default class RichTextEditor extends Component {
                     bounces={false}
                     javaScriptEnabled={true}
                     source={viewHTML}
-                    opacity={opacity}
                     onLoad={that.init}
                 />
                 {Platform.OS === 'android' && <TextInput ref={ref => (that._input = ref)} style={styles._input} />}
@@ -442,7 +439,6 @@ export default class RichTextEditor extends Component {
         initialFocus && !disabled && that.focusContentEditor();
         // no visible ?
         that.sendAction(actions.init);
-        !that.unmount && that.setState({isInit: true});
     }
 
     /**
@@ -473,4 +469,8 @@ const styles = StyleSheet.create({
         bottom: -999,
         left: -999,
     },
+
+    webview: {
+        backgroundColor: "transparent"
+    }
 });
