@@ -238,12 +238,15 @@ export default class RichTextEditor extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const {editorStyle, disabled} = this.props;
+        const {editorStyle, disabled,placeholder} = this.props;
         if (prevProps.editorStyle !== editorStyle) {
             editorStyle && this.setContentStyle(editorStyle);
         }
         if (disabled !== prevProps.disabled) {
             this.setDisable(disabled);
+        }
+        if(placeholder!== prevProps.placeholder){
+            this.setPlaceholder(placeholder);
         }
     }
 
