@@ -33,6 +33,7 @@ function createHTML(options = {}) {
         keyUpListener = false,
         inputListener = false,
         autoCapitalize = 'off',
+        enterKeyHint = '',
         autoCorrect = false,
         defaultParagraphSeparator = 'div',
         // When first gaining focus, the cursor moves to the end of the text
@@ -414,7 +415,9 @@ function createHTML(options = {}) {
             },
 
             UPDATE_OFFSET_Y: function (){
+                 console.log('---1--');
                 if (!${useContainer}) return;
+                 console.log('---2--');
                 var node = anchorNode || window.getSelection().anchorNode;
                 if (node){
                     var offsetY = node.offsetTop || node.parentNode.offsetTop;
@@ -432,6 +435,8 @@ function createHTML(options = {}) {
             content.id = 'content';
             content.contentEditable = true;
             content.spellcheck = false;
+            content.autofocus = true;
+            content.enterKeyHint = '${enterKeyHint}';
             content.autocapitalize = '${autoCapitalize}';
             content.autocorrect = ${autoCorrect};
             content.autocomplete = 'off';

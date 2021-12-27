@@ -60,6 +60,7 @@ export default class RichTextEditor extends Component {
             onKeyUp,
             onKeyDown,
             onInput,
+            enterKeyHint,
             autoCapitalize,
             autoCorrect,
             defaultParagraphSeparator,
@@ -84,6 +85,7 @@ export default class RichTextEditor extends Component {
                         keyUpListener: !!onKeyUp,
                         keyDownListener: !!onKeyDown,
                         inputListener: !!onInput,
+                        enterKeyHint,
                         autoCapitalize,
                         autoCorrect,
                         defaultParagraphSeparator,
@@ -200,6 +202,7 @@ export default class RichTextEditor extends Component {
                     break;
                 case messages.OFFSET_Y:
                     let offsetY = Number.parseInt(Number.parseInt(data) + that.layout.y || 0);
+                    console.log(offsetY)
                     offsetY > 0 && onCursorPosition(offsetY);
                     break;
                 default:

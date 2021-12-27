@@ -1,3 +1,8 @@
+
+#1.8.8
+### Added
+- Add `enterKeyHint` String value to set return key type - [returnKeyType](https://reactnative.dev/docs/textinput#returnkeytype)
+
 #1.8.7
 ### Fix
 - Fix Non-rendering problems caused by transparency  [[issues](https://github.com/wxik/react-native-rich-editor/issues/132)]

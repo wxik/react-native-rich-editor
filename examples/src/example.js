@@ -356,6 +356,7 @@ class Example extends React.Component {
                         style={styles.rich}
                         useContainer={true}
                         initialHeight={400}
+                        enterKeyHint={'done'}
                         // containerStyle={{borderRadius: 24}}
                         placeholder={'please input content'}
                         initialContentHTML={initHTML}

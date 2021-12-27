@@ -51,6 +51,12 @@ export interface RichEditorProps extends WebViewProps {
     autoCapitalize?: 'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters';
 
     /**
+     * String value to set return key type
+     * See: https://reactnative.dev/docs/textinput#returnkeytype
+     */
+    enterKeyHint?: 'done' | 'go' | 'next' | 'search' | 'send'
+
+    /**
      * Boolean value to enable paste as plain text. The default value is false.
      */
     pasteAsPlainText?: boolean;

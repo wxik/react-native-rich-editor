@@ -49,6 +49,9 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `disabled`
 * Boolean value to disable editor. The default value is `false`.
 
+* `enterKeyHint`
+* String value to set return key type - [returnKeyType](https://reactnative.dev/docs/textinput#returnkeytype)
+
 * `editorInitializedCallback `
 
     A function that will be called when the editor has been initialized.
@@ -258,14 +261,14 @@ import {actions, RichEditor, RichToolbar} from "react-native-pell-rich-editor";
 const TempScreen = () => {
 	const richText = React.useRef();
 	return (
-		<SafeAreaView> 
+		<SafeAreaView>
 			<ScrollView>
 				<KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}	style={{ flex: 1 }}>
 					<Text>Description:</Text>
 					<RichEditor
 						ref={richText}
-						onChange={ descriptionText => { 
-							console.log("descriptionText:", descriptionText); 
+						onChange={ descriptionText => {
+							console.log("descriptionText:", descriptionText);
 						}}
 					/>
 				</KeyboardAvoidingView>
@@ -273,12 +276,12 @@ const TempScreen = () => {
 
 			<RichToolbar
 				editor={richText}
-				actions={[ actions.setBold, actions.setItalic, actions.setUnderline, actions.heading1, ]} 
+				actions={[ actions.setBold, actions.setItalic, actions.setUnderline, actions.heading1, ]}
 				iconMap={{ [actions.heading1]: ({tintColor}) => (<Text style={[{color: tintColor}]}>H1</Text>), }}
 			/>
 		</SafeAreaView>
 	);
-}; 
+};
 
 export default TempScreen;
 ```
