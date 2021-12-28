@@ -45,7 +45,7 @@ const initHTML = `<br/>
 const phizIcon = require('./assets/phiz.png');
 const htmlIcon = require('./assets/html.png');
 
-class Example extends React.Component {
+class ExampleClass extends React.Component {
     richText = React.createRef();
     linkModal = React.createRef();
     scrollRef = React.createRef();
@@ -499,4 +499,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export {Example};
+export {ExampleClass};

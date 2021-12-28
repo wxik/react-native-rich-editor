@@ -156,9 +156,8 @@ android {
         debug {
             signingConfig signingConfigs.debug
             if (nativeArchitectures) {
-                    ndk {
-                        abiFilters nativeArchitectures.split(',')
-                    }
+                ndk {
+                    abiFilters nativeArchitectures.split(',')
                 }
             }
         }

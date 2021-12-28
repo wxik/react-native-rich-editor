@@ -19,7 +19,7 @@ npm i react-native-pell-rich-editor
 Also, follow instructions [here](https://github.com/react-native-community/react-native-webview) to add the native `react-native-webview` dependency.
 
 * [Online Preview](https://wxik.github.io/react-native-rich-editor/web) （Some functions）
-* [Example](./examples)
+* [Example](./examples) Hooks Rewrite
 
 ![](readme/editor.jpg)
 
@@ -261,26 +261,26 @@ import {actions, RichEditor, RichToolbar} from "react-native-pell-rich-editor";
 const TempScreen = () => {
 	const richText = React.useRef();
 	return (
-		<SafeAreaView>
-			<ScrollView>
-				<KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}	style={{ flex: 1 }}>
-					<Text>Description:</Text>
-					<RichEditor
-						ref={richText}
-						onChange={ descriptionText => {
-							console.log("descriptionText:", descriptionText);
-						}}
-					/>
-				</KeyboardAvoidingView>
-			</ScrollView>
+        <SafeAreaView>
+            <ScrollView>
+                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}	style={{ flex: 1 }}>
+                    <Text>Description:</Text>
+                    <RichEditor
+                        ref={richText}
+                        onChange={ descriptionText => {
+                            console.log("descriptionText:", descriptionText);
+                        }}
+                    />
+                </KeyboardAvoidingView>
+            </ScrollView>
 
-			<RichToolbar
-				editor={richText}
-				actions={[ actions.setBold, actions.setItalic, actions.setUnderline, actions.heading1, ]}
-				iconMap={{ [actions.heading1]: ({tintColor}) => (<Text style={[{color: tintColor}]}>H1</Text>), }}
-			/>
-		</SafeAreaView>
-	);
+            <RichToolbar
+                editor={richText}
+                actions={[ actions.setBold, actions.setItalic, actions.setUnderline, actions.heading1, ]}
+                iconMap={{ [actions.heading1]: ({tintColor}) => (<Text style={[{color: tintColor}]}>H1</Text>), }}
+            />
+        </SafeAreaView>
+    );
 };
 
 export default TempScreen;
