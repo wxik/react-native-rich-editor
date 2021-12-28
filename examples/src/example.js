@@ -77,14 +77,16 @@ class Example extends React.Component {
 
     componentDidMount() {
         Appearance.addChangeListener(this.themeChange);
-        Keyboard.addListener('keyboardDidShow', this.onKeyShow);
-        Keyboard.addListener('keyboardDidHide', this.onKeyHide);
+        this.didShow = Keyboard.addListener('keyboardDidShow', this.onKeyShow);
+        this.didHide = Keyboard.addListener('keyboardDidHide', this.onKeyHide);
     }
 
     componentWillUnmount() {
         Appearance.removeChangeListener(this.themeChange);
-        Keyboard.removeListener('keyboardDidShow', this.onKeyShow);
-        Keyboard.removeListener('keyboardDidHide', this.onKeyHide);
+        this.didShow?.remove();
+        this.didHide?.remove();
+        // Keyboard.removeListener('keyboardDidShow', this.onKeyShow);
+        // Keyboard.removeListener('keyboardDidHide', this.onKeyHide);
     }
 
     onKeyHide = () => {};
@@ -420,7 +422,7 @@ class Example extends React.Component {
                                 <Text style={[styles.tib, {color: tintColor}]}>H1</Text>
                             ),
                             [actions.heading4]: ({tintColor}) => (
-                                <Text style={[styles.tib, {color: tintColor}]}>H3</Text>
+                                <Text style={[styles.tib, {color: tintColor}]}>H4</Text>
                             ),
                             insertHTML: htmlIcon,
                         }}

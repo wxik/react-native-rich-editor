@@ -415,12 +415,12 @@ function createHTML(options = {}) {
             },
 
             UPDATE_OFFSET_Y: function (){
-                 console.log('---1--');
                 if (!${useContainer}) return;
-                 console.log('---2--');
                 var node = anchorNode || window.getSelection().anchorNode;
+                var sel = window.getSelection();
                 if (node){
-                    var offsetY = node.offsetTop || node.parentNode.offsetTop;
+                    var siblingOffset = (node.nextSibling && node.nextSibling.offsetTop) || (node.previousSibling && node.previousSibling.offsetTop)
+                    var offsetY = node.offsetTop || siblingOffset || node.parentNode.offsetTop;
                     if (offsetY){
                         _postMessage({type: 'OFFSET_Y', data: offsetY});
                     }
