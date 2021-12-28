@@ -1,7 +1,7 @@
 {
   "name": "react-native-pell-rich-editor",
   "description": "React Native Rich Editor",
-  "version": "1.8.7",
+  "version": "1.8.8",
   "main": "src/index.js",
   "license": "MIT",
   "private": false,
