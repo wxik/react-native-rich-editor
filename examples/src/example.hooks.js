@@ -4,7 +4,7 @@
  * @author wxik
  * @since 2019-06-24 14:52
  */
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
     Appearance,
     Button,
@@ -73,9 +73,10 @@ export function Example(props) {
     // save on html
     let contentRef = useRef(initHTML);
 
-    let [state, setState] = useState(() => ({
-        theme: initTheme, contentStyle: createContentStyle(initTheme), emojiVisible: false,
-    }));
+    let [theme, setTheme] = useState(initTheme);
+    let [emojiVisible, setEmojiVisible] = useState(false);
+    let [disabled, setDisable] = useState(false);
+    let contentStyle = useMemo(()=> createContentStyle(theme), [theme]);
 
     // on save to preview
     let handleSave = useCallback(() => {
@@ -94,19 +95,16 @@ export function Example(props) {
 
     // theme change to editor color
     let themeChange = useCallback(({colorScheme}) => {
-        setState({theme: colorScheme, contentStyle: createContentStyle(colorScheme)});
+        setTheme(colorScheme);
     }, []);
 
     let onTheme = useCallback(() => {
-        let {theme} = state;
-        theme = theme === 'light' ? 'dark' : 'light';
-        let contentStyle = createContentStyle(theme);
-        setState({...state, theme, contentStyle});
-    }, [state]);
+        setTheme(theme === 'light' ? 'dark' : 'light');
+    }, [theme]);
 
     let onDisabled = useCallback(() => {
-        setState({...state, disabled: !state.disabled});
-    }, [state]);
+        setDisable(!disabled);
+    }, [disabled]);
 
     let editorInitializedCallback = useCallback(() => {
         richText.current.registerToolbar(function (items) {
@@ -119,8 +117,8 @@ export function Example(props) {
     }, []);
 
     let onKeyShow = useCallback(() => {
-        TextInput.State.currentlyFocusedInput() && setState({...state, emojiVisible: false});
-    }, [state]);
+        TextInput.State.currentlyFocusedInput() && setEmojiVisible(false)
+    }, []);
 
     // editor height change
     let handleHeightChange = useCallback((height) => {
@@ -133,11 +131,10 @@ export function Example(props) {
     }, [])
 
     let handleEmoji = useCallback(() => {
-        let {emojiVisible} = state;
         Keyboard.dismiss();
         richText.current?.blurContentEditor();
-        setState({...state, emojiVisible: !emojiVisible});
-    }, [state]);
+        setEmojiVisible(!emojiVisible)
+    }, [emojiVisible]);
 
     let handleInsertVideo = useCallback(() => {
         richText.current?.insertVideo(
@@ -251,7 +248,6 @@ export function Example(props) {
         }
     }, []);
 
-    let {contentStyle, theme, emojiVisible, disabled} = state;
     let {backgroundColor, color, placeholderColor} = contentStyle;
     let dark = theme === 'dark';
 
@@ -386,9 +382,9 @@ export function Example(props) {
                         insertHTML: htmlIcon,
                     }}
                     insertEmoji={handleEmoji}
-                    insertHTML={handleInsertHTML()}
-                    insertVideo={handleInsertVideo()}
-                    fontSize={handleFontSize()}
+                    insertHTML={handleInsertHTML}
+                    insertVideo={handleInsertVideo}
+                    fontSize={handleFontSize}
                     foreColor={handleForeColor}
                     hiliteColor={handleHiliteColor}
                 />
