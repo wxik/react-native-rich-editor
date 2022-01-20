@@ -70,6 +70,7 @@ export default class RichTextEditor extends Component {
         } = props;
         that.state = {
             html: {
+                baseUrl: '',
                 html:
                     html ||
                     createHTML({
