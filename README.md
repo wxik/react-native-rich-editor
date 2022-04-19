@@ -114,6 +114,9 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `onInput`
   Callback input value
 
+* `onLink`
+  Callback link click
+
 * `onFocus`
   Callback editor focus
 

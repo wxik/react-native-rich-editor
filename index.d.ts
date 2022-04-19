@@ -99,6 +99,11 @@ export interface RichEditorProps extends WebViewProps {
     onInput?: ({data: string, inputType: string}) => void;
 
     /**
+     * Callback when the link clicked
+     */
+    onLink?: (url: string) => void;
+
+    /**
      * Callback when the editor focus some content
      */
     onFocus?: () => void;
