@@ -66,6 +66,7 @@ The editor component. Simply place this component in your view hierarchy to rece
     - `placeholderColor`: Editor placeholder text color
     - `contentCSSText`: editor content css text（initial valid）
     - `cssText`: editor global css text（initial valid）
+    - `initialCSSText`: injects CSS at the beginning of the inline stylesheet. Useful for incorporating custom fonts (see below).
 
 * `onChange`
     Callback after editor data modification
@@ -151,6 +152,40 @@ This method registers a function that will get called whenver the cursor positio
   editorInitializedCallback={() => this.onEditorInitialized()}
 />
 ```
+
+
+### Using Custom Fonts
+In order to use custom fonts, you need to use `initialCSSText` from the `editorStyle` prop.
+
+1. Upload your font files to https://transfonter.org and check the 'base64' option. When you download the zip file, there will be a stylesheet.css file there.
+2. Take your stylesheet.css file and create a `stylesheet.js` file.
+3. Create an export and paste the contents of the css file there. e.g.:
+```javascript
+const FontFamilyStylesheet = `
+@font-face {
+    font-family: 'Your Font Family';
+    src: url('data:font/ttf;charset=utf-8;base64,...............'); // You can also use a web url here
+    font-weight: normal;
+}
+`;
+
+export default FontFamilyStylesheet;
+```
+4. Where you've incorporated your `RichEditor` component, import the file and utilize it.
+```javascript
+import FontFamilyStylesheet from 'stylesheet.js';
+
+<RichEditor
+  editorStyle={{ initialCSSText: `${FontFamilyStylesheet}`, contentCSSText: `font-family: 'Your Font Family';` }}
+/>
+```
+5. Reload the app. You should now be seeing your Rich Editor content in your custom font face!
+
+
+
+For more info on how `initialCSSText` works, check out the PR [here](https://github.com/wxik/react-native-rich-editor/pull/111).
+Also, credit to [this](https://github.com/wxik/react-native-rich-editor/issues/70#issuecomment-759441101) issue comment and [his fork](https://github.com/FloMueh/react-native-rich-editor) that describes how to use the base64 encoded font file.
+
 
 
 ## `RichToolbar`
