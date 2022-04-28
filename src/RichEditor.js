@@ -346,6 +346,10 @@ export default class RichTextEditor extends Component {
         this.sendAction(actions.content, 'focus');
     }
 
+    scrollSelectionIntoView() {
+        this.sendAction(actions.content, 'scrollSelectionIntoView');
+    }
+
     /**
      * open android keyboard
      * @platform android
