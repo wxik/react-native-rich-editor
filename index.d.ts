@@ -181,6 +181,11 @@ export class RichEditor extends React.Component<RichEditorProps> {
 
     focusContentEditor: () => void;
 
+    /**
+     * Scrolls the view into the current cursor position
+     */
+    scrollSelectionIntoView: () => void;
+
     insertImage: (attributes: any, style?: string) => void;
 
     insertVideo: (attributes: any, style?: string) => void;
