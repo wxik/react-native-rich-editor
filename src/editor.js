@@ -243,10 +243,12 @@ function createHTML(options = {}) {
                     selection.selectAllChildren(editor.content);
                     selection.collapseToEnd();
                 }
+
+                (!selection || selection.type == 'Caret') && setTimeout(scrollSelectionIntoView, 250);
+
             } catch(e){
                 console.log(e)
             }
-            setTimeout(scrollSelectionIntoView, 250);
             saveSelection();
         }
 
@@ -589,6 +591,8 @@ function createHTML(options = {}) {
                     // Set whether the checkbox is selected by default
                     if (ele.checked) ele.setAttribute('checked', '');
                     else ele.removeAttribute('checked');
+                } else {
+                    saveSelection();
                 }
             }
             addEventListener(content, 'touchcancel', handleSelecting);
