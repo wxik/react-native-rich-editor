@@ -248,6 +248,26 @@ function createHTML(options = {}) {
             }
         }
 
+        function adjustNestedElements() {
+            // adjust ul/ol if we use p separator
+            // since nesting is not valid for p
+            if (editor.paragraphSeparator == 'p') {
+                var selection = window.getSelection();
+
+                let lists = document.querySelectorAll("ol, ul");
+                for (let i = 0; i < lists.length; i++) {
+                    let ele = lists[i];
+                    let parentNode = ele.parentNode;
+                    if (parentNode.tagName === 'P' && parentNode.lastChild === parentNode.firstChild) {
+                        parentNode.insertAdjacentElement('beforebegin', ele);
+                        parentNode.remove()
+                    }
+                }
+
+                selection.collapse(anchorNode, anchorOffset);
+            }
+        }
+
         var Actions = {
             bold: { state: function() { return queryCommandState('bold'); }, result: function() { return exec('bold'); }},
             italic: { state: function() { return queryCommandState('italic'); }, result: function() { return exec('italic'); }},
@@ -266,11 +286,23 @@ function createHTML(options = {}) {
             removeFormat: { result: function() { return exec('removeFormat'); }},
             orderedList: {
                 state: function() { return !checkboxNode(window.getSelection().anchorNode) && queryCommandState('insertOrderedList'); },
-                result: function() { if (!!checkboxNode(window.getSelection().anchorNode)) return;return exec('insertOrderedList'); }
+                result: function() {
+                    if (!!checkboxNode(window.getSelection().anchorNode)) return;
+
+                    let flag = exec('insertOrderedList');
+                    adjustNestedElements();
+                    return flag;
+                }
             },
             unorderedList: {
                 state: function() { return queryCommandState('insertUnorderedList');},
-                result: function() { if (!!checkboxNode(window.getSelection().anchorNode)) return; return exec('insertUnorderedList');}
+                result: function() {
+                    if (!!checkboxNode(window.getSelection().anchorNode)) return;
+
+                    let flag =  exec('insertUnorderedList');
+                    adjustNestedElements();
+                    return flag
+                }
             },
             code: { result: function(type) {
                 var flag = exec(formatBlock, '<pre>');
