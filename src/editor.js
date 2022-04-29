@@ -340,6 +340,11 @@ function createHTML(options = {}) {
                     // title = title || window.prompt('Enter the link title');
                     var url = data.url || window.prompt('Enter the link URL');
                     if (url){
+                        // when adding a link, if our current node is empty, it may have a <br>
+                        // if so, replace it with '' so the added link doesn't end up with an extra space.
+                        if (anchorNode && anchorNode.innerHTML === '<br>') {
+                            anchorNode.innerHTML = '';
+                        }
                         exec('insertHTML', "<a href='"+ url +"'>"+(title || url)+"</a>");
                     }
                 }
@@ -483,7 +488,7 @@ function createHTML(options = {}) {
                         paragraphStatus = 1;
                     }
                 } else if (content.innerHTML === '<br>'){
-                     content.innerHTML = '';
+                    content.innerHTML = '';
                 } else if (enterStatus && queryCommandValue(formatBlock) === 'blockquote') {
                     formatParagraph();
                 }
