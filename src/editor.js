@@ -580,13 +580,16 @@ function createHTML(options = {}) {
                     exec("insertText", text);
                 }
             });
-            addEventListener(content, 'compositionstart', function(event){
-                compositionStatus = 1;
-            })
-            addEventListener(content, 'compositionend', function (event){
-                compositionStatus = 0;
-                paragraphStatus && formatParagraph(true);
-            })
+
+            // these make a mess on Android, and are not even used on iOS
+            // so it's better to disable them for now
+            // addEventListener(content, 'compositionstart', function(event){
+            //     compositionStatus = 1;
+            // })
+            // addEventListener(content, 'compositionend', function (event){
+            //     compositionStatus = 0;
+            //     paragraphStatus && formatParagraph(true);
+            // })
 
             var message = function (event){
                 var msgData = JSON.parse(event.data), action = Actions[msgData.type];
