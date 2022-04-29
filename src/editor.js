@@ -301,7 +301,7 @@ function createHTML(options = {}) {
 
                     let flag =  exec('insertUnorderedList');
                     adjustNestedElements();
-                    return flag
+                    return flag;
                 }
             },
             code: { result: function(type) {
