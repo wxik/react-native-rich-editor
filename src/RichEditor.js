@@ -283,7 +283,7 @@ export default class RichTextEditor extends Component {
                     onLoad={that.init}
                     onNavigationStateChange={(event) => {
                         if (event.navigationType === 'click' && event.url) {
-                            onLink.openURL(event.url);
+                            onLink?.openURL(event.url);
                             return false;
                         }
                         return true;
