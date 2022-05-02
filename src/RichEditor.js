@@ -260,7 +260,7 @@ export default class RichTextEditor extends Component {
 
     renderWebView() {
         let that = this;
-        const {html, editorStyle, useContainer, style, ...rest} = that.props;
+        const {html, editorStyle, useContainer, style, onLink, ...rest} = that.props;
         const {html: viewHTML} = that.state;
         return (
             <>
@@ -283,7 +283,7 @@ export default class RichTextEditor extends Component {
                     onLoad={that.init}
                     onNavigationStateChange={(event) => {
                         if (event.navigationType === 'click' && event.url) {
-                            Linking.openURL(event.url);
+                            onLink.openURL(event.url);
                             return false;
                         }
                         return true;
