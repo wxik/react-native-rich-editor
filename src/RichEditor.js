@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {WebView} from 'react-native-webview';
 import {actions, messages} from './const';
-import {Keyboard, Platform, StyleSheet, TextInput, View} from 'react-native';
+import {Keyboard, Platform, StyleSheet, TextInput, View, Linking} from 'react-native';
 import {createHTML} from './editor';
 
 const PlatformIOS = Platform.OS === 'ios';
@@ -281,12 +281,13 @@ export default class RichTextEditor extends Component {
                     javaScriptEnabled={true}
                     source={viewHTML}
                     onLoad={that.init}
-                    onNavigationStateChange={(event) => {
-                        if (event.navigationType === 'click' && event.url) {
-                            onLink?.openURL(event.url);
-                            return false;
-                        }
-                        return true;
+                    onShouldStartLoadWithRequest={event => {
+                      if (event.url !== 'about:blank') {
+                        this.webviewBridge?.stopLoading();
+                        Linking?.openURL(event.url);
+                        return false;
+                      }
+                      return true;
                     }}
                 />
                 {Platform.OS === 'android' && <TextInput ref={ref => (that._input = ref)} style={styles._input} />}
