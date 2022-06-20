@@ -316,6 +316,8 @@ function createHTML(options = {}) {
                 result: function(url, style) {
                     if (url){
                         exec('insertHTML', "<img style='"+ (style || '')+"' src='"+ url +"'/>");
+                        // This is needed, or the image will not be inserted if the html is empty
+                        exec('insertHTML', "<br/>");
                         Actions.UPDATE_HEIGHT();
                     }
                 }
