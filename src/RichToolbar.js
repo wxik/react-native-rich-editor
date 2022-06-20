@@ -112,7 +112,13 @@ export default class RichToolbar extends Component {
     _mount = () => {
         const {editor: {current: editor} = {current: this.props.getEditor?.()}} = this.props;
         if (!editor) {
-            throw new Error('Toolbar has no editor!');
+            // No longer throw an error, just try to re-load it when needed.
+            // This is because the webview may go away during long periods of inactivity,
+            // and the ref will be lost, causing the entire app to crash in this throw new error.
+            //throw new Error('Toolbar has no editor!');
+            if (__DEV__) {
+                console.warn("Toolbar has no editor. Please make sure the prop getEditor returns a ref to the editor component.");
+            }
         } else {
             editor.registerToolbar((selectedItems) => this.setSelectedItems(selectedItems));
             this.editor = editor;
@@ -152,7 +158,10 @@ export default class RichToolbar extends Component {
 
     handleKeyboard() {
         const editor = this.editor;
-        if (!editor) return;
+        if (!editor) {
+            this._mount();
+            return;
+        }
         if (editor.isKeyboardOpen) {
             editor.dismissKeyboard();
         } else {
@@ -163,7 +172,11 @@ export default class RichToolbar extends Component {
     _onPress(action) {
         const {onPressAddImage, onInsertLink, insertVideo} = this.props;
         const editor = this.editor;
-        if (!editor) return;
+
+        if (!editor) {
+            this._mount();
+            return;
+        }
 
         switch (action) {
             case actions.insertLink:
