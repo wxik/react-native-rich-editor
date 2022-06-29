@@ -148,7 +148,7 @@ export interface RichEditorProps extends WebViewProps {
     };
 }
 
-export type SelectionChangeListener = (items: string[]) => void;
+export type SelectionChangeListener = (items: (string| {type: string, value: string})[]) => void;
 
 export const actions: {[key: string]: string};
 

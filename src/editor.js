@@ -332,9 +332,9 @@ function createHTML(options = {}) {
             justifyLeft: { state: function() { return queryCommandState('justifyLeft'); }, result: function() { return exec('justifyLeft'); }},
             justifyRight: { state: function() { return queryCommandState('justifyRight'); }, result: function() { return exec('justifyRight'); }},
             justifyFull: { state: function() { return queryCommandState('justifyFull'); }, result: function() { return exec('justifyFull'); }},
-            hiliteColor: {  state: function() { return queryCommandState('hiliteColor'); }, result: function(color) { return exec('hiliteColor', color); }},
-            foreColor: { state: function() { return queryCommandState('foreColor'); }, result: function(color) { return exec('foreColor', color); }},
-            fontSize: { result: function(size) { return exec('fontSize', size); }},
+            hiliteColor: {  state: function() { return queryCommandValue('backColor'); }, result: function(color) { return exec('backColor', color); }},
+            foreColor: { state: function() { return queryCommandValue('foreColor'); }, result: function(color) { return exec('foreColor', color); }},
+            fontSize: { state: function() { return queryCommandValue('fontSize'); }, result: function(size) { return exec('fontSize', size); }},
             fontName: { result: function(name) { return exec('fontName', name); }},
             link: {
                 // result: function(data) {
@@ -562,8 +562,9 @@ function createHTML(options = {}) {
             function handler() {
                 var activeTools = [];
                 for(var k in actionsHandler){
-                    if ( Actions[k].state() ){
-                        activeTools.push(k);
+                    const state =  Actions[k].state() 
+                    if ( state ){
+                        activeTools.push(typeof state === "boolean" ? k : {type: k, value: Actions[k].state()});
                     }
                 }
                 postAction({type: 'SELECTION_CHANGE', data: activeTools});
