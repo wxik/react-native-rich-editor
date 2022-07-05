@@ -40,6 +40,7 @@ function createHTML(options = {}) {
     // When first gaining focus, the cursor moves to the end of the text
     firstFocusEnd = true,
     useContainer = true,
+    styleWithCSS = false,
   } = options;
   //ERROR: HTML height not 100%;
   return `
@@ -703,6 +704,7 @@ function createHTML(options = {}) {
         editor = init({
             element: document.getElementById('editor'),
             defaultParagraphSeparator: '${defaultParagraphSeparator}',
+            styleWithCSS: ${styleWithCSS},
             onChange: function (){
                 clearTimeout(_handleCTime);
                 _handleCTime = setTimeout(function(){

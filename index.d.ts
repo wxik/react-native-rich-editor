@@ -146,9 +146,14 @@ export interface RichEditorProps extends WebViewProps {
         initialCSSText?: string; // editor global css initial text
         cssText?: string; // editor global css text
     };
+
+    /**
+     * Use style instead of dedicated tags
+     */
+    styleWithCSS?: boolean;
 }
 
-export type SelectionChangeListener = (items: (string| {type: string, value: string})[]) => void;
+export type SelectionChangeListener = (items: (string | {type: string; value: string})[]) => void;
 
 export const actions: {[key: string]: string};
 
