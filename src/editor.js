@@ -39,6 +39,7 @@ function createHTML(options = {}) {
         // When first gaining focus, the cursor moves to the end of the text
         firstFocusEnd = true,
         useContainer = true,
+        initialFocus = false,
     } = options;
     //ERROR: HTML height not 100%;
     return `
@@ -435,7 +436,7 @@ function createHTML(options = {}) {
             content.id = 'content';
             content.contentEditable = true;
             content.spellcheck = false;
-            content.autofocus = true;
+            content.autofocus = ${initialFocus ? 'true' : 'false'};
             content.enterKeyHint = '${enterKeyHint}';
             content.autocapitalize = '${autoCapitalize}';
             content.autocorrect = ${autoCorrect};
