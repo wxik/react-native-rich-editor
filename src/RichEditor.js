@@ -7,18 +7,6 @@ import {createHTML} from './editor';
 const PlatformIOS = Platform.OS === 'ios';
 
 export default class RichTextEditor extends Component {
-    // static propTypes = {
-    //     initialContentHTML: PropTypes.string,
-    //     editorInitializedCallback: PropTypes.func,
-    //     onChange: PropTypes.func,
-    //     onHeightChange: PropTypes.func,
-    //     initialFocus: PropTypes.bool,
-    //     disabled: PropTypes.bool,
-    //     onPaste: PropTypes.func,
-    //     onKeyUp: PropTypes.func,
-    //     onKeyDown: PropTypes.func,
-    //     onFocus: PropTypes.func,
-    // };
 
     static defaultProps = {
         contentInset: {},

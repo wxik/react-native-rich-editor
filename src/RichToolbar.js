@@ -49,23 +49,6 @@ function getDefaultIcon() {
 
 // noinspection FallThroughInSwitchStatementJS
 export default class RichToolbar extends Component {
-    // static propTypes = {
-    //   getEditor?: PropTypes.func.isRequired,
-    //   editor?: PropTypes.object,
-    //   actions: PropTypes.array,
-    //   onPressAddImage: PropTypes.func,
-    //   onInsertLink: PropTypes.func,
-    //   selectedButtonStyle: PropTypes.object,
-    //   itemStyle: PropTypes.object,
-    //   iconTint: PropTypes.any,
-    //   selectedIconTint: PropTypes.any,
-    //   unselectedButtonStyle: PropTypes.object,
-    //   disabledButtonStyle: PropTypes.object,
-    //   disabledIconTint: PropTypes.any,
-    //   renderAction: PropTypes.func,
-    //   iconMap: PropTypes.object,
-    //   disabled: PropTypes.bool,
-    // };
 
     static defaultProps = {
         actions: defaultActions,
