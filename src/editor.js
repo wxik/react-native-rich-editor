@@ -201,6 +201,34 @@ function createHTML(options = {}) {
             focusOffset = sel.focusOffset;
         }
 
+        scrollSelectionIntoView = () => {
+            const selection = window.getSelection();
+
+            // Check if there are selection ranges
+            if (!selection.rangeCount) {
+                return;
+            }
+
+            // Get the first selection range. There's almost never can be more (instead of firefox)
+            const firstRange = selection.getRangeAt(0);
+
+            // Sometimes if the editable element is getting removed from the dom you may get a HierarchyRequest error in safari
+            if (firstRange.commonAncestorContainer === document) {
+                return;
+            }
+
+            const tempAnchorEl = document.createElement('div');
+            tempAnchorEl.style.height = '100px';
+
+            firstRange.insertNode(tempAnchorEl);
+
+            tempAnchorEl.scrollIntoView({
+                block: 'end',
+            });
+
+            tempAnchorEl.remove();
+        };
+
         function focusCurrent(){
             editor.content.focus();
             try {
@@ -215,9 +243,13 @@ function createHTML(options = {}) {
                     selection.selectAllChildren(editor.content);
                     selection.collapseToEnd();
                 }
+
+                (!selection || selection.type == 'Caret') && setTimeout(scrollSelectionIntoView, 250);
+
             } catch(e){
                 console.log(e)
             }
+            saveSelection();
         }
 
         var _keyDown = false;
@@ -366,6 +398,7 @@ function createHTML(options = {}) {
                 getHtml: function() { return editor.content.innerHTML; },
                 blur: function() { editor.content.blur(); },
                 focus: function() { focusCurrent(); },
+                scrollSelectionIntoView: function() { scrollSelectionIntoView(); },
                 postHtml: function (){ postAction({type: 'CONTENT_HTML_RESPONSE', data: editor.content.innerHTML}); },
                 setPlaceholder: function(placeholder){ editor.content.setAttribute("placeholder", placeholder) },
 
@@ -558,6 +591,8 @@ function createHTML(options = {}) {
                     // Set whether the checkbox is selected by default
                     if (ele.checked) ele.setAttribute('checked', '');
                     else ele.removeAttribute('checked');
+                } else {
+                    saveSelection();
                 }
             }
             addEventListener(content, 'touchcancel', handleSelecting);
