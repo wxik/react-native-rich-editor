@@ -112,15 +112,17 @@
     childDoc.close();
 
     // toolbar selected
-    selectionChangeListeners.push(function (items) {
-        const icons = document.querySelectorAll(".toolbar .icon");
-        icons.forEach(da => {
-            if (items.indexOf(da.id) !== -1) {
-                da.classList.add('selected');
-            } else {
-                da.classList.remove('selected');
-            }
-        })
+    selectionChangeListeners.push({
+        routeKey: function (items) {
+            const icons = document.querySelectorAll(".toolbar .icon");
+            icons.forEach(da => {
+                if (items.indexOf(da.id) !== -1) {
+                    da.classList.add('selected');
+                } else {
+                    da.classList.remove('selected');
+                }
+            })
+        }
     });
     window.editor = (function () {
 

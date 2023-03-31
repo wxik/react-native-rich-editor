@@ -15,7 +15,7 @@ charset = utf-8
 # 缩进使用 tab 或者 space
 indent_style = space
 # 缩进为 space 时，缩进的字符数
-indent_size = 4
+indent_size = 2
 # 缩进为 tab 时，缩进的宽度
 # tab_width = 4
 # 换行符的类型。lf, cr, crlf三种
