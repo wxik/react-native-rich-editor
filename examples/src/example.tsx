@@ -4,7 +4,7 @@
  * @author wxik
  * @since 2019-06-24 14:52
  */
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Appearance,
   Button,
