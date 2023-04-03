@@ -45,6 +45,11 @@ export interface RichEditorProps extends WebViewProps {
     disabled?: boolean;
 
     /**
+     * Boolean value to enable auto-correct. The default value is false.
+     */
+    autoCorrect?: boolean;
+
+    /**
      * String value to set text auto capitalization.
      * See: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autocapitalize
      */
@@ -54,7 +59,7 @@ export interface RichEditorProps extends WebViewProps {
      * String value to set return key type
      * See: https://reactnative.dev/docs/textinput#returnkeytype
      */
-    enterKeyHint?: 'done' | 'go' | 'next' | 'search' | 'send'
+    enterKeyHint?: 'done' | 'go' | 'next' | 'search' | 'send';
 
     /**
      * Boolean value to enable paste as plain text. The default value is false.
@@ -111,7 +116,7 @@ export interface RichEditorProps extends WebViewProps {
     /**
      * Callback Enter the position of the cursor
      */
-    onCursorPosition?: (offsetY: number)=> void;
+    onCursorPosition?: (offsetY: number) => void;
 
     /**
      * Callback after height change
@@ -202,13 +207,13 @@ export class RichEditor extends React.Component<RichEditorProps> {
      * The background color of the selected text
      * @param color
      */
-    setHiliteColor: (color: string)=> void;
+    setHiliteColor: (color: string) => void;
 
     /**
      * The color of the selected text
      * @param color
      */
-    setForeColor: (color: string)=> void;
+    setForeColor: (color: string) => void;
 
     /**
      * $ = document.querySelector
