@@ -34,14 +34,13 @@ function createHTML(options = {}) {
     inputListener = false,
     autoCapitalize = 'off',
     enterKeyHint = '',
-    initialFocus = true,
+    initialFocus = false,
     autoCorrect = false,
     defaultParagraphSeparator = 'div',
     // When first gaining focus, the cursor moves to the end of the text
     firstFocusEnd = true,
     useContainer = true,
   } = options;
-  console.log('initialFocus', initialFocus);
   //ERROR: HTML height not 100%;
   return `
 <!DOCTYPE html>
