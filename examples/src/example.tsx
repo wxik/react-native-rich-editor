@@ -4,7 +4,7 @@
  * @author wxik
  * @since 2019-06-24 14:52
  */
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Appearance,
   Button,
@@ -313,7 +313,7 @@ export function Example(props: IProps) {
           initialFocus={false}
           firstFocusEnd={false}
           disabled={disabled}
-          editorStyle={{initialCSSText: `${1}`, contentCSSText: `font-family: ${Your_Font_Family}`}} // default light style
+          editorStyle={contentStyle} // default light style
           ref={richText}
           style={styles.rich}
           useContainer={true}
