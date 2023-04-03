@@ -198,6 +198,7 @@ function createHTML(options = {}) {
 
         function saveSelection(){
             var sel = window.getSelection();
+            currentSelection = sel;
             anchorNode = sel.anchorNode;
             anchorOffset = sel.anchorOffset;
             focusNode = sel.focusNode;
@@ -304,14 +305,57 @@ function createHTML(options = {}) {
             fontSize: { result: function(size) { return exec('fontSize', size); }},
             fontName: { result: function(name) { return exec('fontName', name); }},
             link: {
+                // result: function(data) {
+                //     data = data || {};
+                //     var title = data.title;
+                //     title = title || window.getSelection().toString();
+                //     // title = title || window.prompt('Enter the link title');
+                //     var url = data.url || window.prompt('Enter the link URL');
+                //     if (url){
+                //         exec('insertHTML', "<a href='"+ url +"'>"+(title || url)+"</a>");
+                //     }
+                // }
                 result: function(data) {
+                    var sel = document.getSelection();
                     data = data || {};
-                    var title = data.title;
-                    title = title || window.getSelection().toString();
-                    // title = title || window.prompt('Enter the link title');
                     var url = data.url || window.prompt('Enter the link URL');
-                    if (url){
-                        exec('insertHTML', "<a href='"+ url +"'>"+(title || url)+"</a>");
+
+                    if (url) {
+                        var el = document.createElement("a");
+                        el.setAttribute("href", url);
+
+                        var title = data.title || sel.toString() || url;
+                        el.text = title;
+
+                        // when adding a link, if our current node is empty, it may have a <br>
+                        // if so, replace it with '' so the added link doesn't end up with an extra space.
+                        // Also, if totally empty, we must format the paragraph to add the link into the container.
+                        var mustFormat = false;
+                        if (sel.anchorNode && sel.anchorNode.innerHTML === '<br>') {
+                            sel.anchorNode.innerHTML = '';
+                        } else if (!sel.anchorNode || sel.anchorNode === editor.content) {
+                            mustFormat = true;
+                        }
+
+                        // insert like this so we can replace current selection, if any
+                        var range = sel.getRangeAt(0);
+                        range.deleteContents();
+                        range.insertNode(el);
+
+                        // restore cursor to end
+                        range.setStartAfter(el);
+                        range.setEndAfter(el);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+
+                        // format paragraph if needed
+                        if (mustFormat){
+                            formatParagraph();
+                        }
+
+                        // save selection, and fire on change to our webview
+                        saveSelection();
+                        editor.settings.onChange();
                     }
                 }
             },
@@ -619,7 +663,7 @@ function createHTML(options = {}) {
                 Actions.content.focus();
                 handleSelecting(event);
             });
-            return {content, paragraphSeparator: paragraphSeparator};
+            return {content, paragraphSeparator: paragraphSeparator, settings};
         };
 
         var _handleCTime = null;
