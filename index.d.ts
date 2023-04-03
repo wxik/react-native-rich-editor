@@ -199,6 +199,8 @@ export class RichEditor extends React.Component<RichEditorProps> {
 
     insertHTML: (html: string) => void;
 
+    injectJavascript: (type: string) => void;
+
     preCode: (type: string) => void;
 
     /**
