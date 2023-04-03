@@ -312,7 +312,7 @@ const TempScreen = () => {
       <RichToolbar
         editor={richText}
         actions={[ actions.setBold, actions.setItalic, actions.setUnderline, actions.heading1 ]}
-        iconMap={{ [actions.heading1]: ({tintColor}) => (<Text style={[{color: tintColor}]}>H1</Text>), }}
+        iconMap={{ [actions.heading1]: ({tintColor}) => (<Text style={{color: tintColor}}>H1</Text>) }}
       />
     </SafeAreaView>
   );
