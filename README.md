@@ -176,9 +176,8 @@ export default FontFamilyStylesheet;
 import FontFamilyStylesheet from 'stylesheet.js';
 
 const fontFamily = 'Your_Font_Family';
-<RichEditor
-  editorStyle={{ initialCSSText: `${FontFamilyStylesheet}`, contentCSSText: `font-family: ${fontFamily}` }}
-/>
+const initialCSSText = { initialCSSText: `${FontFamilyStylesheet}`, contentCSSText: `font-family: ${fontFamily}` }
+<RichEditor editorStyle={initialCSSText}/>
 ```
 5. Reload the app. You should now be seeing your Rich Editor content in your custom font face!
 
