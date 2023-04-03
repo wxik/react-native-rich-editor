@@ -125,6 +125,9 @@ export interface RichEditorProps extends WebViewProps {
 
     onMessage?: (message: {type: string; id: string; data?: any}) => void;
 
+    /** Custom action sent to editor */
+    sendAction(type: string, action: string, data?: any, options?: any): void;
+
     /**
      * When first gaining focus, the cursor moves to the end of the text
      * Default is true
