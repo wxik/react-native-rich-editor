@@ -293,6 +293,8 @@ import React from "react";
 import { Text, Platform, KeyboardAvoidingView, SafeAreaView, ScrollView } from "react-native";
 import {actions, RichEditor, RichToolbar} from "react-native-pell-rich-editor";
 
+
+const handleHead = ({tintColor}) => <Text style={{color: tintColor}}>H1</Text>
 const TempScreen = () => {
 	const richText = React.useRef();
 	return (
@@ -312,7 +314,7 @@ const TempScreen = () => {
       <RichToolbar
         editor={richText}
         actions={[ actions.setBold, actions.setItalic, actions.setUnderline, actions.heading1 ]}
-        iconMap={{ [actions.heading1]: ({tintColor}) => (<Text style={{color: tintColor}}>H1</Text>) }}
+        iconMap={{ [actions.heading1]: handleHead }}
       />
     </SafeAreaView>
   );
