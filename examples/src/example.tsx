@@ -313,7 +313,7 @@ export function Example(props: IProps) {
           initialFocus={false}
           firstFocusEnd={false}
           disabled={disabled}
-          editorStyle={contentStyle} // default light style
+          editorStyle={{initialCSSText: `${1}`, contentCSSText: `font-family: ${Your_Font_Family}`}} // default light style
           ref={richText}
           style={styles.rich}
           useContainer={true}
