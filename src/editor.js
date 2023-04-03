@@ -423,7 +423,14 @@ function createHTML(options = {}) {
                 var sel = window.getSelection();
                 if (node){
                     var siblingOffset = (node.nextSibling && node.nextSibling.offsetTop) || (node.previousSibling && node.previousSibling.offsetTop)
-                    var offsetY = node.offsetTop || siblingOffset || node.parentNode.offsetTop;
+                    var rectOffset = null;
+                    if (sel.rangeCount > 0) {
+                        var range = sel.getRangeAt(0);
+                        var rect = range.getClientRects()[0];
+                        rectOffset = rect ? rect.y : null;
+                    }
+
+                    var offsetY = node.offsetTop || siblingOffset || rectOffset || node.parentNode.offsetTop;
                     if (offsetY){
                         _postMessage({type: 'OFFSET_Y', data: offsetY});
                     }
