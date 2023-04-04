@@ -1,4 +1,4 @@
-# 1.8.10
+# 1.9.0
 
 ### PR
 - [Use rect to update offset_y when pasting](https://github.com/wxik/react-native-rich-editor/pull/301)
@@ -8,6 +8,8 @@
 - [Fix insert links](https://github.com/wxik/react-native-rich-editor/pull/247)
 - [Updating the README with custom fonts usage](https://github.com/wxik/react-native-rich-editor/pull/241)
 - [Fix nested tags when using p separator](https://github.com/wxik/react-native-rich-editor/pull/244)
+- [feat: Add injectJavascript method](https://github.com/wxik/react-native-rich-editor/pull/307)
+- [feat(toolbar): get current color, font size and background color from editor](https://github.com/wxik/react-native-rich-editor/pull/260)
 
 # 1.8.9
 ### Fix
