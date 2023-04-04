@@ -56,6 +56,7 @@ export default class RichTextEditor extends Component {
       initialHeight,
       initialFocus,
       disabled,
+      styleWithCSS,
     } = props;
     that.state = {
       html: {
@@ -81,6 +82,7 @@ export default class RichTextEditor extends Component {
             defaultParagraphSeparator,
             firstFocusEnd,
             useContainer,
+            styleWithCSS,
           }),
       },
       keyboardHeight: 0,

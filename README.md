@@ -97,6 +97,9 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `useContainer`
     A boolean value that determines if a View container is wrapped around the WebView. The default value is true. If you are using your own View to wrap this library around, set this value to false.
 
+* `styleWithCSS`
+    When true, style attribute of tags are modified. Otherwise dedicated tags are created. The default value is false 
+
 * `initialHeight`
     useContainer is false by inline view of initial height
 
