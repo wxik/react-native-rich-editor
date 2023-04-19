@@ -1,13 +1,30 @@
+# 1.9.0
 
-#1.8.8
+### PR
+- [Use rect to update offset_y when pasting](https://github.com/wxik/react-native-rich-editor/pull/301)
+- [added missing autoCorrect prop](https://github.com/wxik/react-native-rich-editor/pull/277)
+- [feat(ts): add sendAction method in definition file](https://github.com/wxik/react-native-rich-editor/pull/257)
+- [improve the getEditor prop to prevent crashes](https://github.com/wxik/react-native-rich-editor/pull/255)
+- [Fix insert links](https://github.com/wxik/react-native-rich-editor/pull/247)
+- [Updating the README with custom fonts usage](https://github.com/wxik/react-native-rich-editor/pull/241)
+- [Fix nested tags when using p separator](https://github.com/wxik/react-native-rich-editor/pull/244)
+- [feat: Add injectJavascript method](https://github.com/wxik/react-native-rich-editor/pull/307)
+- [feat(toolbar): get current color, font size and background color from editor](https://github.com/wxik/react-native-rich-editor/pull/260)
+
+# 1.8.9
+### Fix
+- [autofocus to initialFocus on iOS 16](https://github.com/wxik/react-native-rich-editor/issues/304#issuecomment-1493905015)
+
+
+# 1.8.8
 ### Added
 - Add `enterKeyHint` String value to set return key type - [returnKeyType](https://reactnative.dev/docs/textinput#returnkeytype)
 
-#1.8.7
+# 1.8.7
 ### Fix
 - Fix Non-rendering problems caused by transparency  [[issues](https://github.com/wxik/react-native-rich-editor/issues/132)]
 
-#1.8.6
+# 1.8.6
 ### Changed
 - Add `autoCorrect` props of default false
 ### PR
@@ -17,17 +34,17 @@
 ### Fix
 - Fix `blockquote` Enter new line
 
-#1.8.4 - 1.8.5
-###Fix
+# 1.8.4 - 1.8.5
+### Fix
 - Fix code wrapping
 - Fix `useContainer = false` scroll
 
-#1.8.2 - 1.8.3
+# 1.8.2 - 1.8.3
 ###Fix
 - Fix Some input methods appear on the screen in English  [#154](https://github.com/wxik/react-native-rich-editor/issues/154)
 - Fix The cursor positioning problem after getting the focus in the `ScrollView`
 
-#1.8.1
+# 1.8.1
 ### Fix
 - Fix the problem that `initialHeight` does not take effect
 - Fix the problem that the `height` does not decrease after the text content is reduced
@@ -37,7 +54,7 @@
 - The `height` setting will not be less than `initialHeight`
 
 
-#1.8.0
+# 1.8.0
 
 ### This version merges with netizens to provide PR, thank you very much
 
@@ -47,7 +64,7 @@
 - Add `onCursorPosition` Enter the position of the cursor
 - Add `caretColor` cursor/selection color
 
-#1.7.0
+# 1.7.0
 ### Added
 - Add h1,h2,h3,h4,h5,h6 State mapping
 - `setFontSize` Changes the font size for the selection or at the insertion point. This requires an integer from 1-7 as a value argument.
@@ -57,7 +74,7 @@
 - [Toolbar active/inactive](https://github.com/wxik/react-native-rich-editor/issues/141)
 - Adjust the format of `insertImage` to solve the bug that the picture cannot be deleted
 
-#1.6.5
+# 1.6.5
 ### Fix
 - Fix `pasteAsPlainText`
 

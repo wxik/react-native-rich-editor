@@ -45,6 +45,11 @@ export interface RichEditorProps extends WebViewProps {
     disabled?: boolean;
 
     /**
+     * Boolean value to enable auto-correct. The default value is false.
+     */
+    autoCorrect?: boolean;
+
+    /**
      * String value to set text auto capitalization.
      * See: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autocapitalize
      */
@@ -54,7 +59,7 @@ export interface RichEditorProps extends WebViewProps {
      * String value to set return key type
      * See: https://reactnative.dev/docs/textinput#returnkeytype
      */
-    enterKeyHint?: 'done' | 'go' | 'next' | 'search' | 'send'
+    enterKeyHint?: 'done' | 'go' | 'next' | 'search' | 'send';
 
     /**
      * Boolean value to enable paste as plain text. The default value is false.
@@ -116,7 +121,7 @@ export interface RichEditorProps extends WebViewProps {
     /**
      * Callback Enter the position of the cursor
      */
-    onCursorPosition?: (offsetY: number)=> void;
+    onCursorPosition?: (offsetY: number) => void;
 
     /**
      * Callback after height change
@@ -124,6 +129,9 @@ export interface RichEditorProps extends WebViewProps {
     onHeightChange?: (height: number) => void;
 
     onMessage?: (message: {type: string; id: string; data?: any}) => void;
+
+    /** Custom action sent to editor */
+    sendAction(type: string, action: string, data?: any, options?: any): void;
 
     /**
      * When first gaining focus, the cursor moves to the end of the text
@@ -143,9 +151,14 @@ export interface RichEditorProps extends WebViewProps {
         initialCSSText?: string; // editor global css initial text
         cssText?: string; // editor global css text
     };
+
+    /**
+     * Use style instead of dedicated tags
+     */
+    styleWithCSS?: boolean;
 }
 
-export type SelectionChangeListener = (items: string[]) => void;
+export type SelectionChangeListener = (items: (string | {type: string; value: string})[]) => void;
 
 export const actions: {[key: string]: string};
 
@@ -196,6 +209,8 @@ export class RichEditor extends React.Component<RichEditorProps> {
 
     insertHTML: (html: string) => void;
 
+    injectJavascript: (type: string) => void;
+
     preCode: (type: string) => void;
 
     /**
@@ -207,13 +222,13 @@ export class RichEditor extends React.Component<RichEditorProps> {
      * The background color of the selected text
      * @param color
      */
-    setHiliteColor: (color: string)=> void;
+    setHiliteColor: (color: string) => void;
 
     /**
      * The color of the selected text
      * @param color
      */
-    setForeColor: (color: string)=> void;
+    setForeColor: (color: string) => void;
 
     /**
      * $ = document.querySelector

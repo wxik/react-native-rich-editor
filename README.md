@@ -66,6 +66,7 @@ The editor component. Simply place this component in your view hierarchy to rece
     - `placeholderColor`: Editor placeholder text color
     - `contentCSSText`: editor content css text（initial valid）
     - `cssText`: editor global css text（initial valid）
+    - `initialCSSText`: injects CSS at the beginning of the inline stylesheet. Useful for incorporating custom fonts (see below).
 
 * `onChange`
     Callback after editor data modification
@@ -95,6 +96,9 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 * `useContainer`
     A boolean value that determines if a View container is wrapped around the WebView. The default value is true. If you are using your own View to wrap this library around, set this value to false.
+
+* `styleWithCSS`
+    When true, style attribute of tags are modified. Otherwise dedicated tags are created. The default value is false 
 
 * `initialHeight`
     useContainer is false by inline view of initial height
@@ -154,6 +158,40 @@ This method registers a function that will get called whenver the cursor positio
   editorInitializedCallback={() => this.onEditorInitialized()}
 />
 ```
+
+
+### Using Custom Fonts
+In order to use custom fonts, you need to use `initialCSSText` from the `editorStyle` prop.
+
+1. Upload your font files to https://transfonter.org and check the 'base64' option. When you download the zip file, there will be a stylesheet.css file there.
+2. Take your stylesheet.css file and create a `stylesheet.js` file.
+3. Create an export and paste the contents of the css file there. e.g.:
+```javascript
+const FontFamilyStylesheet = `
+@font-face {
+    font-family: 'Your Font Family';
+    src: url('data:font/ttf;charset=utf-8;base64,...............'); // You can also use a web url here
+    font-weight: normal;
+}
+`;
+
+export default FontFamilyStylesheet;
+```
+4. Where you've incorporated your `RichEditor` component, import the file and utilize it.
+```javascript
+import FontFamilyStylesheet from 'stylesheet.js';
+
+const fontFamily = 'Your_Font_Family';
+const initialCSSText = { initialCSSText: `${FontFamilyStylesheet}`, contentCSSText: `font-family: ${fontFamily}` }
+<RichEditor editorStyle={initialCSSText}/>
+```
+5. Reload the app. You should now be seeing your Rich Editor content in your custom font face!
+
+
+
+For more info on how `initialCSSText` works, check out the PR [here](https://github.com/wxik/react-native-rich-editor/pull/111).
+Also, credit to [this](https://github.com/wxik/react-native-rich-editor/issues/70#issuecomment-759441101) issue comment and [his fork](https://github.com/FloMueh/react-native-rich-editor) that describes how to use the base64 encoded font file.
+
 
 
 ## `RichToolbar`
@@ -261,29 +299,31 @@ import React from "react";
 import { Text, Platform, KeyboardAvoidingView, SafeAreaView, ScrollView } from "react-native";
 import {actions, RichEditor, RichToolbar} from "react-native-pell-rich-editor";
 
+
+const handleHead = ({tintColor}) => <Text style={{color: tintColor}}>H1</Text>
 const TempScreen = () => {
 	const richText = React.useRef();
 	return (
-        <SafeAreaView>
-            <ScrollView>
-                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}	style={{ flex: 1 }}>
-                    <Text>Description:</Text>
-                    <RichEditor
-                        ref={richText}
-                        onChange={ descriptionText => {
-                            console.log("descriptionText:", descriptionText);
-                        }}
-                    />
-                </KeyboardAvoidingView>
-            </ScrollView>
+    <SafeAreaView>
+      <ScrollView>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}	style={{ flex: 1 }}>
+          <Text>Description:</Text>
+          <RichEditor
+              ref={richText}
+              onChange={ descriptionText => {
+                  console.log("descriptionText:", descriptionText);
+              }}
+          />
+        </KeyboardAvoidingView>
+      </ScrollView>
 
-            <RichToolbar
-                editor={richText}
-                actions={[ actions.setBold, actions.setItalic, actions.setUnderline, actions.heading1, ]}
-                iconMap={{ [actions.heading1]: ({tintColor}) => (<Text style={[{color: tintColor}]}>H1</Text>), }}
-            />
-        </SafeAreaView>
-    );
+      <RichToolbar
+        editor={richText}
+        actions={[ actions.setBold, actions.setItalic, actions.setUnderline, actions.heading1 ]}
+        iconMap={{ [actions.heading1]: handleHead }}
+      />
+    </SafeAreaView>
+  );
 };
 
 export default TempScreen;
