@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {WebView} from 'react-native-webview';
 import {actions, messages} from './const';
-import {Keyboard, Platform, StyleSheet, TextInput, View} from 'react-native';
+import {Keyboard, Platform, StyleSheet, TextInput, View, Linking} from 'react-native';
 import {createHTML} from './editor';
 
 const PlatformIOS = Platform.OS === 'ios';
@@ -140,7 +140,7 @@ export default class RichTextEditor extends Component {
 
   onMessage(event) {
     const that = this;
-    const {onFocus, onBlur, onChange, onPaste, onKeyUp, onKeyDown, onInput, onMessage, onCursorPosition} = that.props;
+    const {onFocus, onBlur, onChange, onPaste, onKeyUp, onKeyDown, onInput, onMessage, onCursorPosition, onLink} = that.props;
     try {
       const message = JSON.parse(event.nativeEvent.data);
       const data = message.data;
@@ -155,6 +155,9 @@ export default class RichTextEditor extends Component {
               that.pendingContentHtml = undefined;
             }
           }
+          break;
+        case messages.LINK_TOUCHED:
+          onLink?.(data);
           break;
         case messages.LOG:
           console.log('FROM EDIT:', ...data);
@@ -249,7 +252,7 @@ export default class RichTextEditor extends Component {
 
   renderWebView() {
     let that = this;
-    const {html, editorStyle, useContainer, style, ...rest} = that.props;
+    const {html, editorStyle, useContainer, style, onLink, ...rest} = that.props;
     const {html: viewHTML} = that.state;
     return (
       <>
@@ -270,6 +273,14 @@ export default class RichTextEditor extends Component {
           javaScriptEnabled={true}
           source={viewHTML}
           onLoad={that.init}
+          onShouldStartLoadWithRequest={event => {
+            if (event.url !== 'about:blank') {
+              this.webviewBridge?.stopLoading();
+              Linking?.openURL(event.url);
+              return false;
+            }
+            return true;
+          }}
         />
         {Platform.OS === 'android' && <TextInput ref={ref => (that._input = ref)} style={styles._input} />}
       </>
