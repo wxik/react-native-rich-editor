@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {Button, SafeAreaView, StyleSheet, View} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {INavigation} from './interface';

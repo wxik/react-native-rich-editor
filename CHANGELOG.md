@@ -10,6 +10,7 @@
 - [Fix nested tags when using p separator](https://github.com/wxik/react-native-rich-editor/pull/244)
 - [feat: Add injectJavascript method](https://github.com/wxik/react-native-rich-editor/pull/307)
 - [feat(toolbar): get current color, font size and background color from editor](https://github.com/wxik/react-native-rich-editor/pull/260)
+- [Link click handler](https://github.com/wxik/react-native-rich-editor/pull/240)
 
 # 1.8.9
 ### Fix

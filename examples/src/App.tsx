@@ -3,7 +3,7 @@
  * https://github.com/facebook/react-native
  */
 
-import {FC, useMemo, useState} from 'react';
+import React, {FC, useMemo, useState} from 'react';
 import {Example} from './example';
 import {Welcome} from './welcome';
 import {Preview} from './preview';
@@ -21,7 +21,7 @@ const App: FC = () => {
   const [routeKey, setRouteKey] = useState<RouteKeyType>('index');
   const [args, setArgs] = useState<Record<string, any>>({});
 
-  const handleFuc = useMemo<INavigation>(() => {
+  const handleFuc = useMemo(() => {
     return {
       push: (key: RouteKeyType, params: Record<string, any>) => {
         if (Routes[key]) {
@@ -29,7 +29,7 @@ const App: FC = () => {
           setArgs(params);
         }
       },
-    };
+    } as INavigation;
   }, []);
   const Comp = Routes[routeKey];
   return <Comp navigation={handleFuc} {...args} />;

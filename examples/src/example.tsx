@@ -1,10 +1,11 @@
+/* eslint-disable react/no-unstable-nested-components,react-native/no-inline-styles*/
 /**
  * Rich Editor Example
  * @deprecated Please refer to example.hooks.js
  * @author wxik
  * @since 2019-06-24 14:52
  */
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Appearance,
   Button,
@@ -20,7 +21,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {actions, getContentCSS, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
+import {actions, FONT_SIZE, getContentCSS, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 import {XMath} from '@wxik/core';
 import {InsertLinkModal} from './insertLink';
 import {EmojiView} from './emoji';
@@ -74,9 +75,9 @@ function createContentStyle(theme: ColorSchemeName) {
 
 export function Example(props: IProps) {
   const {theme: initTheme = Appearance.getColorScheme(), navigation} = props;
-  const richText = useRef<RichEditor>();
+  const richText = useRef<RichEditor>(null);
   const linkModal = useRef<RefLinkModal>();
-  const scrollRef = useRef<ScrollView>();
+  const scrollRef = useRef<ScrollView>(null);
   // save on html
   const contentRef = useRef(initHTML);
 
@@ -175,13 +176,15 @@ export function Example(props: IProps) {
   }, []);
 
   const onLinkDone = useCallback(({title, url}: {title?: string; url?: string}) => {
-    richText.current?.insertLink(title, url);
+    if (title && url) {
+      richText.current?.insertLink(title, url);
+    }
   }, []);
 
   const handleFontSize = useCallback(() => {
     // 1=  10px, 2 = 13px, 3 = 16px, 4 = 18px, 5 = 24px, 6 = 32px, 7 = 48px;
     let size = [1, 2, 3, 4, 5, 6, 7];
-    richText.current?.setFontSize(size[XMath.random(size.length - 1)]);
+    richText.current?.setFontSize(size[XMath.random(size.length - 1)] as FONT_SIZE);
   }, []);
 
   const handleForeColor = useCallback(() => {
@@ -210,7 +213,7 @@ export function Example(props: IProps) {
     // console.log(inputType, data)
   }, []);
 
-  const handleMessage = useCallback(({type, id, data}) => {
+  const handleMessage = useCallback(({type, id, data}: {type: string; id: string; data?: any}) => {
     switch (type) {
       case 'ImgClick':
         richText.current?.commandDOM(`$('#${id}').src="${imageList[XMath.random(imageList.length - 1)]}"`);
