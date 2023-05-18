@@ -673,12 +673,12 @@ function createHTML(options = {}) {
                 }
             });
             addEventListener(content, 'compositionstart', function(event){
-                if(useCharacter){
+                if(${useCharacter}){
                     compositionStatus = 1;
                 }
             })
             addEventListener(content, 'compositionend', function (event){
-                if(useCharacter){
+                if(${useCharacter}){
                     compositionStatus = 0;
                     paragraphStatus && formatParagraph(true);
                 }
