@@ -1,12 +1,8 @@
-const config = {
-    //  editorconfig
-    editorconfig: true,
-
-    bracketSpacing: false,
-    jsxBracketSameLine: true,
-    singleQuote: true,
-    trailingComma: 'all',
-    arrowParens: 'avoid',
+module.exports = {
+  arrowParens: 'avoid',
+  bracketSameLine: true,
+  bracketSpacing: false,
+  singleQuote: true,
+  trailingComma: 'all',
+  printWidth: 120,
 };
-
-module.exports = config;
