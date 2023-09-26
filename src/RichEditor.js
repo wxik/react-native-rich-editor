@@ -16,7 +16,7 @@ export default class RichTextEditor extends Component {
     disabled: false,
     useContainer: true,
     pasteAsPlainText: false,
-    autoCapitalize: 'off',
+    autoCapitalize: 'sentences',
     defaultParagraphSeparator: 'div',
     editorInitializedCallback: () => {},
     initialHeight: 0,
