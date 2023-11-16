@@ -259,13 +259,13 @@ export default class RichToolbar extends Component {
       <View style={vStyle}>
         <FlatList
           horizontal={horizontal}
+          style={flatContainerStyle}
           keyboardShouldPersistTaps={'always'}
           keyExtractor={(item, index) => item.action + '-' + index}
           data={this.state.data}
           alwaysBounceHorizontal={false}
           showsHorizontalScrollIndicator={false}
           renderItem={({item}) => this._renderAction(item.action, item.selected)}
-          contentContainerStyle={flatContainerStyle}
         />
         {children}
       </View>
