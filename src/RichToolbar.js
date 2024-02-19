@@ -114,7 +114,7 @@ export default class RichToolbar extends Component {
     if (this.editor && items !== selectedItems) {
       this.setState({
         items,
-        data: this.state.actions.map(action => ({action, selected: items.includes(action)})),
+        data: this.state.actions.map(action => ({action, selected: items.includes(action) || items.some(item => item && item.type === action)})),
       });
     }
   }
