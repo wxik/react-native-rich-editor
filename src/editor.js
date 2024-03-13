@@ -531,7 +531,7 @@ function createHTML(options = {}) {
             content.oninput = function (_ref) {
                 // var firstChild = _ref.target.firstChild;
                 if ((anchorNode === void 0 || anchorNode === content) && queryCommandValue(formatBlock) === ''){
-                    if ( !compositionStatus ){
+                    if ( !compositionStatus || anchorNode === content){
                         formatParagraph(true);
                         paragraphStatus = 0;
                     } else {
