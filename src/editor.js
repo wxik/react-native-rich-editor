@@ -41,6 +41,7 @@ function createHTML(options = {}) {
     firstFocusEnd = true,
     useContainer = true,
     styleWithCSS = false,
+    defaultHttps = true,
   } = options;
   //ERROR: HTML height not 100%;
   return `
@@ -354,8 +355,13 @@ function createHTML(options = {}) {
                     var url = data.url || window.prompt('Enter the link URL');
 
                     if (url) {
+                        let href = url
+                        if (${defaultHttps} && !href.startsWith("http")) {
+                            href = "https://" + href
+                        }
+
                         var el = document.createElement("a");
-                        el.setAttribute("href", url);
+                        el.setAttribute("href", href);
 
                         var title = data.title || sel.toString() || url;
                         el.text = title;
