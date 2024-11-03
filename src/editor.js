@@ -680,7 +680,7 @@ function createHTML(options = {}) {
             })
 
             var message = function (event){
-                var msgData = JSON.parse(event.data), action = Actions[msgData.type];
+                var msgData = event.data, action = Actions[msgData.type];
                 if (action){
                     if (action[msgData.name]){
                         var flag = msgData.name === 'result';

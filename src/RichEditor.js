@@ -227,7 +227,7 @@ export default class RichTextEditor extends Component {
    * @private
    */
   sendAction(type, action, data, options) {
-    let jsonString = JSON.stringify(JSON.stringify({type, name: action, data, options}));
+    let jsonString = JSON.stringify({type, name: action, data, options});
     if (!this.unmount && this.webviewBridge) {
       const functionString = `
         document.dispatchEvent(new MessageEvent('message', {data: ${jsonString}}));
