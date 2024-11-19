@@ -267,7 +267,7 @@ export default class RichTextEditor extends Component {
           ref={that.setRef}
           onMessage={that.onMessage}
           originWhitelist={['*']}
-          dataDetectorTypes={'none'}
+          dataDetectorTypes={['none']}
           domStorageEnabled={false}
           bounces={false}
           javaScriptEnabled={true}
