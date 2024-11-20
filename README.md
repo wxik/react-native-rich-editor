@@ -106,6 +106,9 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `pasteAsPlainText`
     A boolean value (false as default) that determines if the clipboard paste will keep its format or it will be done as plain text
 
+* `defaultHttps`
+    A boolean value (true as default) that prepends https:// to the start of links
+
 * `onPaste`
   Callback clipboard paste value
 
