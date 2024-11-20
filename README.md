@@ -35,6 +35,10 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 `RichEditor` takes the following optional props:
 
+* `html`
+
+    Accepts custom HTML, allowing you to make your own customizations
+    
 * `placeholder`
 
     Wrap the editor content placeholder
