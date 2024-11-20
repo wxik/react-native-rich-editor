@@ -41,6 +41,7 @@ function createHTML(options = {}) {
     firstFocusEnd = true,
     useContainer = true,
     styleWithCSS = false,
+    useCharacter = true,
     defaultHttps = true,
   } = options;
   //ERROR: HTML height not 100%;
@@ -680,11 +681,15 @@ function createHTML(options = {}) {
                 }
             });
             addEventListener(content, 'compositionstart', function(event){
-                compositionStatus = 1;
+                if(${useCharacter}){
+                    compositionStatus = 1;
+                }
             })
             addEventListener(content, 'compositionend', function (event){
-                compositionStatus = 0;
-                paragraphStatus && formatParagraph(true);
+                if(${useCharacter}){
+                    compositionStatus = 0;
+                    paragraphStatus && formatParagraph(true);
+                }
             })
 
             var message = function (event){
