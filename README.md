@@ -35,6 +35,10 @@ The editor component. Simply place this component in your view hierarchy to rece
 
 `RichEditor` takes the following optional props:
 
+* `html`
+
+    Accepts custom HTML, allowing you to make your own customizations
+    
 * `placeholder`
 
     Wrap the editor content placeholder
@@ -106,8 +110,13 @@ The editor component. Simply place this component in your view hierarchy to rece
 * `pasteAsPlainText`
     A boolean value (false as default) that determines if the clipboard paste will keep its format or it will be done as plain text
 
+
 * `useCharacter`
   The option to disable Chinese characters allows you to support English characters without errors on Android. Set to `true` by default for backwards compatibility.
+
+* `defaultHttps`
+    A boolean value (true as default) that prepends https:// to the start of links
+
 
 * `onPaste`
   Callback clipboard paste value
