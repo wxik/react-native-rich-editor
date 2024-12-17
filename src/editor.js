@@ -245,10 +245,7 @@ function createHTML(options = {}) {
                     var br = createElement('br');
                     sp.appendChild(br);
                     setTimeout(function (){
-                        if (!node.classList.contains("x-todo-box")){
-                            node = node.parentNode.previousSibling;
-                        }
-                        node.parentNode.replaceChild(sp, node);
+                        node.replaceChild(sp, node.lastElementChild);
                         setCollapse(sp);
                     });
                 }
@@ -441,11 +438,12 @@ function createHTML(options = {}) {
                     if (anchorNode === editor.content || queryCommandValue(formatBlock) === ''){
                         formatParagraph();
                     }
+                    
                     var box = checkboxNode(anchorNode);
                     if (!!box){
                         cancelCheckboxList(box.parentNode);
                     } else {
-                        !queryCommandState('insertOrderedList') && execCheckboxList(pNode);
+                        !queryCommandState('insertOrderedList') && execCheckboxList(anchorNode);
                     }
                 }
             },
