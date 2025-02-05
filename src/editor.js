@@ -41,6 +41,8 @@ function createHTML(options = {}) {
     firstFocusEnd = true,
     useContainer = true,
     styleWithCSS = false,
+    useCharacter = true,
+    defaultHttps = true,
   } = options;
   //ERROR: HTML height not 100%;
   return `
@@ -354,8 +356,13 @@ function createHTML(options = {}) {
                     var url = data.url || window.prompt('Enter the link URL');
 
                     if (url) {
+                        let href = url
+                        if (${defaultHttps} && !href.startsWith("http")) {
+                            href = "https://" + href
+                        }
+
                         var el = document.createElement("a");
-                        el.setAttribute("href", url);
+                        el.setAttribute("href", href);
 
                         var title = data.title || sel.toString() || url;
                         el.text = title;
@@ -396,6 +403,8 @@ function createHTML(options = {}) {
                 result: function(url, style) {
                     if (url){
                         exec('insertHTML', "<img style='"+ (style || '')+"' src='"+ url +"'/>");
+                        // This is needed, or the image will not be inserted if the html is empty
+                        exec('insertHTML', "<br/>");
                         Actions.UPDATE_HEIGHT();
                     }
                 }
@@ -531,7 +540,7 @@ function createHTML(options = {}) {
             content.oninput = function (_ref) {
                 // var firstChild = _ref.target.firstChild;
                 if ((anchorNode === void 0 || anchorNode === content) && queryCommandValue(formatBlock) === ''){
-                    if ( !compositionStatus ){
+                    if ( !compositionStatus || anchorNode === content){
                         formatParagraph(true);
                         paragraphStatus = 0;
                     } else {
@@ -672,11 +681,15 @@ function createHTML(options = {}) {
                 }
             });
             addEventListener(content, 'compositionstart', function(event){
-                compositionStatus = 1;
+                if(${useCharacter}){
+                    compositionStatus = 1;
+                }
             })
             addEventListener(content, 'compositionend', function (event){
-                compositionStatus = 0;
-                paragraphStatus && formatParagraph(true);
+                if(${useCharacter}){
+                    compositionStatus = 0;
+                    paragraphStatus && formatParagraph(true);
+                }
             })
 
             var message = function (event){
