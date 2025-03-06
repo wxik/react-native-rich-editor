@@ -57,7 +57,7 @@ export default class RichTextEditor extends Component {
       initialFocus,
       disabled,
       styleWithCSS,
-      useCharacter
+      useCharacter,
       defaultHttps,
     } = props;
     that.state = {
@@ -271,7 +271,7 @@ export default class RichTextEditor extends Component {
           ref={that.setRef}
           onMessage={that.onMessage}
           originWhitelist={['*']}
-          dataDetectorTypes={['none']}
+          // dataDetectorTypes={['none']}
           domStorageEnabled={false}
           bounces={false}
           javaScriptEnabled={true}
