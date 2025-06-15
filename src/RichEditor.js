@@ -57,7 +57,7 @@ export default class RichTextEditor extends Component {
       initialFocus,
       disabled,
       styleWithCSS,
-      useCharacter
+      useCharacter,
       defaultHttps,
     } = props;
     that.state = {
