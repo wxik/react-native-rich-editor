@@ -35,6 +35,7 @@ function createHTML(options = {}) {
     autoCapitalize = 'off',
     enterKeyHint = '',
     initialFocus = false,
+    spellcheck = true,
     autoCorrect = false,
     defaultParagraphSeparator = 'div',
     // When first gaining focus, the cursor moves to the end of the text
@@ -57,8 +58,8 @@ function createHTML(options = {}) {
         html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em; height: 100%}
         body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: ${backgroundColor};caret-color: ${caretColor};}
         .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;${
-    !useContainer ? 'height:100%;' : ''
-  }-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
+          !useContainer ? 'height:100%;' : ''
+        }-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
         .pell { height: 100%;} .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
     </style>
     <style>
@@ -438,7 +439,7 @@ function createHTML(options = {}) {
                     if (anchorNode === editor.content || queryCommandValue(formatBlock) === ''){
                         formatParagraph();
                     }
-                    
+
                     var box = checkboxNode(anchorNode);
                     if (!!box){
                         cancelCheckboxList(box.parentNode);
@@ -528,7 +529,7 @@ function createHTML(options = {}) {
             var content = settings.element.content = createElement('div');
             content.id = 'content';
             content.contentEditable = true;
-            content.spellcheck = false;
+            content.spellcheck = ${spellcheck};
             content.autofocus = ${initialFocus};
             content.enterKeyHint = '${enterKeyHint}';
             content.autocapitalize = '${autoCapitalize}';
@@ -570,7 +571,7 @@ function createHTML(options = {}) {
             function handler() {
                 var activeTools = [];
                 for(var k in actionsHandler){
-                    const state =  Actions[k].state() 
+                    const state =  Actions[k].state()
                     if ( state ){
                         activeTools.push(typeof state === "boolean" ? k : {type: k, value: Actions[k].state()});
                     }
@@ -748,4 +749,4 @@ function createHTML(options = {}) {
 }
 
 const HTML = createHTML();
-export {HTML, createHTML, getContentCSS};
+export { HTML, createHTML, getContentCSS };

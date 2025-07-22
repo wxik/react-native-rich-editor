@@ -3,11 +3,11 @@
  * https://github.com/facebook/react-native
  */
 
-import React, {FC, useMemo, useState} from 'react';
-import {Example} from './example';
-import {Welcome} from './welcome';
-import {Preview} from './preview';
-import {INavigation} from './interface';
+import React, { FC, useMemo, useState } from 'react';
+import { Example } from './example';
+import { Welcome } from './welcome';
+import { Preview } from './preview';
+import { INavigation } from './interface';
 
 const Routes = {
   index: Welcome,

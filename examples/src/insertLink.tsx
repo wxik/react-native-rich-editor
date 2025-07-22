@@ -4,21 +4,21 @@
  * @sine 2020-07-07 20:21
  */
 
-import React, {FC, RefObject, useImperativeHandle, useRef, useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import React, { FC, RefObject, useImperativeHandle, useRef, useState } from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 
 interface IProps {
   color: string;
   placeholderColor: string;
   backgroundColor: string;
-  onDone: (param: {title?: string; url?: string}) => void;
+  onDone: (param: { title?: string; url?: string }) => void;
   forwardRef: RefObject<any>;
 }
 
-export const InsertLinkModal: FC<IProps> = ({color, placeholderColor, backgroundColor, onDone, forwardRef}) => {
+export const InsertLinkModal: FC<IProps> = ({ color, placeholderColor, backgroundColor, onDone, forwardRef }) => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const dataRef = useRef<{title?: string; url?: string}>({});
+  const dataRef = useRef<{ title?: string; url?: string }>({});
 
   const setTitle = (title: string) => {
     dataRef.current.title = title;
@@ -33,15 +33,11 @@ export const InsertLinkModal: FC<IProps> = ({color, placeholderColor, background
     onDone(dataRef.current);
   };
 
-  useImperativeHandle(
-    forwardRef,
-    () => {
-      return {
-        setModalVisible,
-      };
-    },
-    [],
-  );
+  useImperativeHandle(forwardRef, () => {
+    return {
+      setModalVisible,
+    };
+  }, []);
 
   return (
     <Modal
@@ -52,13 +48,13 @@ export const InsertLinkModal: FC<IProps> = ({color, placeholderColor, background
       backdropColor={color}
       backdropOpacity={0.3}
       onBackdropPress={() => setModalVisible(false)}>
-      <View style={[styles.dialog, {backgroundColor}]}>
+      <View style={[styles.dialog, { backgroundColor }]}>
         <View style={styles.linkTitle}>
-          <Text style={{color}}>Insert Link</Text>
+          <Text style={{ color }}>Insert Link</Text>
         </View>
         <View style={styles.item}>
           <TextInput
-            style={[styles.input, {color}]}
+            style={[styles.input, { color }]}
             placeholderTextColor={placeholderColor}
             placeholder={'title'}
             onChangeText={text => setTitle(text)}
@@ -66,7 +62,7 @@ export const InsertLinkModal: FC<IProps> = ({color, placeholderColor, background
         </View>
         <View style={styles.item}>
           <TextInput
-            style={[styles.input, {color}]}
+            style={[styles.input, { color }]}
             placeholderTextColor={placeholderColor}
             placeholder="http(s)://"
             onChangeText={text => setURL(text)}

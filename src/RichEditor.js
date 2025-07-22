@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {WebView} from 'react-native-webview';
-import {actions, messages} from './const';
-import {Keyboard, Platform, StyleSheet, TextInput, View, Linking} from 'react-native';
-import {createHTML} from './editor';
+import React, { Component } from 'react';
+import { WebView } from 'react-native-webview';
+import { actions, messages } from './const';
+import { Keyboard, Platform, StyleSheet, TextInput, View, Linking } from 'react-native';
+import { createHTML } from './editor';
 
 const PlatformIOS = Platform.OS === 'ios';
 
@@ -40,7 +40,15 @@ export default class RichTextEditor extends Component {
     that.layout = {};
     that.selectionChangeListeners = [];
     const {
-      editorStyle: {backgroundColor, color, placeholderColor, initialCSSText, cssText, contentCSSText, caretColor} = {},
+      editorStyle: {
+        backgroundColor,
+        color,
+        placeholderColor,
+        initialCSSText,
+        cssText,
+        contentCSSText,
+        caretColor,
+      } = {},
       html,
       pasteAsPlainText,
       onPaste,
@@ -144,7 +152,7 @@ export default class RichTextEditor extends Component {
 
   onMessage(event) {
     const that = this;
-    const {onFocus, onBlur, onChange, onPaste, onKeyUp, onKeyDown, onInput, onMessage, onCursorPosition, onLink} =
+    const { onFocus, onBlur, onChange, onPaste, onKeyUp, onKeyDown, onInput, onMessage, onCursorPosition, onLink } =
       that.props;
     try {
       const message = JSON.parse(event.nativeEvent.data);
@@ -214,11 +222,11 @@ export default class RichTextEditor extends Component {
   }
 
   setWebHeight(height) {
-    const {onHeightChange, useContainer, initialHeight} = this.props;
+    const { onHeightChange, useContainer, initialHeight } = this.props;
     if (height !== this.state.height) {
       const maxHeight = Math.max(height, initialHeight);
       if (!this.unmount && useContainer && maxHeight >= initialHeight) {
-        this.setState({height: maxHeight});
+        this.setState({ height: maxHeight });
       }
       onHeightChange && onHeightChange(height);
     }
@@ -232,14 +240,14 @@ export default class RichTextEditor extends Component {
    * @private
    */
   sendAction(type, action, data, options) {
-    let jsonString = JSON.stringify({type, name: action, data, options});
+    let jsonString = JSON.stringify({ type, name: action, data, options });
     if (!this.unmount && this.webviewBridge) {
       this.webviewBridge.postMessage(jsonString);
     }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const {editorStyle, disabled, placeholder} = this.props;
+    const { editorStyle, disabled, placeholder } = this.props;
     if (prevProps.editorStyle !== editorStyle) {
       editorStyle && this.setContentStyle(editorStyle);
     }
@@ -257,8 +265,8 @@ export default class RichTextEditor extends Component {
 
   renderWebView() {
     let that = this;
-    const {html, editorStyle, useContainer, style, onLink, ...rest} = that.props;
-    const {html: viewHTML} = that.state;
+    const { html, editorStyle, useContainer, style, onLink, ...rest } = that.props;
+    const { html: viewHTML } = that.state;
     return (
       <>
         <WebView
@@ -292,20 +300,20 @@ export default class RichTextEditor extends Component {
     );
   }
 
-  onViewLayout({nativeEvent: {layout}}) {
+  onViewLayout({ nativeEvent: { layout } }) {
     // const {x, y, width, height} = layout;
     this.layout = layout;
   }
 
   render() {
-    let {height} = this.state;
+    let { height } = this.state;
 
     // useContainer is an optional prop with default value of true
     // If set to true, it will use a View wrapper with styles and height.
     // If set to false, it will not use a View wrapper
-    const {useContainer, style} = this.props;
+    const { useContainer, style } = this.props;
     return useContainer ? (
-      <View style={[style, {height}]} onLayout={this.onViewLayout}>
+      <View style={[style, { height }]} onLayout={this.onViewLayout}>
         {this.renderWebView()}
       </View>
     ) : (
@@ -393,7 +401,7 @@ export default class RichTextEditor extends Component {
   insertLink(title, url) {
     if (url) {
       this.showAndroidKeyboard();
-      this.sendAction(actions.insertLink, 'result', {title, url});
+      this.sendAction(actions.insertLink, 'result', { title, url });
     }
   }
 
@@ -443,7 +451,7 @@ export default class RichTextEditor extends Component {
 
   init() {
     let that = this;
-    const {initialFocus, initialContentHTML, placeholder, editorInitializedCallback, disabled} = that.props;
+    const { initialFocus, initialContentHTML, placeholder, editorInitializedCallback, disabled } = that.props;
     initialContentHTML && that.setContentHTML(initialContentHTML);
     placeholder && that.setPlaceholder(placeholder);
     that.setDisable(disabled);

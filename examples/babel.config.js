@@ -8,6 +8,7 @@ module.exports = {
       {
         alias: {
           'react-native-pell-rich-editor': path.resolve('..'),
+          'react-native-webview': path.resolve(__dirname, './node_modules/react-native-webview'),
         },
       },
     ],
