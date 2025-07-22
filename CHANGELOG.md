@@ -1,3 +1,17 @@
+
+# 1.10.0
+
+### fix
+- useCharacter code error
+- fix broken check box action usage
+- fixed auto formatting on empty content causing unnecessary formatting on compositionend
+- handle checkboxList selected status
+
+### Added
+- addinh heading1 to RichToolbar
+- force prepend https:// to links
+- props `horizontal` default = true
+
 # 1.9.0
 
 ### PR

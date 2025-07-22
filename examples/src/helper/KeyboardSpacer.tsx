@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import {
   // @ts-ignore
   DeviceInfo,
@@ -135,8 +135,8 @@ class KeyboardSpacer extends PureComponent<IProps, IState> {
   }
 
   render() {
-    return <View style={[styles.container, {height: this.state.keyboardSpace}, this.props.style]} />;
+    return <View style={[styles.container, { height: this.state.keyboardSpace }, this.props.style]} />;
   }
 }
 
-export default ({ios = true, ...props}) => (!ios || Platform.OS === 'ios' ? <KeyboardSpacer {...props} /> : null);
+export default ({ ios = true, ...props }) => (!ios || Platform.OS === 'ios' ? <KeyboardSpacer {...props} /> : null);

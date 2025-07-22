@@ -3,14 +3,14 @@
  * @since 2020-07-09 16:02
  */
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 interface IProps {
   onSelect: (value: string) => void;
 }
 
 export function EmojiView(props: IProps) {
-  const {onSelect} = props;
+  const { onSelect } = props;
   return (
     <View style={styles.view}>
       <Text style={styles.item} onPress={() => onSelect('😃')}>

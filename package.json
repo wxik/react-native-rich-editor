@@ -4,22 +4,21 @@
   "version": "1.9.0",
   "main": "src/index.js",
   "license": "MIT",
-  "private": false,
   "author": {
-    "name": "wxik",
-    "email": "io@wxik.com"
+    "name": "stulip",
+    "email": "stulip@126.com"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/wxik/react-native-rich-editor.git"
   },
-  "dependencies": {
-  },
   "devDependencies": {
-    "@types/react-native": "*"
+    "@types/react-native": "*",
+    "react-native-webview": ">=11"
   },
   "peerDependencies": {
     "react-native": ">=0.50.0",
     "react-native-webview": ">=7.5.2"
-  }
+  },
+  "packageManager": "yarn@4.9.2"
 }

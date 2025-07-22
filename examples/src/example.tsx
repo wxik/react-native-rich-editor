@@ -5,7 +5,7 @@
  * @author wxik
  * @since 2019-06-24 14:52
  */
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Appearance,
   Button,
@@ -21,12 +21,12 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {actions, FONT_SIZE, getContentCSS, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
-import {XMath} from '@wxik/core';
-import {InsertLinkModal} from './insertLink';
-import {EmojiView} from './emoji';
-import {INavigation, RefLinkModal} from './interface';
-import {IconRecord} from '../../index';
+import { actions, FONT_SIZE, getContentCSS, RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
+import { random } from '@guc/core';
+import { InsertLinkModal } from './insertLink';
+import { EmojiView } from './emoji';
+import { INavigation, RefLinkModal } from './interface';
+import { IconRecord } from '../../index';
 
 interface IProps {
   navigation: INavigation;
@@ -74,7 +74,7 @@ function createContentStyle(theme: ColorSchemeName) {
 }
 
 export function Example(props: IProps) {
-  const {theme: initTheme = Appearance.getColorScheme(), navigation} = props;
+  const { theme: initTheme = Appearance.getColorScheme(), navigation } = props;
   const richText = useRef<RichEditor>(null);
   const linkModal = useRef<RefLinkModal>();
   const scrollRef = useRef<ScrollView>(null);
@@ -88,7 +88,7 @@ export function Example(props: IProps) {
 
   // on save to preview
   const handleSave = useCallback(() => {
-    navigation.push('preview', {html: contentRef.current, css: getContentCSS()});
+    navigation.push('preview', { html: contentRef.current, css: getContentCSS() });
   }, [navigation]);
 
   const handleHome = useCallback(() => {
@@ -102,7 +102,7 @@ export function Example(props: IProps) {
   }, []);
 
   // theme change to editor color
-  const themeChange = useCallback(({colorScheme}: Appearance.AppearancePreferences) => {
+  const themeChange = useCallback(({ colorScheme }: Appearance.AppearancePreferences) => {
     setTheme(colorScheme);
   }, []);
 
@@ -155,8 +155,8 @@ export function Example(props: IProps) {
     // );
     richText.current?.insertHTML(
       `<div style="padding:10px 0;" contentEditable="false">
-                <iframe  width="100%" height="220"  src="https://www.youtube.com/embed/6FrNXgXlCGA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>`,
+          <iframe  width="100%" height="220"  src="https://www.youtube.com/embed/6FrNXgXlCGA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+      </div>`,
     );
   }, []);
 
@@ -175,7 +175,7 @@ export function Example(props: IProps) {
     linkModal.current?.setModalVisible(true);
   }, []);
 
-  const onLinkDone = useCallback(({title, url}: {title?: string; url?: string}) => {
+  const onLinkDone = useCallback(({ title, url }: { title?: string; url?: string }) => {
     if (title && url) {
       richText.current?.insertLink(title, url);
     }
@@ -184,7 +184,7 @@ export function Example(props: IProps) {
   const handleFontSize = useCallback(() => {
     // 1=  10px, 2 = 13px, 3 = 16px, 4 = 18px, 5 = 24px, 6 = 32px, 7 = 48px;
     let size = [1, 2, 3, 4, 5, 6, 7];
-    richText.current?.setFontSize(size[XMath.random(size.length - 1)] as FONT_SIZE);
+    richText.current?.setFontSize(size[random(size.length - 1)] as FONT_SIZE);
   }, []);
 
   const handleForeColor = useCallback(() => {
@@ -213,16 +213,16 @@ export function Example(props: IProps) {
     // console.log(inputType, data)
   }, []);
 
-  const handleMessage = useCallback(({type, id, data}: {type: string; id: string; data?: any}) => {
+  const handleMessage = useCallback(({ type, id, data }: { type: string; id: string; data?: any }) => {
     switch (type) {
       case 'ImgClick':
-        richText.current?.commandDOM(`$('#${id}').src="${imageList[XMath.random(imageList.length - 1)]}"`);
+        richText.current?.commandDOM(`$('#${id}').src="${imageList[random(imageList.length - 1)]}"`);
         break;
       case 'TitleClick':
         const color = ['red', 'blue', 'gray', 'yellow', 'coral'];
 
         // command: $ = document.querySelector
-        richText.current?.commandDOM(`$('#${id}').style.color='${color[XMath.random(color.length - 1)]}'`);
+        richText.current?.commandDOM(`$('#${id}').style.color='${color[random(color.length - 1)]}'`);
         break;
       case 'SwitchImage':
         break;
@@ -240,7 +240,7 @@ export function Example(props: IProps) {
 
   const handleCursorPosition = useCallback((scrollY: number) => {
     // Positioning scroll bar
-    scrollRef.current!.scrollTo({y: scrollY - 30, animated: true});
+    scrollRef.current!.scrollTo({ y: scrollY - 30, animated: true });
   }, []);
 
   useEffect(() => {
@@ -254,7 +254,7 @@ export function Example(props: IProps) {
     };
   }, [onKeyHide, onKeyShow, themeChange]);
 
-  const {backgroundColor, color, placeholderColor} = contentStyle;
+  const { backgroundColor, color, placeholderColor } = contentStyle;
   const dark = theme === 'dark';
 
   return (
@@ -279,19 +279,19 @@ export function Example(props: IProps) {
         scrollEventThrottle={20}>
         <View style={[styles.topVi, dark && styles.darkBack]}>
           <View style={styles.item}>
-            <Text style={{color}}>To: </Text>
+            <Text style={{ color }}>To: </Text>
             <TextInput
               autoCorrect={false}
-              style={[styles.input, {color}]}
+              style={[styles.input, { color }]}
               placeholderTextColor={placeholderColor}
               placeholder={'stulip@126.com'}
             />
           </View>
           <View style={styles.item}>
-            <Text style={{color}}>Subject: </Text>
+            <Text style={{ color }}>Subject: </Text>
             <TextInput
               autoCorrect={false}
-              style={[styles.input, {color}]}
+              style={[styles.input, { color }]}
               placeholderTextColor={placeholderColor}
               placeholder="Rich Editor Bug 😀"
             />
@@ -377,12 +377,16 @@ export function Example(props: IProps) {
           ]} // default defaultActions
           iconMap={{
             insertEmoji: phizIcon,
-            [actions.foreColor]: () => <Text style={[styles.tib, {color: 'blue'}]}>FC</Text>,
-            [actions.hiliteColor]: ({tintColor}: IconRecord) => (
-              <Text style={[styles.tib, {color: tintColor, backgroundColor: 'red'}]}>BC</Text>
+            [actions.foreColor]: () => <Text style={[styles.tib, { color: 'blue' }]}>FC</Text>,
+            [actions.hiliteColor]: ({ tintColor }: IconRecord) => (
+              <Text style={[styles.tib, { color: tintColor, backgroundColor: 'red' }]}>BC</Text>
             ),
-            [actions.heading1]: ({tintColor}: IconRecord) => <Text style={[styles.tib, {color: tintColor}]}>H1</Text>,
-            [actions.heading4]: ({tintColor}: IconRecord) => <Text style={[styles.tib, {color: tintColor}]}>H4</Text>,
+            [actions.heading1]: ({ tintColor }: IconRecord) => (
+              <Text style={[styles.tib, { color: tintColor }]}>H1</Text>
+            ),
+            [actions.heading4]: ({ tintColor }: IconRecord) => (
+              <Text style={[styles.tib, { color: tintColor }]}>H4</Text>
+            ),
             insertHTML: htmlIcon,
           }}
           insertEmoji={handleEmoji}

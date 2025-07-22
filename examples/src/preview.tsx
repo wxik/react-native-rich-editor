@@ -1,7 +1,7 @@
-import React, {FC} from 'react';
-import {Button, SafeAreaView, StyleSheet, View} from 'react-native';
-import {WebView} from 'react-native-webview';
-import {INavigation} from './interface';
+import React, { FC } from 'react';
+import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { INavigation } from './interface';
 
 interface IProps {
   navigation: INavigation;
@@ -9,7 +9,7 @@ interface IProps {
   css?: string;
 }
 
-export const Preview: FC<IProps> = ({html, css, navigation}) => {
+export const Preview: FC<IProps> = ({ html, css, navigation }) => {
   html = `<html><head><meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">${css}</head><body>${html}</body></html>`;
   const handleHome = () => {
     navigation.push('rich');
@@ -29,7 +29,7 @@ export const Preview: FC<IProps> = ({html, css, navigation}) => {
         domStorageEnabled={false}
         bounces={false}
         javaScriptEnabled={true}
-        source={{html}}
+        source={{ html }}
       />
     </SafeAreaView>
   );
