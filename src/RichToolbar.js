@@ -28,6 +28,7 @@ function getDefaultIcon() {
   texts[actions.insertLink] = require('../img/link.png');
   texts[actions.setStrikethrough] = require('../img/strikethrough.png');
   texts[actions.setUnderline] = require('../img/underline.png');
+  texts[actions.heading1] = require('../img/heading1.png');
   texts[actions.insertVideo] = require('../img/video.png');
   texts[actions.removeFormat] = require('../img/remove_format.png');
   texts[actions.undo] = require('../img/undo.png');
@@ -114,7 +115,10 @@ export default class RichToolbar extends Component {
     if (this.editor && items !== selectedItems) {
       this.setState({
         items,
-        data: this.state.actions.map(action => ({action, selected: items.includes(action) || items.some(item => item && item.type === action)})),
+        data: this.state.actions.map(action => ({
+          action,
+          selected: items.includes(action) || items.some(item => item && item.type === action),
+        })),
       });
     }
   }
