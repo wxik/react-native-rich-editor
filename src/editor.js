@@ -485,11 +485,22 @@ function createHTML(options = {}) {
 
             init: function (){
                 if (${useContainer}){
-                    // setInterval(Actions.UPDATE_HEIGHT, 150);
+                    // setInterval(Actions.UPDATE_HEIGHT, 800);
+                    // If there were images in the initial content, they may change the height of the container
+                    // when they are loaded. As such we need to register waiting for finish of load of the images.
+                    Actions.REGISTER_IMAGE_LOAD_HEIGHT();
                     Actions.UPDATE_HEIGHT();
                 } else {
                     // react-native-webview There is a bug in the body and html height setting of a certain version of 100%
                     // body.style.height = docEle.clientHeight + 'px';
+                }
+            },
+
+            REGISTER_IMAGE_LOAD_HEIGHT: function () {
+                const images = document.getElementsByTagName('img');
+                for (let i = 0; i < images.length; i++) {
+                    images[i].onload = Actions.UPDATE_HEIGHT;
+                    images[i].onerror = Actions.UPDATE_HEIGHT;
                 }
             },
 

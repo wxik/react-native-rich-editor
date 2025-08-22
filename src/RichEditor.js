@@ -266,7 +266,7 @@ export default class RichTextEditor extends Component {
 
   renderWebView() {
     let that = this;
-    const { html, editorStyle, useContainer, style, onLink, dataDetectorTypes, ...rest } = that.props;
+    const { html, editorStyle, useContainer, style, onLink, dataDetectorTypes, baseUrl, ...rest } = that.props;
     const { html: viewHTML } = that.state;
     return (
       <>
@@ -285,9 +285,13 @@ export default class RichTextEditor extends Component {
           domStorageEnabled={false}
           bounces={false}
           javaScriptEnabled={true}
-          source={viewHTML}
+          source={{ ...viewHTML, baseUrl: baseUrl}}
           onLoad={that.init}
           onShouldStartLoadWithRequest={event => {
+            if (baseUrl && event.url.startsWith(baseUrl)) {
+              // We are trying to open a page which starts with the baseUrl, so we handle it internally
+              return true;
+            }
             if (event.url !== 'about:blank') {
               this.webviewBridge?.stopLoading();
               Linking?.openURL(event.url);
