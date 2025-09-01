@@ -360,6 +360,11 @@ export interface RichToolbarProps<A extends actions> {
   style?: StyleProp<ViewStyle>;
 
   /**
+   * Flat style prop for the toolbar
+   */
+  flatStyle?: StyleProp<ViewStyle>;
+
+  /**
    * Flat container style prop for the toolbar
    */
   flatContainerStyle?: StyleProp<ViewStyle>;

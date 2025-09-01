@@ -303,7 +303,7 @@ export function Example(props: IProps) {
         </View>
         <RichToolbar
           style={[styles.richBar, dark && styles.richBarDark]}
-          flatContainerStyle={styles.flatStyle}
+          flatStyle={styles.flatStyle}
           editor={richText}
           disabled={disabled}
           selectedIconTint={'#2095F2'}
@@ -342,7 +342,7 @@ export function Example(props: IProps) {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <RichToolbar
           style={[styles.richBar, dark && styles.richBarDark]}
-          flatContainerStyle={styles.flatStyle}
+          flatStyle={styles.flatStyle}
           editor={richText}
           disabled={disabled}
           // iconTint={color}

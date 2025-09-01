@@ -259,13 +259,14 @@ export default class RichToolbar extends Component {
   }
 
   render() {
-    const { style, disabled, children, flatContainerStyle, horizontal = true } = this.props;
+    const { style, disabled, children, flatStyle, flatContainerStyle, horizontal = true } = this.props;
     const vStyle = [styles.barContainer, style, disabled && this._getButtonDisabledStyle()];
     return (
       <View style={vStyle}>
         <FlatList
           horizontal={horizontal}
-          style={flatContainerStyle}
+          style={flatStyle}
+          contentContainerStyle={flatContainerStyle}
           keyboardShouldPersistTaps={'always'}
           keyExtractor={(item, index) => item.action + '-' + index}
           data={this.state.data}
