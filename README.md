@@ -30,7 +30,6 @@ Also, follow instructions [here](https://github.com/react-native-community/react
 
 ---
 
----
 ## Text color problem
 The `actions.foreColor` action allows changing the text color. 
 
