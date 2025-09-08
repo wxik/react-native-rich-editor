@@ -30,6 +30,23 @@ Also, follow instructions [here](https://github.com/react-native-community/react
 
 ---
 
+## Text color problem
+The `actions.foreColor` action allows changing the text color. 
+
+**Important limitations regarding alpha (transparency):**
+
+- Using alpha in `foreColor` is **not reliably supported** in WebView.
+- Passing `rgba(...)` works partially: the color may appear slightly darker, but **true transparency is not applied**.
+- Hex colors with alpha are ignored and may result in inconsistent colors.
+- Fully transparent black (`rgba(0,0,0,0)`) can render as a default color (e.g., red) due to the deprecated `<font>` tag.
+- Attempting to normalize the HTML output (e.g., convert `rgba` back to hex) is computationally expensive and not recommended.
+
+**Recommendation:**  
+- Avoid using alpha in `foreColor` whenever possible.  
+- If transparency is needed, pass `rgba(...)` directly, but be aware of the limitations.  
+
+---
+
 ## `RichEditor`
 The editor component. Simply place this component in your view hierarchy to receive a fully functional Rich text Editor.
 
