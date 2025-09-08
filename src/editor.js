@@ -163,7 +163,7 @@ function createHTML(options = {}) {
             var foNode;
             if (node){
                 node.innerHTML = HTML;
-                foNode = node.firstChild;
+                foNode = node.firstChild.firstChild;
             } else {
                 exec("insertHTML", HTML);
             }
