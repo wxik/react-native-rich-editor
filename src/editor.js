@@ -1,6 +1,6 @@
 function getContentCSS() {
-    /*img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}*/
-    return `
+  /*img {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}*/
+  return `
     <style>
         video {max-width: 98%;margin-left:auto;margin-right:auto;display: block;}
         img {max-width: 98%;vertical-align: middle;}
@@ -19,29 +19,34 @@ function getContentCSS() {
 }
 
 function createHTML(options = {}) {
-    const {
-        backgroundColor = '#FFF',
-        color = '#000033',
-        caretColor = '',
-        placeholderColor = '#a9a9a9',
-        contentCSSText = '',
-        cssText = '',
-        initialCSSText = '',
-        pasteAsPlainText = false,
-        pasteListener = false,
-        keyDownListener = false,
-        keyUpListener = false,
-        inputListener = false,
-        autoCapitalize = 'off',
-        enterKeyHint = '',
-        autoCorrect = false,
-        defaultParagraphSeparator = 'div',
-        // When first gaining focus, the cursor moves to the end of the text
-        firstFocusEnd = true,
-        useContainer = true,
-    } = options;
-    //ERROR: HTML height not 100%;
-    return `
+  const {
+    backgroundColor = '#FFF',
+    color = '#000033',
+    caretColor = '',
+    placeholderColor = '#a9a9a9',
+    contentCSSText = '',
+    cssText = '',
+    initialCSSText = '',
+    pasteAsPlainText = false,
+    pasteListener = false,
+    keyDownListener = false,
+    keyUpListener = false,
+    inputListener = false,
+    autoCapitalize = 'off',
+    enterKeyHint = '',
+    initialFocus = false,
+    spellcheck = true,
+    autoCorrect = false,
+    defaultParagraphSeparator = 'div',
+    // When first gaining focus, the cursor moves to the end of the text
+    firstFocusEnd = true,
+    useContainer = true,
+    styleWithCSS = false,
+    useCharacter = true,
+    defaultHttps = true,
+  } = options;
+  //ERROR: HTML height not 100%;
+  return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,7 +57,9 @@ function createHTML(options = {}) {
         * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;box-sizing: border-box;}
         html, body { margin: 0; padding: 0;font-family: Arial, Helvetica, sans-serif; font-size:1em; height: 100%}
         body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: ${backgroundColor};caret-color: ${caretColor};}
-        .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;${!useContainer ? 'height:100%;' : ''}-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
+        .content {font-family: Arial, Helvetica, sans-serif;color: ${color}; width: 100%;${
+          !useContainer ? 'height:100%;' : ''
+        }-webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
         .pell { height: 100%;} .pell-content { outline: 0; overflow-y: auto;padding: 10px;height: 100%;${contentCSSText}}
     </style>
     <style>
@@ -195,6 +202,7 @@ function createHTML(options = {}) {
 
         function saveSelection(){
             var sel = window.getSelection();
+            currentSelection = sel;
             anchorNode = sel.anchorNode;
             anchorOffset = sel.anchorOffset;
             focusNode = sel.focusNode;
@@ -238,13 +246,30 @@ function createHTML(options = {}) {
                     var br = createElement('br');
                     sp.appendChild(br);
                     setTimeout(function (){
-                        if (!node.classList.contains("x-todo-box")){
-                            node = node.parentNode.previousSibling;
-                        }
-                        node.parentNode.replaceChild(sp, node);
+                        node.replaceChild(sp, node.lastElementChild);
                         setCollapse(sp);
                     });
                 }
+            }
+        }
+
+        function adjustNestedElements() {
+            // adjust ul/ol if we use p separator
+            // since nesting is not valid for p
+            if (editor.paragraphSeparator == 'p') {
+                var selection = window.getSelection();
+
+                let lists = document.querySelectorAll("ol, ul");
+                for (let i = 0; i < lists.length; i++) {
+                    let ele = lists[i];
+                    let parentNode = ele.parentNode;
+                    if (parentNode.tagName === 'P' && parentNode.lastChild === parentNode.firstChild) {
+                        parentNode.insertAdjacentElement('beforebegin', ele);
+                        parentNode.remove()
+                    }
+                }
+
+                selection.collapse(anchorNode, anchorOffset);
             }
         }
 
@@ -266,11 +291,23 @@ function createHTML(options = {}) {
             removeFormat: { result: function() { return exec('removeFormat'); }},
             orderedList: {
                 state: function() { return !checkboxNode(window.getSelection().anchorNode) && queryCommandState('insertOrderedList'); },
-                result: function() { if (!!checkboxNode(window.getSelection().anchorNode)) return;return exec('insertOrderedList'); }
+                result: function() {
+                    if (!!checkboxNode(window.getSelection().anchorNode)) return;
+
+                    let flag = exec('insertOrderedList');
+                    adjustNestedElements();
+                    return flag;
+                }
             },
             unorderedList: {
                 state: function() { return queryCommandState('insertUnorderedList');},
-                result: function() { if (!!checkboxNode(window.getSelection().anchorNode)) return; return exec('insertUnorderedList');}
+                result: function() {
+                    if (!!checkboxNode(window.getSelection().anchorNode)) return;
+
+                    let flag =  exec('insertUnorderedList');
+                    adjustNestedElements();
+                    return flag;
+                }
             },
             code: { result: function(type) {
                 var flag = exec(formatBlock, '<pre>');
@@ -296,19 +333,67 @@ function createHTML(options = {}) {
             justifyLeft: { state: function() { return queryCommandState('justifyLeft'); }, result: function() { return exec('justifyLeft'); }},
             justifyRight: { state: function() { return queryCommandState('justifyRight'); }, result: function() { return exec('justifyRight'); }},
             justifyFull: { state: function() { return queryCommandState('justifyFull'); }, result: function() { return exec('justifyFull'); }},
-            hiliteColor: {  state: function() { return queryCommandState('hiliteColor'); }, result: function(color) { return exec('hiliteColor', color); }},
-            foreColor: { state: function() { return queryCommandState('foreColor'); }, result: function(color) { return exec('foreColor', color); }},
-            fontSize: { result: function(size) { return exec('fontSize', size); }},
+            hiliteColor: {  state: function() { return queryCommandValue('backColor'); }, result: function(color) { return exec('backColor', color); }},
+            foreColor: { state: function() { return queryCommandValue('foreColor'); }, result: function(color) { return exec('foreColor', color); }},
+            fontSize: { state: function() { return queryCommandValue('fontSize'); }, result: function(size) { return exec('fontSize', size); }},
             fontName: { result: function(name) { return exec('fontName', name); }},
             link: {
+                // result: function(data) {
+                //     data = data || {};
+                //     var title = data.title;
+                //     title = title || window.getSelection().toString();
+                //     // title = title || window.prompt('Enter the link title');
+                //     var url = data.url || window.prompt('Enter the link URL');
+                //     if (url){
+                //         exec('insertHTML', "<a href='"+ url +"'>"+(title || url)+"</a>");
+                //     }
+                // }
                 result: function(data) {
+                    var sel = document.getSelection();
                     data = data || {};
-                    var title = data.title;
-                    title = title || window.getSelection().toString();
-                    // title = title || window.prompt('Enter the link title');
                     var url = data.url || window.prompt('Enter the link URL');
-                    if (url){
-                        exec('insertHTML', "<a href='"+ url +"'>"+(title || url)+"</a>");
+
+                    if (url) {
+                        let href = url
+                        if (${defaultHttps} && !href.startsWith("http")) {
+                            href = "https://" + href
+                        }
+
+                        var el = document.createElement("a");
+                        el.setAttribute("href", href);
+
+                        var title = data.title || sel.toString() || url;
+                        el.text = title;
+
+                        // when adding a link, if our current node is empty, it may have a <br>
+                        // if so, replace it with '' so the added link doesn't end up with an extra space.
+                        // Also, if totally empty, we must format the paragraph to add the link into the container.
+                        var mustFormat = false;
+                        if (sel.anchorNode && sel.anchorNode.innerHTML === '<br>') {
+                            sel.anchorNode.innerHTML = '';
+                        } else if (!sel.anchorNode || sel.anchorNode === editor.content) {
+                            mustFormat = true;
+                        }
+
+                        // insert like this so we can replace current selection, if any
+                        var range = sel.getRangeAt(0);
+                        range.deleteContents();
+                        range.insertNode(el);
+
+                        // restore cursor to end
+                        range.setStartAfter(el);
+                        range.setEndAfter(el);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+
+                        // format paragraph if needed
+                        if (mustFormat){
+                            formatParagraph();
+                        }
+
+                        // save selection, and fire on change to our webview
+                        saveSelection();
+                        editor.settings.onChange();
                     }
                 }
             },
@@ -316,6 +401,8 @@ function createHTML(options = {}) {
                 result: function(url, style) {
                     if (url){
                         exec('insertHTML', "<img style='"+ (style || '')+"' src='"+ url +"'/>");
+                        // This is needed, or the image will not be inserted if the html is empty
+                        exec('insertHTML', "<br/>");
                         Actions.UPDATE_HEIGHT();
                     }
                 }
@@ -352,11 +439,12 @@ function createHTML(options = {}) {
                     if (anchorNode === editor.content || queryCommandValue(formatBlock) === ''){
                         formatParagraph();
                     }
+
                     var box = checkboxNode(anchorNode);
                     if (!!box){
                         cancelCheckboxList(box.parentNode);
                     } else {
-                        !queryCommandState('insertOrderedList') && execCheckboxList(pNode);
+                        !queryCommandState('insertOrderedList') && execCheckboxList(anchorNode);
                     }
                 }
             },
@@ -420,7 +508,14 @@ function createHTML(options = {}) {
                 var sel = window.getSelection();
                 if (node){
                     var siblingOffset = (node.nextSibling && node.nextSibling.offsetTop) || (node.previousSibling && node.previousSibling.offsetTop)
-                    var offsetY = node.offsetTop || siblingOffset || node.parentNode.offsetTop;
+                    var rectOffset = null;
+                    if (sel.rangeCount > 0) {
+                        var range = sel.getRangeAt(0);
+                        var rect = range.getClientRects()[0];
+                        rectOffset = rect ? rect.y : null;
+                    }
+
+                    var offsetY = node.offsetTop || siblingOffset || rectOffset || node.parentNode.offsetTop;
                     if (offsetY){
                         _postMessage({type: 'OFFSET_Y', data: offsetY});
                     }
@@ -434,8 +529,8 @@ function createHTML(options = {}) {
             var content = settings.element.content = createElement('div');
             content.id = 'content';
             content.contentEditable = true;
-            content.spellcheck = false;
-            content.autofocus = true;
+            content.spellcheck = ${spellcheck};
+            content.autofocus = ${initialFocus};
             content.enterKeyHint = '${enterKeyHint}';
             content.autocapitalize = '${autoCapitalize}';
             content.autocorrect = ${autoCorrect};
@@ -444,14 +539,14 @@ function createHTML(options = {}) {
             content.oninput = function (_ref) {
                 // var firstChild = _ref.target.firstChild;
                 if ((anchorNode === void 0 || anchorNode === content) && queryCommandValue(formatBlock) === ''){
-                    if ( !compositionStatus ){
+                    if ( !compositionStatus || anchorNode === content){
                         formatParagraph(true);
                         paragraphStatus = 0;
                     } else {
                         paragraphStatus = 1;
                     }
                 } else if (content.innerHTML === '<br>'){
-                     content.innerHTML = '';
+                    content.innerHTML = '';
                 } else if (enterStatus && queryCommandValue(formatBlock) === 'blockquote') {
                     formatParagraph();
                 }
@@ -476,8 +571,9 @@ function createHTML(options = {}) {
             function handler() {
                 var activeTools = [];
                 for(var k in actionsHandler){
-                    if ( Actions[k].state() ){
-                        activeTools.push(k);
+                    const state =  Actions[k].state()
+                    if ( state ){
+                        activeTools.push(typeof state === "boolean" ? k : {type: k, value: Actions[k].state()});
                     }
                 }
                 postAction({type: 'SELECTION_CHANGE', data: activeTools});
@@ -559,6 +655,9 @@ function createHTML(options = {}) {
                     if (ele.checked) ele.setAttribute('checked', '');
                     else ele.removeAttribute('checked');
                 }
+                if (ele.nodeName === 'A' && ele.getAttribute('href')) {
+                    postAction({type: 'LINK_TOUCHED', data: ele.getAttribute('href')});
+                }
             }
             addEventListener(content, 'touchcancel', handleSelecting);
             addEventListener(content, 'mouseup', handleSelecting);
@@ -581,11 +680,15 @@ function createHTML(options = {}) {
                 }
             });
             addEventListener(content, 'compositionstart', function(event){
-                compositionStatus = 1;
+                if(${useCharacter}){
+                    compositionStatus = 1;
+                }
             })
             addEventListener(content, 'compositionend', function (event){
-                compositionStatus = 0;
-                paragraphStatus && formatParagraph(true);
+                if(${useCharacter}){
+                    compositionStatus = 0;
+                    paragraphStatus && formatParagraph(true);
+                }
             })
 
             var message = function (event){
@@ -609,13 +712,14 @@ function createHTML(options = {}) {
                 Actions.content.focus();
                 handleSelecting(event);
             });
-            return {content, paragraphSeparator: paragraphSeparator};
+            return {content, paragraphSeparator: paragraphSeparator, settings};
         };
 
         var _handleCTime = null;
         editor = init({
             element: document.getElementById('editor'),
             defaultParagraphSeparator: '${defaultParagraphSeparator}',
+            styleWithCSS: ${styleWithCSS},
             onChange: function (){
                 clearTimeout(_handleCTime);
                 _handleCTime = setTimeout(function(){
@@ -645,4 +749,4 @@ function createHTML(options = {}) {
 }
 
 const HTML = createHTML();
-export {HTML, createHTML, getContentCSS};
+export { HTML, createHTML, getContentCSS };

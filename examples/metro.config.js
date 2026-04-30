@@ -5,30 +5,30 @@
  * @format
  */
 
-const path = require("path");
+const path = require('path');
 
 module.exports = {
-    projectRoot: __dirname,
-    watchFolders: [path.resolve(__dirname, '..')],
-    resolver: {
-        extraNodeModules: new Proxy(
-            {},
-            {
-                get: (target, name) => {
-                    if (target.hasOwnProperty(name)) {
-                        return target[name]
-                    }
-                    return path.join(process.cwd(), `node_modules/${name}`)
-                },
-            },
-        ),
-    },
-    transformer: {
-        getTransformOptions: async () => ({
-            transform: {
-                experimentalImportSupport: false,
-                inlineRequires: true,
-            },
-        }),
-    },
+  projectRoot: __dirname,
+  watchFolders: [path.resolve(__dirname, '..')],
+  resolver: {
+    extraNodeModules: new Proxy(
+      {},
+      {
+        get: (target, name) => {
+          if (target.hasOwnProperty(name)) {
+            return target[name];
+          }
+          return path.join(process.cwd(), `node_modules/${name}`);
+        },
+      },
+    ),
+  },
+  transformer: {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: true,
+      },
+    }),
+  },
 };
