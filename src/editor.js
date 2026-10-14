@@ -539,7 +539,8 @@ function createHTML(options = {}) {
             content.oninput = function (_ref) {
                 // var firstChild = _ref.target.firstChild;
                 if ((anchorNode === void 0 || anchorNode === content) && queryCommandValue(formatBlock) === ''){
-                    if ( !compositionStatus || anchorNode === content){
+                    // Formatting the composing range makes Gboard stop with SELECTION_CHANGE.
+                    if (!compositionStatus && !_ref.isComposing){
                         formatParagraph(true);
                         paragraphStatus = 0;
                     } else {
@@ -687,7 +688,10 @@ function createHTML(options = {}) {
             addEventListener(content, 'compositionend', function (event){
                 if(${useCharacter}){
                     compositionStatus = 0;
-                    paragraphStatus && formatParagraph(true);
+                    if (paragraphStatus) {
+                        paragraphStatus = 0;
+                        formatParagraph(true);
+                    }
                 }
             })
 
